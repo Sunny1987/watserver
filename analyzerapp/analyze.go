@@ -4,6 +4,7 @@ import (
 	"golang.org/x/net/html"
 	"log"
 	"sync"
+	"webserver/analyzerapp/rule"
 	"webserver/resultsapp"
 )
 
@@ -19,6 +20,7 @@ type AnalyzeBundle struct {
 	CollectedTags resultsapp.TagsFamily
 	MyTags        resultsapp.Tags
 	Response      resultsapp.Response
+	rules         rule.RuleResults
 }
 
 // NewAnalyzeBundle is the constructor for AnalyzeBundle
@@ -29,12 +31,13 @@ func NewAnalyzeBundle(req *resultsapp.MyRequest, logger *log.Logger, base string
 func (aBundle *AnalyzeBundle) Analyze() resultsapp.Response {
 	aBundle.Response.Request = aBundle.Req
 
-	wg.Add(24)
+	//wg.Add(24)
+	wg.Add(23)
 	go aBundle.anchorAnalysis()
 	go aBundle.audioAnalysis()
 	go aBundle.areaAnalysis()
 	go aBundle.buttonAnalysis()
-	go aBundle.cssAnalysis()
+	//go aBundle.cssAnalysis()
 	go aBundle.divAnalysis()
 	go aBundle.embedAnalysis()
 	go aBundle.h1Analysis()
@@ -65,17 +68,19 @@ func (aBundle *AnalyzeBundle) divAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Divs
 
-	var list []*resultsapp.Divtag
+	var list []resultsapp.Divtag
 	for _, node := range nodes {
-		var tag *resultsapp.Divtag
+		var tag resultsapp.Divtag
 
 		//build the node
 		tag.Div = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.DivResults = list
 }
@@ -86,17 +91,19 @@ func (aBundle *AnalyzeBundle) buttonAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Buttons
 
-	var list []*resultsapp.Buttontag
+	var list []resultsapp.Buttontag
 	for _, node := range nodes {
-		var tag *resultsapp.Buttontag
+		var tag resultsapp.Buttontag
 
 		//build the node
 		tag.Button = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.ButtonResults = list
 }
@@ -107,17 +114,19 @@ func (aBundle *AnalyzeBundle) inputAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Inputs
 
-	var list []*resultsapp.Inputtag
+	var list []resultsapp.Inputtag
 	for _, node := range nodes {
-		var tag *resultsapp.Inputtag
+		var tag resultsapp.Inputtag
 
 		//build the node
 		tag.Input = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.InputResults = list
 }
@@ -128,17 +137,19 @@ func (aBundle *AnalyzeBundle) imagesAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Imgs
 
-	var list []*resultsapp.Imgtag
+	var list []resultsapp.Imgtag
 	for _, node := range nodes {
-		var tag *resultsapp.Imgtag
+		var tag resultsapp.Imgtag
 
 		//build the node
 		tag.Img = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.ImageResults = list
 }
@@ -149,17 +160,19 @@ func (aBundle *AnalyzeBundle) videoAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Videos
 
-	var list []*resultsapp.Videotag
+	var list []resultsapp.Videotag
 	for _, node := range nodes {
-		var tag *resultsapp.Videotag
+		var tag resultsapp.Videotag
 
 		//build the node
 		tag.Video = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.VideoResults = list
 }
@@ -170,17 +183,19 @@ func (aBundle *AnalyzeBundle) audioAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Audios
 
-	var list []*resultsapp.Audiotag
+	var list []resultsapp.Audiotag
 	for _, node := range nodes {
-		var tag *resultsapp.Audiotag
+		var tag resultsapp.Audiotag
 
 		//build the node
 		tag.Audio = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.AudioResults = list
 }
@@ -191,17 +206,19 @@ func (aBundle *AnalyzeBundle) textareaAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.TextAreas
 
-	var list []*resultsapp.Textareatag
+	var list []resultsapp.Textareatag
 	for _, node := range nodes {
-		var tag *resultsapp.Textareatag
+		var tag resultsapp.Textareatag
 
 		//build the node
 		tag.Textarea = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.TextareaResults = list
 }
@@ -212,17 +229,19 @@ func (aBundle *AnalyzeBundle) selectAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Selects
 
-	var list []*resultsapp.Selecttag
+	var list []resultsapp.Selecttag
 	for _, node := range nodes {
-		var tag *resultsapp.Selecttag
+		var tag resultsapp.Selecttag
 
 		//build the node
 		tag.Select = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.SelectResults = list
 }
@@ -233,17 +252,19 @@ func (aBundle *AnalyzeBundle) iframeAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Iframes
 
-	var list []*resultsapp.Iframetag
+	var list []resultsapp.Iframetag
 	for _, node := range nodes {
-		var tag *resultsapp.Iframetag
+		var tag resultsapp.Iframetag
 
 		//build the node
 		tag.Iframe = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.IframeResults = list
 }
@@ -254,17 +275,19 @@ func (aBundle *AnalyzeBundle) linkAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Links
 
-	var list []*resultsapp.Linktag
+	var list []resultsapp.Linktag
 	for _, node := range nodes {
-		var tag *resultsapp.Linktag
+		var tag resultsapp.Linktag
 
 		//build the node
 		tag.Link = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.LinkResults = list
 }
@@ -275,17 +298,19 @@ func (aBundle *AnalyzeBundle) anchorAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Anchors
 
-	var list []*resultsapp.Anchortag
+	var list []resultsapp.Anchortag
 	for _, node := range nodes {
-		var tag *resultsapp.Anchortag
+		var tag resultsapp.Anchortag
 
 		//build the node
 		tag.Anchor = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.AnchorResults = list
 }
@@ -296,17 +321,19 @@ func (aBundle *AnalyzeBundle) areaAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Areas
 
-	var list []*resultsapp.Areatag
+	var list []resultsapp.Areatag
 	for _, node := range nodes {
-		var tag *resultsapp.Areatag
+		var tag resultsapp.Areatag
 
 		//build the node
 		tag.Area = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.AreaResults = list
 }
@@ -317,17 +344,19 @@ func (aBundle *AnalyzeBundle) objectAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Objects
 
-	var list []*resultsapp.Objecttag
+	var list []resultsapp.Objecttag
 	for _, node := range nodes {
-		var tag *resultsapp.Objecttag
+		var tag resultsapp.Objecttag
 
 		//build the node
 		tag.Object = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.ObjectResults = list
 }
@@ -338,17 +367,19 @@ func (aBundle *AnalyzeBundle) embedAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Embeds
 
-	var list []*resultsapp.Embedtag
+	var list []resultsapp.Embedtag
 	for _, node := range nodes {
-		var tag *resultsapp.Embedtag
+		var tag resultsapp.Embedtag
 
 		//build the node
 		tag.Embed = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.EmbedResults = list
 }
@@ -359,17 +390,19 @@ func (aBundle *AnalyzeBundle) trackAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Tracks
 
-	var list []*resultsapp.Tracktag
+	var list []resultsapp.Tracktag
 	for _, node := range nodes {
-		var tag *resultsapp.Tracktag
+		var tag resultsapp.Tracktag
 
 		//build the node
 		tag.Track = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.TrackResults = list
 }
@@ -380,17 +413,19 @@ func (aBundle *AnalyzeBundle) h1Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H1s
 
-	var list []*resultsapp.H1tag
+	var list []resultsapp.H1tag
 	for _, node := range nodes {
-		var tag *resultsapp.H1tag
+		var tag resultsapp.H1tag
 
 		//build the node
 		tag.H1 = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.H1Results = list
 }
@@ -401,17 +436,19 @@ func (aBundle *AnalyzeBundle) h2Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H2s
 
-	var list []*resultsapp.H2tag
+	var list []resultsapp.H2tag
 	for _, node := range nodes {
-		var tag *resultsapp.H2tag
+		var tag resultsapp.H2tag
 
 		//build the node
 		tag.H2 = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.H2Results = list
 }
@@ -422,17 +459,19 @@ func (aBundle *AnalyzeBundle) h3Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H3s
 
-	var list []*resultsapp.H3tag
+	var list []resultsapp.H3tag
 	for _, node := range nodes {
-		var tag *resultsapp.H3tag
+		var tag resultsapp.H3tag
 
 		//build the node
 		tag.H3 = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.H3Results = list
 }
@@ -443,17 +482,19 @@ func (aBundle *AnalyzeBundle) h4Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H4s
 
-	var list []*resultsapp.H4tag
+	var list []resultsapp.H4tag
 	for _, node := range nodes {
-		var tag *resultsapp.H4tag
+		var tag resultsapp.H4tag
 
 		//build the node
 		tag.H4 = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.H4Results = list
 }
@@ -464,17 +505,19 @@ func (aBundle *AnalyzeBundle) h5Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H5s
 
-	var list []*resultsapp.H5tag
+	var list []resultsapp.H5tag
 	for _, node := range nodes {
-		var tag *resultsapp.H5tag
+		var tag resultsapp.H5tag
 
 		//build the node
 		tag.H5 = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.H5Results = list
 }
@@ -485,17 +528,19 @@ func (aBundle *AnalyzeBundle) h6Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H6s
 
-	var list []*resultsapp.H6tag
+	var list []resultsapp.H6tag
 	for _, node := range nodes {
-		var tag *resultsapp.H6tag
+		var tag resultsapp.H6tag
 
 		//build the node
 		tag.H6 = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.H6Results = list
 }
@@ -506,17 +551,19 @@ func (aBundle *AnalyzeBundle) paraAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Paras
 
-	var list []*resultsapp.Paratag
+	var list []resultsapp.Paratag
 	for _, node := range nodes {
-		var tag *resultsapp.Paratag
+		var tag resultsapp.Paratag
 
 		//build the node
 		tag.Para = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.ParaResults = list
 }
@@ -527,17 +574,19 @@ func (aBundle *AnalyzeBundle) preAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Pres
 
-	var list []*resultsapp.Pretag
+	var list []resultsapp.Pretag
 	for _, node := range nodes {
-		var tag *resultsapp.Pretag
+		var tag resultsapp.Pretag
 
 		//build the node
 		tag.Pre = nodeText(node)
 
 		//implement rules
-		//tag.divRulesWCAG111(node, l)
-
-		list = append(list, tag)
+		aBundle.rules.Logger = aBundle.Logger
+		if status := aBundle.rules.Execute(node); status == true {
+			tag.Result = aBundle.rules.Results
+			list = append(list, tag)
+		}
 	}
 	aBundle.Response.PreResults = list
 }
@@ -546,7 +595,7 @@ func (aBundle *AnalyzeBundle) preAnalysis() {
 func (aBundle *AnalyzeBundle) cssAnalysis() {
 	aBundle.Logger.Println("Initiating CSS Analysis......")
 	defer wg.Done()
-	var list []*resultsapp.CSS
+	var list []resultsapp.CSS
 	//nodes := nodeMap["divNodes"]
 	nodes := aBundle.CollectedTags.CssLinks
 	for _, css := range nodes {
@@ -557,7 +606,11 @@ func (aBundle *AnalyzeBundle) cssAnalysis() {
 		tag.CSS = css
 
 		//implement rule
-		//tag.cssAnalysisWCAG111(css, l, nodes)
+		aBundle.rules.Logger = aBundle.Logger
+		//if status := aBundle.rules.Execute(node); status == true {
+		//	tag.Result = aBundle.rules.Results
+		//	list = append(list, tag)
+		//}
 
 	}
 	aBundle.Response.CSSResults = list

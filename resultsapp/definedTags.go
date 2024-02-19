@@ -26,178 +26,155 @@ type Tags struct {
 	Videotag
 }
 
+type Result struct {
+	Guideline *string
+	Rules     []*string
+}
+
 // Divtag is the Div based rule results
 type Divtag struct {
-	Div         string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
+	Div    string
+	Result []*Result
 }
 
 // Anchortag is the anchor based rule results
 type Anchortag struct {
-	Anchor      string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
+	Anchor string
+	Result []*Result
 }
 
 // Audiotag is the audio based rule results
 type Audiotag struct {
-	Audio       string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
-	Wc121H96    *string
-	Wc121ARIA   *string
+	Audio  string
+	Result []*Result
 }
 
 // Buttontag is the button based rule results
 type Buttontag struct {
-	Button      string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
+	Button string
+	Result []*Result
 }
 
 // Imgtag is the img based rule results
 type Imgtag struct {
-	Img         string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
-	Wc111G94    *string
-	Wc111H2     *string
-	Wc111Aria15 *string
+	Img    string
+	Result []*Result
 }
 
 // Inputtag is the input based rule results
 type Inputtag struct {
-	Input       string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
+	Input  string
+	Result []*Result
 }
 
 // Selecttag is the select based rule results
 type Selecttag struct {
-	Select      string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
+	Select string
+	Result []*Result
 }
 
 // Textareatag is the textarea based rule results
 type Textareatag struct {
-	Textarea    string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
+	Textarea string
+	Result   []*Result
 }
 
 // Videotag is the video based rule results
 type Videotag struct {
-	Video       string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
+	Video  string
+	Result []*Result
 }
 
 // Paratag is the para based rule results
 type Paratag struct {
-	Para        string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
+	Para   string
+	Result []*Result
 }
 
 // Iframetag is the iframe based rule results
 type Iframetag struct {
-	Iframe      string
-	Wc111Aria6  *string
-	Wc111Aria10 *string
+	Iframe string
+	Result []*Result
 }
 
 // Areatag is the area based rule results
 type Areatag struct {
-	Area     string
-	Wc111G94 *string
-	Wc111H2  *string
+	Area   string
+	Result []*Result
 }
 
 // Objecttag is the object based rule results
 type Objecttag struct {
-	Object    string
-	Wc121H96  *string
-	Wc121ARIA *string
-	Wc111H53  *string
-	Wc121G166 *string
+	Object string
+	Result []*Result
 }
 
 // Embedtag is the embed based rule results
 type Embedtag struct {
-	Embed     string
-	Wc121H96  *string
-	Wc121ARIA *string
-	Wc111H53  *string
-	Wc121G166 *string
+	Embed  string
+	Result []*Result
 }
 
 // Tracktag is the track based rule results
 type Tracktag struct {
-	Track      string
-	Wc121H96   *string
-	Wc121ARIA  *string
-	Wc111G94   *string
-	Wc111H2    *string
-	Wcag122G87 *string
+	Track  string
+	Result []*Result
 }
 
 // Applettag is the applet based rule results
 type Applettag struct {
-	Applet    string
-	Wc121H96  *string
-	Wc121ARIA *string
-	Wc111G94  *string
-	Wc111H2   *string
-	Wc111H35  *string
+	Applet string
+	Result []*Result
 }
 
 // H1tag is the h1 based rule results
 type H1tag struct {
-	H1      string
-	Wcag241 *string
+	H1     string
+	Result []*Result
 }
 
 // H2tag is the h2 based rule results
 type H2tag struct {
-	H2      string
-	Wcag241 *string
+	H2     string
+	Result []*Result
 }
 
 // H3tag is the h3 based rule results
 type H3tag struct {
-	H3 string
+	H3     string
+	Result []*Result
 }
 
 // H4tag is the h4 based rule results
 type H4tag struct {
-	H4 string
+	H4     string
+	Result []*Result
 }
 
 // H5tag is the h5 based rule results
 type H5tag struct {
-	H5 string
+	H5     string
+	Result []*Result
 }
 
 // H6tag is the h6 based rule results
 type H6tag struct {
-	H6 string
+	H6     string
+	Result []*Result
 }
 
 // Pretag is the Pre based rule results
 type Pretag struct {
-	Pre      string
-	Wc111H86 *string
+	Pre    string
+	Result []*Result
 }
 type CSS struct {
-	CSS      string
-	WC111H86 *string
+	CSS    string
+	Result []*Result
 }
 
 // Linktag is the Link based rule results
 type Linktag struct {
-	Link     string
-	Wc111G94 *string
-	Wc111H2  *string
+	Link   string
+	Result []*Result
 }

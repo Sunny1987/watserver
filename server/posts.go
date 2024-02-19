@@ -48,6 +48,7 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 
 	//print the response
+	resultsapp.PrintResponse(rw, l.myLogger, finalResult)
 	//PrintResponse(finalResult, rw, l.myLogger)
 
 	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))
