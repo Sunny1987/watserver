@@ -3,6 +3,8 @@ package rule
 import (
 	"golang.org/x/net/html"
 	"reflect"
+	"strings"
+	"webserver/analyzerapp/helper"
 )
 
 //type WCAG111rule interface {
@@ -37,6 +39,7 @@ func (rule *RuleResults) ExecuteWCAG111(node *html.Node) (string, []*string) {
 	//implement the techniques
 	rule.Logger.Println("....Execute ARIA6")
 	rule.Aria6Technique(node)
+	rule.Aria10Technique(node)
 
 	return "WCAG111", rule.Rules.WCAG111.GetRuleFailures()
 }
@@ -62,9 +65,51 @@ func (rule *RuleResults) Aria6Technique(node *html.Node) {
 	rule.Logger.Println("...Initiating ARIA6 analysis")
 
 	//logic implementation
-	if attributeSearch(node.Attr, "role") && attributeCheckValEmpty(node.Attr, "aria-label") {
+	if helper.AttributeSearch(node.Attr, "role") && helper.AttributeCheckValEmpty(node.Attr, "aria-label") {
 		rule.Rules.WCAG111.Aria6 = Fail
-	} else {
-		rule.Rules.WCAG111.Aria6 = Pass
+	}
+}
+
+// Aria10Technique analysis is invoked for all tags
+func (rule *RuleResults) Aria10Technique(node *html.Node) {
+	rule.Logger.Println("...Initiating ARIA10 analysis")
+
+	//*******************logic implementation**********//
+	//The implementation is as per https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA10
+	//This example shows how to use the aria-labelledby attribute to provide a short text description for a read-only complex graphic of a star rating pattern; the graphic is composed of several image elements. The text alternative for the graphic is the label, visible on the page beneath the star pattern.
+	//
+	//<div role="img" aria-labelledby="star_id">
+	//<img src="fullstar.png" alt=""/>
+	//<img src="fullstar.png" alt=""/>
+	//<img src="fullstar.png" alt=""/>
+	//<img src="fullstar.png" alt=""/>
+	//<img src="emptystar.png" alt=""/>
+	//</div>
+	//
+	//<div id="star_id">4 of 5</div>
+	if helper.HasChildren(node) {
+		if helper.AttributeCheckValEmpty(node.Attr, "aria-labelledby") {
+			for c := node.FirstChild; c != nil; c = c.NextSibling {
+				if helper.AttributeSearch(c.Attr, "src") {
+					if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+						rule.Rules.WCAG111.Aria10 = Fail
+					}
+				}
+			}
+		}
+	}
+}
+
+// H86Technique analysis invoked for div tag
+func (rule *RuleResults) H86Technique(node *html.Node) {
+	if strings.Contains(rule.Css, "white-space: pre") {
+		name := strings.Split(rule.Css, " ")
+		className := strings.Trim(name[0], "@")
+		if helper.AttributeCheckVal(node.Attr, "class", className) {
+			if helper.AttributeSearch(node.Attr, "alt") {
+				rule.Rules.WCAG111.H86CSS = Fail
+			}
+		}
+
 	}
 }

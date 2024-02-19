@@ -21,6 +21,7 @@ type RuleResults struct {
 	Results []*resultsapp.Result
 	Rules   Rules
 	Logger  *log.Logger
+	Css     string
 }
 
 // Rules carries the rules results

@@ -178,3 +178,8 @@ type Linktag struct {
 	Link   string
 	Result []*Result
 }
+
+type Abbrtag struct {
+	Abbr string
+	Result
+}

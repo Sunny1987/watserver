@@ -1,27 +1,57 @@
-package analyzerapp
+package helper
 
 import (
 	"golang.org/x/net/html"
 	"strings"
 )
 
+// AttributeSearch will respond if the attribute is present
+func AttributeSearch(attrList []html.Attribute, key string) bool {
+	for _, att := range attrList {
+		if att.Key == key {
+			return true
+		}
+	}
+	return false
+}
+
+// AttributeCheckVal will respond if the attribute is present and check its value
+func AttributeCheckVal(attrList []html.Attribute, key string, val string) bool {
+	for _, att := range attrList {
+		if att.Key == key && att.Val == val {
+			return true
+		}
+	}
+	return false
+}
+
+// AttributeCheckValEmpty will respond if the attribute is present and value is empty
+func AttributeCheckValEmpty(attrList []html.Attribute, key string) bool {
+	for _, att := range attrList {
+		if att.Key == key && att.Val != "" {
+			return true
+		}
+	}
+	return false
+}
+
 // hasNoChild will check if node has child
-func hasNoChild(n *html.Node) bool {
+func HasNoChild(n *html.Node) bool {
 	return n.FirstChild == nil
 }
 
 // hasChildren will check if node has children
-func hasChildren(n *html.Node) bool {
+func HasChildren(n *html.Node) bool {
 	return n.FirstChild != nil && n.FirstChild != n.LastChild
 }
 
 // hasOneChild will check if node has only one child
-func hasOneChild(n *html.Node) bool {
+func HasOneChild(n *html.Node) bool {
 	return n.FirstChild != nil && n.FirstChild == n.LastChild
 }
 
 // nodeText will retrieve node text
-func nodeText(n *html.Node) string {
+func NodeText(n *html.Node) string {
 	var strbuilder strings.Builder
 	//var str *string
 	for _, a := range n.Attr {
@@ -39,7 +69,7 @@ func nodeText(n *html.Node) string {
 
 	switch n.Data {
 	case "div":
-		if hasChildren(n) || text(n) != "" {
+		if HasChildren(n) || text(n) != "" {
 			resBuilder.WriteString("<div ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(text(n))
@@ -54,7 +84,7 @@ func nodeText(n *html.Node) string {
 		}
 
 	case "button":
-		if hasChildren(n) || text(n) != "" {
+		if HasChildren(n) || text(n) != "" {
 			resBuilder.WriteString("<button ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
@@ -69,7 +99,7 @@ func nodeText(n *html.Node) string {
 		}
 
 	case "input":
-		if hasChildren(n) || text(n) != "" {
+		if HasChildren(n) || text(n) != "" {
 			resBuilder.WriteString("<button ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
@@ -94,7 +124,7 @@ func nodeText(n *html.Node) string {
 		resBuilder.WriteString("/>")
 		//res = "<select " + str + "/>"
 	case "textarea":
-		if hasChildren(n) || text(n) != "" {
+		if HasChildren(n) || text(n) != "" {
 			resBuilder.WriteString("<textarea ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
@@ -108,7 +138,7 @@ func nodeText(n *html.Node) string {
 			//res = "<textarea " + str + "/>"
 		}
 	case "a":
-		if hasChildren(n) || text(n) != "" {
+		if HasChildren(n) || text(n) != "" {
 			resBuilder.WriteString("<a ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
@@ -122,7 +152,7 @@ func nodeText(n *html.Node) string {
 			resBuilder.WriteString("/>")
 		}
 	case "span":
-		if hasChildren(n) || text(n) != "" {
+		if HasChildren(n) || text(n) != "" {
 			resBuilder.WriteString("<span ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
@@ -178,7 +208,7 @@ func nodeText(n *html.Node) string {
 		resBuilder.WriteString(text(n))
 		resBuilder.WriteString("</h6>")
 	case "p":
-		if hasChildren(n) || text(n) != "" {
+		if HasChildren(n) || text(n) != "" {
 			//res = "<p " + str + ">" + text(n) + "</p>"
 			resBuilder.WriteString("<p ")
 			resBuilder.WriteString(strbuilder.String())

@@ -16,13 +16,15 @@ var ctx context.Context
 func (l *NewLogger) MiddlewareValidation(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		l.myLogger.Println("***Starting Middleware***")
-		req := &MyRequest{}
-		err := json.NewDecoder(request.Body).Decode(req)
-		if err != nil {
-			l.myLogger.Println("Middleware: %v", err)
-		}
+
 		switch request.URL.Path {
 		case "/scan":
+			req := &MyRequest{}
+			err := json.NewDecoder(request.Body).Decode(req)
+			if err != nil {
+				l.myLogger.Println("Middleware: %v", err)
+			}
+			l.myLogger.Printf("req: %v", req)
 			err = req.Validate()
 			if err != nil {
 				if strings.Contains(err.Error(), "lte") {
@@ -38,7 +40,7 @@ func (l *NewLogger) MiddlewareValidation(next http.Handler) http.Handler {
 			next.ServeHTTP(writer, request)
 
 		case "/uploadhtml":
-			ctx = context.WithValue(request.Context(), KeyUser{}, req)
+			ctx = context.TODO()
 			request = request.WithContext(ctx)
 			next.ServeHTTP(writer, request)
 		}

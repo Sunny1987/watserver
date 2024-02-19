@@ -4,6 +4,7 @@ import (
 	"golang.org/x/net/html"
 	"log"
 	"sync"
+	"webserver/analyzerapp/helper"
 	"webserver/analyzerapp/rule"
 	"webserver/resultsapp"
 )
@@ -31,13 +32,12 @@ func NewAnalyzeBundle(req *resultsapp.MyRequest, logger *log.Logger, base string
 func (aBundle *AnalyzeBundle) Analyze() resultsapp.Response {
 	aBundle.Response.Request = aBundle.Req
 
-	//wg.Add(24)
-	wg.Add(23)
+	wg.Add(24)
 	go aBundle.anchorAnalysis()
 	go aBundle.audioAnalysis()
 	go aBundle.areaAnalysis()
 	go aBundle.buttonAnalysis()
-	//go aBundle.cssAnalysis()
+	go aBundle.cssAnalysis()
 	go aBundle.divAnalysis()
 	go aBundle.embedAnalysis()
 	go aBundle.h1Analysis()
@@ -73,7 +73,7 @@ func (aBundle *AnalyzeBundle) divAnalysis() {
 		var tag resultsapp.Divtag
 
 		//build the node
-		tag.Div = nodeText(node)
+		tag.Div = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -82,7 +82,7 @@ func (aBundle *AnalyzeBundle) divAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.DivResults = list
+	aBundle.Response.DivResults = &list
 }
 
 // buttonAnalysis function initiates all the button rule based analysis
@@ -96,7 +96,7 @@ func (aBundle *AnalyzeBundle) buttonAnalysis() {
 		var tag resultsapp.Buttontag
 
 		//build the node
-		tag.Button = nodeText(node)
+		tag.Button = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -105,7 +105,7 @@ func (aBundle *AnalyzeBundle) buttonAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.ButtonResults = list
+	aBundle.Response.ButtonResults = &list
 }
 
 // inputAnalysis function initiates all the input rule based analysis
@@ -119,7 +119,7 @@ func (aBundle *AnalyzeBundle) inputAnalysis() {
 		var tag resultsapp.Inputtag
 
 		//build the node
-		tag.Input = nodeText(node)
+		tag.Input = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -128,7 +128,7 @@ func (aBundle *AnalyzeBundle) inputAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.InputResults = list
+	aBundle.Response.InputResults = &list
 }
 
 // imagesAnalysis function initiates all the images rule based analysisx`
@@ -142,7 +142,7 @@ func (aBundle *AnalyzeBundle) imagesAnalysis() {
 		var tag resultsapp.Imgtag
 
 		//build the node
-		tag.Img = nodeText(node)
+		tag.Img = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -151,7 +151,7 @@ func (aBundle *AnalyzeBundle) imagesAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.ImageResults = list
+	aBundle.Response.ImageResults = &list
 }
 
 // videoAnalysis function initiates all the videos rule based analysis
@@ -165,7 +165,7 @@ func (aBundle *AnalyzeBundle) videoAnalysis() {
 		var tag resultsapp.Videotag
 
 		//build the node
-		tag.Video = nodeText(node)
+		tag.Video = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -174,7 +174,7 @@ func (aBundle *AnalyzeBundle) videoAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.VideoResults = list
+	aBundle.Response.VideoResults = &list
 }
 
 // audioAnalysis function initiates all the audios rule based analysis
@@ -188,7 +188,7 @@ func (aBundle *AnalyzeBundle) audioAnalysis() {
 		var tag resultsapp.Audiotag
 
 		//build the node
-		tag.Audio = nodeText(node)
+		tag.Audio = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -197,7 +197,7 @@ func (aBundle *AnalyzeBundle) audioAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.AudioResults = list
+	aBundle.Response.AudioResults = &list
 }
 
 // textareaAnalysis function initiates all the textarea rule based analysis
@@ -211,7 +211,7 @@ func (aBundle *AnalyzeBundle) textareaAnalysis() {
 		var tag resultsapp.Textareatag
 
 		//build the node
-		tag.Textarea = nodeText(node)
+		tag.Textarea = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -220,7 +220,7 @@ func (aBundle *AnalyzeBundle) textareaAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.TextareaResults = list
+	aBundle.Response.TextareaResults = &list
 }
 
 // selectAnalysis function initiates all the select rule based analysis
@@ -234,7 +234,7 @@ func (aBundle *AnalyzeBundle) selectAnalysis() {
 		var tag resultsapp.Selecttag
 
 		//build the node
-		tag.Select = nodeText(node)
+		tag.Select = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -243,7 +243,7 @@ func (aBundle *AnalyzeBundle) selectAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.SelectResults = list
+	aBundle.Response.SelectResults = &list
 }
 
 // iframeAnalysis function initiates all the iframe rule based analysis
@@ -257,7 +257,7 @@ func (aBundle *AnalyzeBundle) iframeAnalysis() {
 		var tag resultsapp.Iframetag
 
 		//build the node
-		tag.Iframe = nodeText(node)
+		tag.Iframe = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -266,7 +266,7 @@ func (aBundle *AnalyzeBundle) iframeAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.IframeResults = list
+	aBundle.Response.IframeResults = &list
 }
 
 // linkAnalysis function initiates all the link rule based analysis
@@ -280,7 +280,7 @@ func (aBundle *AnalyzeBundle) linkAnalysis() {
 		var tag resultsapp.Linktag
 
 		//build the node
-		tag.Link = nodeText(node)
+		tag.Link = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -289,7 +289,7 @@ func (aBundle *AnalyzeBundle) linkAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.LinkResults = list
+	aBundle.Response.LinkResults = &list
 }
 
 // anchorAnalysis function initiates all the anchor rule based analysis
@@ -303,7 +303,7 @@ func (aBundle *AnalyzeBundle) anchorAnalysis() {
 		var tag resultsapp.Anchortag
 
 		//build the node
-		tag.Anchor = nodeText(node)
+		tag.Anchor = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -312,7 +312,7 @@ func (aBundle *AnalyzeBundle) anchorAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.AnchorResults = list
+	aBundle.Response.AnchorResults = &list
 }
 
 // areaAnalysis function initiates all the area rule based analysis
@@ -326,7 +326,7 @@ func (aBundle *AnalyzeBundle) areaAnalysis() {
 		var tag resultsapp.Areatag
 
 		//build the node
-		tag.Area = nodeText(node)
+		tag.Area = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -335,7 +335,7 @@ func (aBundle *AnalyzeBundle) areaAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.AreaResults = list
+	aBundle.Response.AreaResults = &list
 }
 
 // objectAnalysis function initiates all the object rule based analysis
@@ -349,7 +349,7 @@ func (aBundle *AnalyzeBundle) objectAnalysis() {
 		var tag resultsapp.Objecttag
 
 		//build the node
-		tag.Object = nodeText(node)
+		tag.Object = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -358,7 +358,7 @@ func (aBundle *AnalyzeBundle) objectAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.ObjectResults = list
+	aBundle.Response.ObjectResults = &list
 }
 
 // embedAnalysis function initiates all the embed rule based analysis
@@ -372,7 +372,7 @@ func (aBundle *AnalyzeBundle) embedAnalysis() {
 		var tag resultsapp.Embedtag
 
 		//build the node
-		tag.Embed = nodeText(node)
+		tag.Embed = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -381,7 +381,7 @@ func (aBundle *AnalyzeBundle) embedAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.EmbedResults = list
+	aBundle.Response.EmbedResults = &list
 }
 
 // trackAnalysis function initiates all the track rule based analysis
@@ -395,7 +395,7 @@ func (aBundle *AnalyzeBundle) trackAnalysis() {
 		var tag resultsapp.Tracktag
 
 		//build the node
-		tag.Track = nodeText(node)
+		tag.Track = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -404,7 +404,7 @@ func (aBundle *AnalyzeBundle) trackAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.TrackResults = list
+	aBundle.Response.TrackResults = &list
 }
 
 // h1Analysis function initiates all the h1 rule based analysis
@@ -418,7 +418,7 @@ func (aBundle *AnalyzeBundle) h1Analysis() {
 		var tag resultsapp.H1tag
 
 		//build the node
-		tag.H1 = nodeText(node)
+		tag.H1 = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -427,7 +427,7 @@ func (aBundle *AnalyzeBundle) h1Analysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.H1Results = list
+	aBundle.Response.H1Results = &list
 }
 
 // h2Analysis function initiates all the h2 rule based analysis
@@ -441,7 +441,7 @@ func (aBundle *AnalyzeBundle) h2Analysis() {
 		var tag resultsapp.H2tag
 
 		//build the node
-		tag.H2 = nodeText(node)
+		tag.H2 = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -450,7 +450,7 @@ func (aBundle *AnalyzeBundle) h2Analysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.H2Results = list
+	aBundle.Response.H2Results = &list
 }
 
 // h3Analysis function initiates all the h3 rule based analysis
@@ -464,7 +464,7 @@ func (aBundle *AnalyzeBundle) h3Analysis() {
 		var tag resultsapp.H3tag
 
 		//build the node
-		tag.H3 = nodeText(node)
+		tag.H3 = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -473,7 +473,7 @@ func (aBundle *AnalyzeBundle) h3Analysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.H3Results = list
+	aBundle.Response.H3Results = &list
 }
 
 // h4Analysis function initiates all the h4 rule based analysis
@@ -487,7 +487,7 @@ func (aBundle *AnalyzeBundle) h4Analysis() {
 		var tag resultsapp.H4tag
 
 		//build the node
-		tag.H4 = nodeText(node)
+		tag.H4 = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -496,7 +496,7 @@ func (aBundle *AnalyzeBundle) h4Analysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.H4Results = list
+	aBundle.Response.H4Results = &list
 }
 
 // h5Analysis function initiates all the h5 rule based analysis
@@ -510,7 +510,7 @@ func (aBundle *AnalyzeBundle) h5Analysis() {
 		var tag resultsapp.H5tag
 
 		//build the node
-		tag.H5 = nodeText(node)
+		tag.H5 = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -519,7 +519,7 @@ func (aBundle *AnalyzeBundle) h5Analysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.H5Results = list
+	aBundle.Response.H5Results = &list
 }
 
 // h6Analysis function initiates all the h6 rule based analysis
@@ -533,7 +533,7 @@ func (aBundle *AnalyzeBundle) h6Analysis() {
 		var tag resultsapp.H6tag
 
 		//build the node
-		tag.H6 = nodeText(node)
+		tag.H6 = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -542,7 +542,7 @@ func (aBundle *AnalyzeBundle) h6Analysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.H6Results = list
+	aBundle.Response.H6Results = &list
 }
 
 // paraAnalysis function initiates all the para rule based analysis
@@ -556,7 +556,7 @@ func (aBundle *AnalyzeBundle) paraAnalysis() {
 		var tag resultsapp.Paratag
 
 		//build the node
-		tag.Para = nodeText(node)
+		tag.Para = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -565,7 +565,7 @@ func (aBundle *AnalyzeBundle) paraAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.ParaResults = list
+	aBundle.Response.ParaResults = &list
 }
 
 // preAnalysis function initiates all the pre rule based analysis
@@ -579,7 +579,7 @@ func (aBundle *AnalyzeBundle) preAnalysis() {
 		var tag resultsapp.Pretag
 
 		//build the node
-		tag.Pre = nodeText(node)
+		tag.Pre = helper.NodeText(node)
 
 		//implement rules
 		aBundle.rules.Logger = aBundle.Logger
@@ -588,7 +588,7 @@ func (aBundle *AnalyzeBundle) preAnalysis() {
 			list = append(list, tag)
 		}
 	}
-	aBundle.Response.PreResults = list
+	aBundle.Response.PreResults = &list
 }
 
 // cssAnalysis function initiates all the CSS rule based analysis
@@ -596,9 +596,9 @@ func (aBundle *AnalyzeBundle) cssAnalysis() {
 	aBundle.Logger.Println("Initiating CSS Analysis......")
 	defer wg.Done()
 	var list []resultsapp.CSS
-	//nodes := nodeMap["divNodes"]
-	nodes := aBundle.CollectedTags.CssLinks
-	for _, css := range nodes {
+	nodes := aBundle.CollectedTags.Divs
+	cssLinks := aBundle.CollectedTags.CssLinks
+	for _, css := range cssLinks {
 		aBundle.Logger.Printf("CSS : %v ", css)
 		var tag resultsapp.CSS
 
@@ -606,12 +606,15 @@ func (aBundle *AnalyzeBundle) cssAnalysis() {
 		tag.CSS = css
 
 		//implement rule
-		aBundle.rules.Logger = aBundle.Logger
-		//if status := aBundle.rules.Execute(node); status == true {
-		//	tag.Result = aBundle.rules.Results
-		//	list = append(list, tag)
-		//}
+		aBundle.rules.Css = css
+		for _, node := range nodes {
+			aBundle.rules.Logger = aBundle.Logger
+			if status := aBundle.rules.Execute(node); status == true {
+				tag.Result = aBundle.rules.Results
+				list = append(list, tag)
+			}
+		}
 
 	}
-	aBundle.Response.CSSResults = list
+	aBundle.Response.CSSResults = &list
 }

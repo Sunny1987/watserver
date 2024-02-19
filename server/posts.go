@@ -10,6 +10,7 @@ import (
 
 var wg sync.WaitGroup
 
+// GetURLResp will scan the URL with desired depth and provide the accessibility results
 func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	//track execution time for scan
 	timeStart := time.Now()
@@ -54,6 +55,48 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))
 }
 
+// FileScan will scan the uploaded File and provide the accessibility results
 func (l *NewLogger) FileScan(rw http.ResponseWriter, r *http.Request) {
+	//track execution time for scan
+	timeStart := time.Now()
 
+	//get the request from middleware
+	//req := r.Context().Value(KeyUser{}).(*MyRequest)
+
+	var finalResult []resultsapp.Response
+
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(rw, "Error max file size exceeded", http.StatusBadRequest)
+		return
+	}
+	file, handler, err := r.FormFile("myfile")
+
+	if err != nil {
+		l.myLogger.Println("Error Retrieving the File")
+		l.myLogger.Println(err)
+		return
+	}
+	defer file.Close()
+	l.myLogger.Printf("Uploaded File: %+v\n", handler.Filename)
+	l.myLogger.Printf("File Size: %+v\n", handler.Size)
+	l.myLogger.Printf("MIME Header: %+v\n", handler.Header)
+
+	//setup req object
+	reqMod := &MyRequest{}
+	reqMod.URL = ""
+	reqMod.Depth = 0
+	reqMod.File = file
+	reqMod.FileName = handler.Filename
+
+	//start scan for File
+	results := reqMod.startScan(l.myLogger, "")
+
+	//Create Final response
+	finalResult = append(finalResult, results)
+
+	//print the response
+	resultsapp.PrintResponse(rw, l.myLogger, finalResult)
+
+	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))
 }

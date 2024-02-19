@@ -11,9 +11,10 @@ import (
 
 // MyRequest object for input
 type MyRequest struct {
-	URL   string    `json:"url" validate:"required,url"`
-	Depth int       `json:"depth" validate:"gt=-1,lte=2"`
-	File  io.Reader `json:"file"`
+	URL      string    `json:"url" validate:"required,url"`
+	Depth    int       `json:"depth" validate:"gt=-1,lte=2"`
+	File     io.Reader `json:"file"`
+	FileName string    `json:"fileName"`
 }
 
 // Validate will perform field level validation
@@ -30,7 +31,7 @@ func (req *MyRequest) Validate() error {
 func (req *MyRequest) startScan(l *log.Logger, base string) resultsapp.Response {
 
 	//create requestBundle
-	requestBundle := resultsapp.NewMyRequest(req.URL, req.Depth, req.File)
+	requestBundle := resultsapp.NewMyRequest(req.URL, req.Depth, req.File, req.FileName)
 
 	//Create new ParseBundle/DataBundle
 	DataBundle := parser.NewParseBundle(requestBundle, l, base)
