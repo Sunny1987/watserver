@@ -42,6 +42,12 @@ func (rule *RuleResults) ExecuteWCAG111(node *html.Node) (string, []*string) {
 	rule.Logger.Println("....Execute ARIA6")
 	rule.Aria6Technique(node)
 	rule.Aria10Technique(node)
+	rule.ARIA15Technique(node)
+	rule.G94Technique(node)
+	rule.H2Technique(node)
+	rule.H35Technique(node)
+	rule.H45Technique(node)
+	rule.H86Technique(node)
 
 	return "WCAG111", rule.Rules.WCAG111.GetRuleFailures()
 }
@@ -122,5 +128,58 @@ func (rule *RuleResults) H45Technique(node *html.Node) {
 		if helper.AttributeCheckValEmpty(node.Attr, "longdesc") {
 			rule.Rules.WCAG111.H45 = Fail
 		}
+	}
+}
+
+// ARIA15Technique analysis for all tags
+func (rule *RuleResults) ARIA15Technique(node *html.Node) {
+	if helper.AttributeSearch(node.Attr, "aria-describedby") {
+		if helper.AttributeCheckValEmpty(node.Attr, "aria-describedby") {
+			rule.Rules.WCAG111.Aria15 = Fail
+		}
+	}
+}
+
+// H2Technique analysis for all tags
+func (rule *RuleResults) H2Technique(node *html.Node) {
+	if node.Parent.Data == "a" {
+		if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+			rule.Rules.WCAG111.H2 = Fail
+		}
+	}
+}
+
+// H35Technique analysis for all tags
+func (rule *RuleResults) H35Technique(node *html.Node) {
+	if helper.HasOneChild(node) {
+		if helper.IsTextNode(node.FirstChild) {
+			if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+				rule.Rules.WCAG111.H35 = Fail
+			}
+
+		}
+	}
+}
+
+// G94Technique analysis for all tags
+func (rule *RuleResults) G94Technique(node *html.Node) {
+	if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+		rule.Rules.WCAG111.G94 = Fail
+	}
+
+	if helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-labelledby") {
+		rule.Rules.WCAG111.G94 = Fail
+	}
+
+	if helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-label") {
+		rule.Rules.WCAG111.G94 = Fail
+	}
+
+	if helper.AttributeCheckValEmpty(node.Attr, "title") {
+		rule.Rules.WCAG111.G94 = Fail
+	}
+
+	if !helper.AttributeCheckValEmpty(node.Attr, "alt") && helper.AttributeCheckVal(node.Attr, "role", "presentation") {
+		rule.Rules.WCAG111.G94 = Fail
 	}
 }

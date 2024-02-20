@@ -1,12 +1,13 @@
 package analyzerapp
 
 import (
-	"golang.org/x/net/html"
 	"log"
 	"sync"
 	"webserver/analyzerapp/helper"
 	"webserver/analyzerapp/rule"
 	"webserver/resultsapp"
+
+	"golang.org/x/net/html"
 )
 
 var wg sync.WaitGroup
@@ -79,7 +80,10 @@ func (aBundle *AnalyzeBundle) divAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+
 		}
 	}
 	aBundle.Response.DivResults = &list
@@ -102,7 +106,9 @@ func (aBundle *AnalyzeBundle) buttonAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.ButtonResults = &list
@@ -125,7 +131,9 @@ func (aBundle *AnalyzeBundle) inputAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.InputResults = &list
@@ -148,7 +156,9 @@ func (aBundle *AnalyzeBundle) imagesAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.ImageResults = &list
@@ -171,7 +181,9 @@ func (aBundle *AnalyzeBundle) videoAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.VideoResults = &list
@@ -194,7 +206,9 @@ func (aBundle *AnalyzeBundle) audioAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.AudioResults = &list
@@ -217,7 +231,9 @@ func (aBundle *AnalyzeBundle) textareaAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.TextareaResults = &list
@@ -240,7 +256,9 @@ func (aBundle *AnalyzeBundle) selectAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.SelectResults = &list
@@ -263,7 +281,9 @@ func (aBundle *AnalyzeBundle) iframeAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.IframeResults = &list
@@ -286,7 +306,9 @@ func (aBundle *AnalyzeBundle) linkAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.LinkResults = &list
@@ -309,7 +331,9 @@ func (aBundle *AnalyzeBundle) anchorAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.AnchorResults = &list
@@ -332,7 +356,9 @@ func (aBundle *AnalyzeBundle) areaAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.AreaResults = &list
@@ -355,7 +381,9 @@ func (aBundle *AnalyzeBundle) objectAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.ObjectResults = &list
@@ -378,7 +406,9 @@ func (aBundle *AnalyzeBundle) embedAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.EmbedResults = &list
@@ -401,7 +431,9 @@ func (aBundle *AnalyzeBundle) trackAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.TrackResults = &list
@@ -424,7 +456,9 @@ func (aBundle *AnalyzeBundle) h1Analysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.H1Results = &list
@@ -447,7 +481,9 @@ func (aBundle *AnalyzeBundle) h2Analysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.H2Results = &list
@@ -470,7 +506,9 @@ func (aBundle *AnalyzeBundle) h3Analysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.H3Results = &list
@@ -493,7 +531,9 @@ func (aBundle *AnalyzeBundle) h4Analysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.H4Results = &list
@@ -516,7 +556,9 @@ func (aBundle *AnalyzeBundle) h5Analysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.H5Results = &list
@@ -539,7 +581,9 @@ func (aBundle *AnalyzeBundle) h6Analysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.H6Results = &list
@@ -562,7 +606,9 @@ func (aBundle *AnalyzeBundle) paraAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.ParaResults = &list
@@ -585,7 +631,9 @@ func (aBundle *AnalyzeBundle) preAnalysis() {
 		aBundle.rules.Logger = aBundle.Logger
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
-			list = append(list, tag)
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
 		}
 	}
 	aBundle.Response.PreResults = &list
@@ -611,7 +659,9 @@ func (aBundle *AnalyzeBundle) cssAnalysis() {
 			aBundle.rules.Logger = aBundle.Logger
 			if status := aBundle.rules.Execute(node); status == true {
 				tag.Result = aBundle.rules.Results
-				list = append(list, tag)
+				if len(list) < 50 {
+					list = append(list, tag)
+				}
 			}
 		}
 

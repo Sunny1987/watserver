@@ -1,8 +1,9 @@
 package helper
 
 import (
-	"golang.org/x/net/html"
 	"strings"
+
+	"golang.org/x/net/html"
 )
 
 // AttributeSearch will respond if the attribute is present
@@ -69,10 +70,10 @@ func NodeText(n *html.Node) string {
 
 	switch n.Data {
 	case "div":
-		if HasChildren(n) || text(n) != "" {
+		if HasChildren(n) || Text(n) != "" {
 			resBuilder.WriteString("<div ")
 			resBuilder.WriteString(strbuilder.String())
-			resBuilder.WriteString(text(n))
+			resBuilder.WriteString(Text(n))
 			resBuilder.WriteString("</div>")
 			//res = "<div " + str + ">" + text(n) + "</div>"
 		} else {
@@ -84,11 +85,11 @@ func NodeText(n *html.Node) string {
 		}
 
 	case "button":
-		if HasChildren(n) || text(n) != "" {
+		if HasChildren(n) || Text(n) != "" {
 			resBuilder.WriteString("<button ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
-			resBuilder.WriteString(text(n))
+			resBuilder.WriteString(Text(n))
 			resBuilder.WriteString("</button>")
 			//res = "<button " + str + ">" + text(n) + "</button>"
 		} else {
@@ -99,11 +100,11 @@ func NodeText(n *html.Node) string {
 		}
 
 	case "input":
-		if HasChildren(n) || text(n) != "" {
+		if HasChildren(n) || Text(n) != "" {
 			resBuilder.WriteString("<button ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
-			resBuilder.WriteString(text(n))
+			resBuilder.WriteString(Text(n))
 			resBuilder.WriteString("</button>")
 			//res = "<button " + str + ">" + text(n) + "</button>"
 		} else {
@@ -124,11 +125,11 @@ func NodeText(n *html.Node) string {
 		resBuilder.WriteString("/>")
 		//res = "<select " + str + "/>"
 	case "textarea":
-		if HasChildren(n) || text(n) != "" {
+		if HasChildren(n) || Text(n) != "" {
 			resBuilder.WriteString("<textarea ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
-			resBuilder.WriteString(text(n))
+			resBuilder.WriteString(Text(n))
 			resBuilder.WriteString("</textarea>")
 			//res = "<textarea " + str + ">" + text(n) + "</textarea>"
 		} else {
@@ -138,11 +139,11 @@ func NodeText(n *html.Node) string {
 			//res = "<textarea " + str + "/>"
 		}
 	case "a":
-		if HasChildren(n) || text(n) != "" {
+		if HasChildren(n) || Text(n) != "" {
 			resBuilder.WriteString("<a ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
-			resBuilder.WriteString(text(n))
+			resBuilder.WriteString(Text(n))
 			resBuilder.WriteString("</a>")
 			//res = "<a " + str + ">" + text(n) + "</a>"
 		} else {
@@ -152,11 +153,11 @@ func NodeText(n *html.Node) string {
 			resBuilder.WriteString("/>")
 		}
 	case "span":
-		if HasChildren(n) || text(n) != "" {
+		if HasChildren(n) || Text(n) != "" {
 			resBuilder.WriteString("<span ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
-			resBuilder.WriteString(text(n))
+			resBuilder.WriteString(Text(n))
 			resBuilder.WriteString("</span>")
 			//res = "<span " + str + ">" + text(n) + "</span>"
 		} else {
@@ -170,50 +171,50 @@ func NodeText(n *html.Node) string {
 		resBuilder.WriteString("<h1 ")
 		resBuilder.WriteString(strbuilder.String())
 		resBuilder.WriteString(">")
-		resBuilder.WriteString(text(n))
+		resBuilder.WriteString(Text(n))
 		resBuilder.WriteString("</h1>")
 	case "h2":
 		//res = "<h2 " + str + ">" + text(n) + "</h2>"
 		resBuilder.WriteString("<h2 ")
 		resBuilder.WriteString(strbuilder.String())
 		resBuilder.WriteString(">")
-		resBuilder.WriteString(text(n))
+		resBuilder.WriteString(Text(n))
 		resBuilder.WriteString("</h2>")
 	case "h3":
 		//res = "<h3 " + str + ">" + text(n) + "</h3>"
 		resBuilder.WriteString("<h3 ")
 		resBuilder.WriteString(strbuilder.String())
 		resBuilder.WriteString(">")
-		resBuilder.WriteString(text(n))
+		resBuilder.WriteString(Text(n))
 		resBuilder.WriteString("</h3>")
 	case "h4":
 		//res = "<h4 " + str + ">" + text(n) + "</h4>"
 		resBuilder.WriteString("<h4 ")
 		resBuilder.WriteString(strbuilder.String())
 		resBuilder.WriteString(">")
-		resBuilder.WriteString(text(n))
+		resBuilder.WriteString(Text(n))
 		resBuilder.WriteString("</h4>")
 	case "h5":
 		//res = "<h5 " + str + ">" + text(n) + "</h5>"
 		resBuilder.WriteString("<h5 ")
 		resBuilder.WriteString(strbuilder.String())
 		resBuilder.WriteString(">")
-		resBuilder.WriteString(text(n))
+		resBuilder.WriteString(Text(n))
 		resBuilder.WriteString("</h5>")
 	case "h6":
 		//res = "<h6 " + str + ">" + text(n) + "</h6>"
 		resBuilder.WriteString("<h6 ")
 		resBuilder.WriteString(strbuilder.String())
 		resBuilder.WriteString(">")
-		resBuilder.WriteString(text(n))
+		resBuilder.WriteString(Text(n))
 		resBuilder.WriteString("</h6>")
 	case "p":
-		if HasChildren(n) || text(n) != "" {
+		if HasChildren(n) || Text(n) != "" {
 			//res = "<p " + str + ">" + text(n) + "</p>"
 			resBuilder.WriteString("<p ")
 			resBuilder.WriteString(strbuilder.String())
 			resBuilder.WriteString(">")
-			resBuilder.WriteString(text(n))
+			resBuilder.WriteString(Text(n))
 			resBuilder.WriteString("</p>")
 		} else {
 			//res = "<p " + str + "/>"
@@ -237,16 +238,13 @@ func NodeText(n *html.Node) string {
 }
 
 // isTextNode will validate if node is TextNode
-func isTextNode(n *html.Node) bool {
-	if n.Type == html.TextNode {
-		return true
-	}
-	return false
+func IsTextNode(n *html.Node) bool {
+	return n.Type == html.TextNode
 }
 
 // text will get the text value of the node
-func text(n *html.Node) string {
-	if isTextNode(n) {
+func Text(n *html.Node) string {
+	if IsTextNode(n) {
 		return n.Data
 	}
 	if n.Type != html.ElementNode {
@@ -254,7 +252,7 @@ func text(n *html.Node) string {
 	}
 	var ret string
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		ret = text(c) + " "
+		ret = Text(c) + " "
 	}
 	return strings.Join(strings.Fields(ret), " ")
 }
