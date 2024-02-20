@@ -1,10 +1,11 @@
 package rule
 
 import (
-	"golang.org/x/net/html"
 	"reflect"
 	"strings"
 	"webserver/analyzerapp/helper"
+
+	"golang.org/x/net/html"
 )
 
 //type WCAG111rule interface {
@@ -30,6 +31,7 @@ type WCAG111 struct {
 	Aria15 string
 	H86    string
 	H86CSS string
+	H45    string
 }
 
 // ExecuteWCAG111 executes the WCAG111 techniques
@@ -111,5 +113,14 @@ func (rule *RuleResults) H86Technique(node *html.Node) {
 			}
 		}
 
+	}
+}
+
+// H45Technique analysis for all tags
+func (rule *RuleResults) H45Technique(node *html.Node) {
+	if helper.AttributeSearch(node.Attr, "longdesc") {
+		if helper.AttributeCheckValEmpty(node.Attr, "longdesc") {
+			rule.Rules.WCAG111.H45 = Fail
+		}
 	}
 }
