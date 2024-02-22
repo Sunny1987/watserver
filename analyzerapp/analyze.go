@@ -33,12 +33,12 @@ func NewAnalyzeBundle(req *resultsapp.MyRequest, logger *log.Logger, base string
 func (aBundle *AnalyzeBundle) Analyze() resultsapp.Response {
 	aBundle.Response.Request = aBundle.Req
 
-	wg.Add(24)
+	wg.Add(23)
 	go aBundle.anchorAnalysis()
 	go aBundle.audioAnalysis()
 	go aBundle.areaAnalysis()
 	go aBundle.buttonAnalysis()
-	go aBundle.cssAnalysis()
+	//go aBundle.cssAnalysis()
 	go aBundle.divAnalysis()
 	go aBundle.embedAnalysis()
 	go aBundle.h1Analysis()

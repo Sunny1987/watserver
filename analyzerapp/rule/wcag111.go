@@ -35,26 +35,33 @@ type WCAG111 struct {
 }
 
 // ExecuteWCAG111 executes the WCAG111 techniques
-func (rule *RuleResults) ExecuteWCAG111(node *html.Node) (string, []*string) {
+func (rule *RuleResults) ExecuteWCAG111(node *html.Node) (string, []string) {
 	rule.Logger.Printf("...intiating WCAG111 for %v ", node.Data)
 
 	//implement the techniques
 	rule.Logger.Println("....Execute ARIA6")
 	rule.Aria6Technique(node)
+	rule.Logger.Println("....Execute ARIA10")
 	rule.Aria10Technique(node)
+	rule.Logger.Println("....Execute ARIA15")
 	rule.ARIA15Technique(node)
+	rule.Logger.Println("....Execute G94")
 	rule.G94Technique(node)
+	rule.Logger.Println("....Execute H2")
 	rule.H2Technique(node)
+	rule.Logger.Println("....Execute H35")
 	rule.H35Technique(node)
+	rule.Logger.Println("....Execute H45")
 	rule.H45Technique(node)
+	rule.Logger.Println("....Execute H86")
 	rule.H86Technique(node)
 
 	return "WCAG111", rule.Rules.WCAG111.GetRuleFailures()
 }
 
 // GetRuleFailures will get the list of Techniques failures
-func (rule WCAG111) GetRuleFailures() []*string {
-	var techniques []*string
+func (rule WCAG111) GetRuleFailures() []string {
+	var techniques []string
 	structVal := reflect.ValueOf(rule)
 	for i := 0; i < structVal.NumField(); i++ {
 		field := structVal.Field(i)
@@ -62,7 +69,7 @@ func (rule WCAG111) GetRuleFailures() []*string {
 		value := field.Interface()
 
 		if value == Fail {
-			techniques = append(techniques, &name)
+			techniques = append(techniques, name)
 		}
 	}
 	return techniques
