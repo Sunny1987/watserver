@@ -35,20 +35,33 @@ type WCAG111 struct {
 }
 
 // ExecuteWCAG111 executes the WCAG111 techniques
-func (rule *RuleResults) ExecuteWCAG111(node *html.Node) (string, []*string) {
+func (rule *RuleResults) ExecuteWCAG111(node *html.Node) (string, []string) {
 	rule.Logger.Printf("...intiating WCAG111 for %v ", node.Data)
 
 	//implement the techniques
 	rule.Logger.Println("....Execute ARIA6")
 	rule.Aria6Technique(node)
+	rule.Logger.Println("....Execute ARIA10")
 	rule.Aria10Technique(node)
+	rule.Logger.Println("....Execute ARIA15")
+	rule.ARIA15Technique(node)
+	rule.Logger.Println("....Execute G94")
+	rule.G94Technique(node)
+	rule.Logger.Println("....Execute H2")
+	rule.H2Technique(node)
+	rule.Logger.Println("....Execute H35")
+	rule.H35Technique(node)
+	rule.Logger.Println("....Execute H45")
+	rule.H45Technique(node)
+	rule.Logger.Println("....Execute H86")
+	rule.H86Technique(node)
 
 	return "WCAG111", rule.Rules.WCAG111.GetRuleFailures()
 }
 
 // GetRuleFailures will get the list of Techniques failures
-func (rule WCAG111) GetRuleFailures() []*string {
-	var techniques []*string
+func (rule WCAG111) GetRuleFailures() []string {
+	var techniques []string
 	structVal := reflect.ValueOf(rule)
 	for i := 0; i < structVal.NumField(); i++ {
 		field := structVal.Field(i)
@@ -56,7 +69,7 @@ func (rule WCAG111) GetRuleFailures() []*string {
 		value := field.Interface()
 
 		if value == Fail {
-			techniques = append(techniques, &name)
+			techniques = append(techniques, name)
 		}
 	}
 	return techniques
@@ -122,5 +135,58 @@ func (rule *RuleResults) H45Technique(node *html.Node) {
 		if helper.AttributeCheckValEmpty(node.Attr, "longdesc") {
 			rule.Rules.WCAG111.H45 = Fail
 		}
+	}
+}
+
+// ARIA15Technique analysis for all tags
+func (rule *RuleResults) ARIA15Technique(node *html.Node) {
+	if helper.AttributeSearch(node.Attr, "aria-describedby") {
+		if helper.AttributeCheckValEmpty(node.Attr, "aria-describedby") {
+			rule.Rules.WCAG111.Aria15 = Fail
+		}
+	}
+}
+
+// H2Technique analysis for all tags
+func (rule *RuleResults) H2Technique(node *html.Node) {
+	if node.Parent.Data == "a" {
+		if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+			rule.Rules.WCAG111.H2 = Fail
+		}
+	}
+}
+
+// H35Technique analysis for all tags
+func (rule *RuleResults) H35Technique(node *html.Node) {
+	if helper.HasOneChild(node) {
+		if helper.IsTextNode(node.FirstChild) {
+			if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+				rule.Rules.WCAG111.H35 = Fail
+			}
+
+		}
+	}
+}
+
+// G94Technique analysis for all tags
+func (rule *RuleResults) G94Technique(node *html.Node) {
+	if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+		rule.Rules.WCAG111.G94 = Fail
+	}
+
+	if helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-labelledby") {
+		rule.Rules.WCAG111.G94 = Fail
+	}
+
+	if helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-label") {
+		rule.Rules.WCAG111.G94 = Fail
+	}
+
+	if helper.AttributeCheckValEmpty(node.Attr, "title") {
+		rule.Rules.WCAG111.G94 = Fail
+	}
+
+	if !helper.AttributeCheckValEmpty(node.Attr, "alt") && helper.AttributeCheckVal(node.Attr, "role", "presentation") {
+		rule.Rules.WCAG111.G94 = Fail
 	}
 }

@@ -39,11 +39,18 @@ type Response struct {
 
 func PrintResponse(rw http.ResponseWriter, l *log.Logger, results []Response) {
 	l.Println("Initiating the response....")
-	rep, err := json.MarshalIndent(results, "", " ")
+	var filteredRes []Response
+	if len(results) > 100 {
+		filteredRes = results[:99]
+	} else {
+		filteredRes = results
+	}
+	rep, err := json.MarshalIndent(filteredRes, "", " ")
 	if err != nil {
 		l.Println(err)
 	}
-	_, err = fmt.Fprintln(rw, string(rep))
+	fresp := string(rep)
+	_, err = fmt.Fprintln(rw, fresp)
 	if err != nil {
 		l.Printf("Error : %v", err)
 	}

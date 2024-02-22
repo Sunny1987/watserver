@@ -27,8 +27,8 @@ type Tags struct {
 }
 
 type Result struct {
-	Guideline *string
-	Rules     []*string
+	Guideline string
+	Rules     []string
 }
 
 // Divtag is the Div based rule results
