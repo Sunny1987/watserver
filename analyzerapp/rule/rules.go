@@ -14,23 +14,21 @@ const (
 	Pass = "Pass"
 )
 
-func NewResult(guideline string, rules []string) *resultsapp.Result {
-	return &resultsapp.Result{Guideline: guideline, Rules: rules}
-}
-
 // RuleResults is the finalized rules results for tags
 type RuleResults struct {
-	Results []*resultsapp.Result
-	Rules   Rules
-	Logger  *log.Logger
-	Css     string
-	sync.Mutex
+	Results    []*resultsapp.Result
+	Rules      Rules
+	Logger     *log.Logger
+	Css        string
+	sync.Mutex //making struct thread-safe
+	status     bool
 }
 
 // Rules carries the rules results
 type Rules struct {
 	WCAG111 WCAG111
 	WCAG121 WCAG121
+	WCAG122 WCAG122
 }
 
 func (rule Rules) ClearRules() {
@@ -43,41 +41,34 @@ func (rule *RuleResults) Execute(node *html.Node) bool {
 	rule.Lock()
 	defer rule.Unlock()
 	var results []*resultsapp.Result
-	var status bool
+	//var status bool
 
 	//Execute WCAG111 guideline
 	guideline, techniques := rule.ExecuteWCAG111(node)
-	//status = UpdateRuleList(guideline, techniques, &results)
-	if len(techniques) > 0 {
-		result := NewResult(guideline, techniques)
-		results = append(results, result)
-		status = true
-		techniques = nil
-		guideline = ""
-	}
+	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
 	//Execute WCAG121 guideline
 	guideline, techniques = rule.ExecuteWCAG121(node)
-	//status = UpdateRuleList(guideline, techniques, &results)
-	if len(techniques) > 0 {
-		result := NewResult(guideline, techniques)
-		results = append(results, result)
-		status = true
-		techniques = nil
-		guideline = ""
-	}
+	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
+
+	//Execute WCAG122 guideline
+	guideline, techniques = rule.ExecuteWCAG122(node)
+	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
 	rule.Results = results
-	return status
+	return rule.status
+
 }
 
-//func UpdateRuleList(guideline string, techniques []string, results *[]*resultsapp.Result) bool {
-//	if len(techniques) > 0 {
-//		result := NewResult(guideline, techniques)
-//		*results = append(*results, result)
-//		techniques = nil
-//		guideline = ""
-//		return true
-//	}
-//	return false
-//}
+// UpdateRuleList will filter and update the result slice
+func (rule *RuleResults) UpdateRuleList(guideline string, techniques []string) []*resultsapp.Result {
+	var results []*resultsapp.Result
+	if len(techniques) > 0 {
+		result := resultsapp.NewResult(guideline, techniques)
+		results = append(results, result)
+		techniques = nil
+		guideline = ""
+		rule.status = true
+	}
+	return results
+}
