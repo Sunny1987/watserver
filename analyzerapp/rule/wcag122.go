@@ -22,7 +22,7 @@ func (rule *RuleResults) ExecuteWCAG122(node *html.Node) (string, []string) {
 	rule.Logger.Println("....Execute H95")
 	rule.H95Technique(node)
 
-	return "WCAG122", rule.Rules.WCAG122.GetRuleFailures()
+	return Wcag122, rule.Rules.WCAG122.GetRuleFailures()
 }
 
 // GetRuleFailures will get the list of Techniques failures
@@ -45,22 +45,22 @@ func (rule WCAG122) GetRuleFailures() []string {
 func (rule *RuleResults) H95Technique(node *html.Node) {
 	if (node.Parent.Data == "video" || node.Parent.Data == "object" || node.Parent.Data == "embed") &&
 		node.Data == "track" &&
-		helper.AttributeCheckVal(node.Attr, "kind", "caption") {
+		helper.IsAttributeKeyValueMatching(node.Attr, "kind", "caption") {
 		rule.Rules.WCAG122.H95 = Fail
 	}
 
 	if (node.Parent.Data == "video" || node.Parent.Data == "object" || node.Parent.Data == "embed") &&
 		helper.HasNoChild(node) &&
-		helper.AttributeCheckValContent(node.Attr, "src", "caption") {
+		helper.IsAttributeValueContaining(node.Attr, "src", "caption") {
 		rule.Rules.WCAG122.H95 = Fail
 	}
 
 	if (node.Parent.Data == "video" || node.Parent.Data == "object" || node.Parent.Data == "embed") &&
-		helper.AttributeSearch(node.Attr, "ariadescribedby") {
+		helper.IsAttributePresent(node.Attr, "ariadescribedby") {
 		attval := helper.GetAttribute(node.Attr, "ariadescribedby")
 		for c := node.Parent.FirstChild; c != nil; c = c.NextSibling {
-			if helper.AttributeSearch(c.Attr, "id") {
-				if helper.AttributeCheckValContent(c.Attr, "id", attval) {
+			if helper.IsAttributePresent(c.Attr, "id") {
+				if helper.IsAttributeValueContaining(c.Attr, "id", attval) {
 					rule.Rules.WCAG122.H95 = Fail
 					break
 				}

@@ -60,7 +60,7 @@ func (rule *RuleResults) ExecuteWCAG111(node *html.Node) (string, []string) {
 	rule.Logger.Println("....Execute H86")
 	rule.H86Technique(node)
 
-	return "WCAG111", rule.Rules.WCAG111.GetRuleFailures()
+	return Wcag111, rule.Rules.WCAG111.GetRuleFailures()
 }
 
 // GetRuleFailures will get the list of Techniques failures
@@ -84,7 +84,7 @@ func (rule *RuleResults) Aria6Technique(node *html.Node) {
 	rule.Logger.Println("...Initiating ARIA6 analysis")
 
 	//logic implementation
-	if helper.AttributeSearch(node.Attr, "role") && helper.AttributeCheckValEmpty(node.Attr, "aria-label") {
+	if helper.IsAttributePresent(node.Attr, "role") && helper.IsAttributeValueEmpty(node.Attr, "aria-label") {
 		rule.Rules.WCAG111.Aria6 = Fail
 	}
 }
@@ -107,10 +107,10 @@ func (rule *RuleResults) Aria10Technique(node *html.Node) {
 	//
 	//<div id="star_id">4 of 5</div>
 	if helper.HasChildren(node) {
-		if helper.AttributeCheckValEmpty(node.Attr, "aria-labelledby") {
+		if helper.IsAttributeValueEmpty(node.Attr, "aria-labelledby") {
 			for c := node.FirstChild; c != nil; c = c.NextSibling {
-				if helper.AttributeSearch(c.Attr, "src") {
-					if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+				if helper.IsAttributePresent(c.Attr, "src") {
+					if helper.IsAttributeValueEmpty(node.Attr, "alt") {
 						rule.Rules.WCAG111.Aria10 = Fail
 					}
 				}
@@ -124,8 +124,8 @@ func (rule *RuleResults) H86Technique(node *html.Node) {
 	if strings.Contains(rule.Css, "white-space: pre") {
 		name := strings.Split(rule.Css, " ")
 		className := strings.Trim(name[0], "@")
-		if helper.AttributeCheckVal(node.Attr, "class", className) {
-			if helper.AttributeSearch(node.Attr, "alt") {
+		if helper.IsAttributeKeyValueMatching(node.Attr, "class", className) {
+			if helper.IsAttributePresent(node.Attr, "alt") {
 				rule.Rules.WCAG111.H86CSS = Fail
 			}
 		}
@@ -135,8 +135,8 @@ func (rule *RuleResults) H86Technique(node *html.Node) {
 
 // H45Technique analysis for all tags
 func (rule *RuleResults) H45Technique(node *html.Node) {
-	if helper.AttributeSearch(node.Attr, "longdesc") {
-		if helper.AttributeCheckValEmpty(node.Attr, "longdesc") {
+	if helper.IsAttributePresent(node.Attr, "longdesc") {
+		if helper.IsAttributeValueEmpty(node.Attr, "longdesc") {
 			rule.Rules.WCAG111.H45 = Fail
 		}
 	}
@@ -144,8 +144,8 @@ func (rule *RuleResults) H45Technique(node *html.Node) {
 
 // ARIA15Technique analysis for all tags
 func (rule *RuleResults) ARIA15Technique(node *html.Node) {
-	if helper.AttributeSearch(node.Attr, "aria-describedby") {
-		if helper.AttributeCheckValEmpty(node.Attr, "aria-describedby") {
+	if helper.IsAttributePresent(node.Attr, "aria-describedby") {
+		if helper.IsAttributeValueEmpty(node.Attr, "aria-describedby") {
 			rule.Rules.WCAG111.Aria15 = Fail
 		}
 	}
@@ -154,7 +154,7 @@ func (rule *RuleResults) ARIA15Technique(node *html.Node) {
 // H2Technique analysis for all tags
 func (rule *RuleResults) H2Technique(node *html.Node) {
 	if node.Parent.Data == "a" {
-		if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+		if helper.IsAttributeValueEmpty(node.Attr, "alt") {
 			rule.Rules.WCAG111.H2 = Fail
 		}
 	}
@@ -164,7 +164,7 @@ func (rule *RuleResults) H2Technique(node *html.Node) {
 func (rule *RuleResults) H35Technique(node *html.Node) {
 	if helper.HasOneChild(node) {
 		if helper.IsTextNode(node.FirstChild) {
-			if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+			if helper.IsAttributeValueEmpty(node.Attr, "alt") {
 				rule.Rules.WCAG111.H35 = Fail
 			}
 
@@ -175,20 +175,14 @@ func (rule *RuleResults) H35Technique(node *html.Node) {
 // G94Technique analysis for all tags
 func (rule *RuleResults) G94Technique(node *html.Node) {
 	rule.Logger.Println(node.Data)
-	if node.Data == "img" && helper.AttributeCheckValEmpty(node.Attr, "alt") ||
+	if node.Data == "img" && helper.IsAttributeValueEmpty(node.Attr, "alt") ||
 		//helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-labelledby") ||
 		//helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-label") ||
-		node.Data == "img" && helper.AttributeCheckValEmpty(node.Attr, "title") {
+		node.Data == "img" && helper.IsAttributeValueEmpty(node.Attr, "title") {
 		rule.Rules.WCAG111.G94 = Fail
 	}
-	//
-	//if node.Data == "img" {
-	//	if helper.AttributeCheckValEmpty(node.Attr, "alt") {
-	//		rule.Rules.WCAG111.G94 = Fail
-	//	}
-	//}
 
-	if node.Data == "area" && helper.AttributeCheckValEmpty(node.Attr, "alt") {
+	if node.Data == "area" && helper.IsAttributeValueEmpty(node.Attr, "alt") {
 		rule.Rules.WCAG111.G94 = Fail
 	}
 

@@ -8,7 +8,10 @@ import (
 )
 
 const (
-	Fail = "Fail"
+	Fail    = "Fail"
+	Wcag111 = "WCAG111"
+	Wcag121 = "WCAG121"
+	Wcag122 = "WCAG122"
 )
 
 // RuleResults is the finalized rules results for tags
