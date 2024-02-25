@@ -6,8 +6,8 @@ import (
 	"golang.org/x/net/html"
 )
 
-// AttributeSearch will respond if the attribute is present
-func AttributeSearch(attrList []html.Attribute, key string) bool {
+// IsAttributePresent will respond if the attribute is present
+func IsAttributePresent(attrList []html.Attribute, key string) bool {
 	for _, att := range attrList {
 		if att.Key == key {
 			return true
@@ -16,8 +16,8 @@ func AttributeSearch(attrList []html.Attribute, key string) bool {
 	return false
 }
 
-// AttributeCheckVal will respond if the attribute is present and check its value
-func AttributeCheckVal(attrList []html.Attribute, key string, val string) bool {
+// IsAttributeKeyValueMatching will respond if the attribute is present and check its value
+func IsAttributeKeyValueMatching(attrList []html.Attribute, key string, val string) bool {
 	for _, att := range attrList {
 		if att.Key == key && att.Val == val {
 			return true
@@ -26,18 +26,18 @@ func AttributeCheckVal(attrList []html.Attribute, key string, val string) bool {
 	return false
 }
 
-// AttributeCheckValEmpty will respond if the attribute is present and value is empty
-func AttributeCheckValEmpty(attrList []html.Attribute, key string) bool {
+// IsAttributeValueEmpty will respond if the attribute is present and value is empty
+func IsAttributeValueEmpty(attrList []html.Attribute, key string) bool {
 	for _, att := range attrList {
-		if att.Key == key && att.Val != "" {
+		if att.Key == key && att.Val == "" {
 			return true
 		}
 	}
 	return false
 }
 
-// AttributeCheckValContent will validate attribute value content
-func AttributeCheckValContent(attrList []html.Attribute, key string, valcontent string) bool {
+// IsAttributeValueContaining will validate attribute value content
+func IsAttributeValueContaining(attrList []html.Attribute, key string, valcontent string) bool {
 	for _, att := range attrList {
 		if att.Key == key && strings.Contains(att.Val, valcontent) {
 			return true

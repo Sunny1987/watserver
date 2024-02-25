@@ -28,7 +28,7 @@ func (rule *RuleResults) ExecuteWCAG121(node *html.Node) (string, []string) {
 	rule.Logger.Println("....Execute G166")
 	rule.G166Technique(node)
 
-	return "WCAG121", rule.Rules.WCAG121.GetRuleFailures()
+	return Wcag121, rule.Rules.WCAG121.GetRuleFailures()
 }
 
 // GetRuleFailures will get the list of Techniques failures
@@ -50,9 +50,9 @@ func (rule WCAG121) GetRuleFailures() []string {
 // H96Technique analysis for video and audio tags
 func (rule *RuleResults) H96Technique(node *html.Node) {
 	if node.Parent.Data == "audio" || node.Parent.Data == "video" {
-		if helper.AttributeCheckVal(node.Attr, "kind", "captions") ||
-			helper.AttributeCheckVal(node.Attr, "kind", "descriptions") &&
-				helper.AttributeCheckValEmpty(node.Attr, "label") {
+		if helper.IsAttributeKeyValueMatching(node.Attr, "kind", "captions") ||
+			helper.IsAttributeKeyValueMatching(node.Attr, "kind", "descriptions") &&
+				helper.IsAttributeValueEmpty(node.Attr, "label") {
 			rule.Rules.WCAG121.H96 = Fail
 		}
 	}
