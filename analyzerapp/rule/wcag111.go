@@ -38,6 +38,10 @@ type WCAG111 struct {
 func (rule *RuleResults) ExecuteWCAG111(node *html.Node) (string, []string) {
 	rule.Logger.Printf("...intiating WCAG111 for %v ", node.Data)
 
+	//Refresh struct
+	wcag111 := WCAG111{}
+	rule.Rules.WCAG111 = wcag111
+
 	//implement the techniques
 	rule.Logger.Println("....Execute ARIA6")
 	rule.Aria6Technique(node)
@@ -170,23 +174,22 @@ func (rule *RuleResults) H35Technique(node *html.Node) {
 
 // G94Technique analysis for all tags
 func (rule *RuleResults) G94Technique(node *html.Node) {
-	if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+	rule.Logger.Println(node.Data)
+	if node.Data == "img" && helper.AttributeCheckValEmpty(node.Attr, "alt") ||
+		//helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-labelledby") ||
+		//helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-label") ||
+		node.Data == "img" && helper.AttributeCheckValEmpty(node.Attr, "title") {
+		rule.Rules.WCAG111.G94 = Fail
+	}
+	//
+	//if node.Data == "img" {
+	//	if helper.AttributeCheckValEmpty(node.Attr, "alt") {
+	//		rule.Rules.WCAG111.G94 = Fail
+	//	}
+	//}
+
+	if node.Data == "area" && helper.AttributeCheckValEmpty(node.Attr, "alt") {
 		rule.Rules.WCAG111.G94 = Fail
 	}
 
-	if helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-labelledby") {
-		rule.Rules.WCAG111.G94 = Fail
-	}
-
-	if helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-label") {
-		rule.Rules.WCAG111.G94 = Fail
-	}
-
-	if helper.AttributeCheckValEmpty(node.Attr, "title") {
-		rule.Rules.WCAG111.G94 = Fail
-	}
-
-	if !helper.AttributeCheckValEmpty(node.Attr, "alt") && helper.AttributeCheckVal(node.Attr, "role", "presentation") {
-		rule.Rules.WCAG111.G94 = Fail
-	}
 }
