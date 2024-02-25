@@ -18,6 +18,10 @@ type WCAG121 struct {
 func (rule *RuleResults) ExecuteWCAG121(node *html.Node) (string, []string) {
 	rule.Logger.Printf("...intiating WCAG121 for %v ", node.Data)
 
+	//Refresh struct
+	wcag121 := WCAG121{}
+	rule.Rules.WCAG121 = wcag121
+
 	//implement the techniques
 	rule.Logger.Println("....Execute H96")
 	rule.H96Technique(node)

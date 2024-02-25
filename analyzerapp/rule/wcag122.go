@@ -14,6 +14,10 @@ type WCAG122 struct {
 func (rule *RuleResults) ExecuteWCAG122(node *html.Node) (string, []string) {
 	rule.Logger.Printf("...intiating WCAG122 for %v ", node.Data)
 
+	//Refresh struct
+	wcag122 := WCAG122{}
+	rule.Rules.WCAG122 = wcag122
+
 	//implement the techniques
 	rule.Logger.Println("....Execute H95")
 	rule.H95Technique(node)
@@ -39,7 +43,28 @@ func (rule WCAG122) GetRuleFailures() []string {
 
 // H95Technique analysis for track tags
 func (rule *RuleResults) H95Technique(node *html.Node) {
-	if node.Parent.Data == "video" && helper.AttributeCheckVal(node.Attr, "kind", "caption") {
+	if (node.Parent.Data == "video" || node.Parent.Data == "object" || node.Parent.Data == "embed") &&
+		node.Data == "track" &&
+		helper.AttributeCheckVal(node.Attr, "kind", "caption") {
 		rule.Rules.WCAG122.H95 = Fail
+	}
+
+	if (node.Parent.Data == "video" || node.Parent.Data == "object" || node.Parent.Data == "embed") &&
+		helper.HasNoChild(node) &&
+		helper.AttributeCheckValContent(node.Attr, "src", "caption") {
+		rule.Rules.WCAG122.H95 = Fail
+	}
+
+	if (node.Parent.Data == "video" || node.Parent.Data == "object" || node.Parent.Data == "embed") &&
+		helper.AttributeSearch(node.Attr, "ariadescribedby") {
+		attval := helper.GetAttribute(node.Attr, "ariadescribedby")
+		for c := node.Parent.FirstChild; c != nil; c = c.NextSibling {
+			if helper.AttributeSearch(c.Attr, "id") {
+				if helper.AttributeCheckValContent(c.Attr, "id", attval) {
+					rule.Rules.WCAG122.H95 = Fail
+					break
+				}
+			}
+		}
 	}
 }

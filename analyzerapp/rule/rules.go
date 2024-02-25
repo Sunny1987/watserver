@@ -2,8 +2,6 @@ package rule
 
 import (
 	"log"
-	"reflect"
-	"sync"
 	"webserver/resultsapp"
 
 	"golang.org/x/net/html"
@@ -11,17 +9,19 @@ import (
 
 const (
 	Fail = "Fail"
-	Pass = "Pass"
 )
 
 // RuleResults is the finalized rules results for tags
 type RuleResults struct {
-	Results    []*resultsapp.Result
-	Rules      Rules
-	Logger     *log.Logger
-	Css        string
-	sync.Mutex //making struct thread-safe
-	status     bool
+	Results []resultsapp.Result
+	Rules   Rules
+	Logger  *log.Logger
+	Css     string
+	status  bool
+}
+
+func NewRuleResults(logger *log.Logger) *RuleResults {
+	return &RuleResults{Logger: logger}
 }
 
 // Rules carries the rules results
@@ -31,17 +31,10 @@ type Rules struct {
 	WCAG122 WCAG122
 }
 
-func (rule Rules) ClearRules() {
-	p := reflect.ValueOf(rule).Elem()
-	p.Set(reflect.Zero(p.Type()))
-}
-
 // Execute method executes all the rules
 func (rule *RuleResults) Execute(node *html.Node) bool {
-	rule.Lock()
-	defer rule.Unlock()
-	var results []*resultsapp.Result
-	//var status bool
+
+	var results []resultsapp.Result
 
 	//Execute WCAG111 guideline
 	guideline, techniques := rule.ExecuteWCAG111(node)
@@ -61,8 +54,8 @@ func (rule *RuleResults) Execute(node *html.Node) bool {
 }
 
 // UpdateRuleList will filter and update the result slice
-func (rule *RuleResults) UpdateRuleList(guideline string, techniques []string) []*resultsapp.Result {
-	var results []*resultsapp.Result
+func (rule *RuleResults) UpdateRuleList(guideline string, techniques []string) []resultsapp.Result {
+	var results []resultsapp.Result
 	if len(techniques) > 0 {
 		result := resultsapp.NewResult(guideline, techniques)
 		results = append(results, result)

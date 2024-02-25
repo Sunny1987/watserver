@@ -36,31 +36,52 @@ func AttributeCheckValEmpty(attrList []html.Attribute, key string) bool {
 	return false
 }
 
-// hasNoChild will check if node has child
+// AttributeCheckValContent will validate attribute value content
+func AttributeCheckValContent(attrList []html.Attribute, key string, valcontent string) bool {
+	for _, att := range attrList {
+		if att.Key == key && strings.Contains(att.Val, valcontent) {
+			return true
+		}
+	}
+	return false
+}
+
+// GetAttribute returns attribute value
+func GetAttribute(attrList []html.Attribute, key string) string {
+	for _, att := range attrList {
+		if att.Key == key {
+			return att.Val
+		}
+	}
+	return ""
+}
+
+// HasNoChild will check if node has child
 func HasNoChild(n *html.Node) bool {
 	return n.FirstChild == nil
 }
 
-// hasChildren will check if node has children
+// HasChildren will check if node has children
 func HasChildren(n *html.Node) bool {
 	return n.FirstChild != nil && n.FirstChild != n.LastChild
 }
 
-// hasOneChild will check if node has only one child
+// HasOneChild will check if node has only one child
 func HasOneChild(n *html.Node) bool {
 	return n.FirstChild != nil && n.FirstChild == n.LastChild
 }
 
-// nodeText will retrieve node text
+// NodeText will retrieve node text
 func NodeText(n *html.Node) string {
+	//html.Render()
 	var strbuilder strings.Builder
 	//var str *string
 	for _, a := range n.Attr {
 		var sbdr strings.Builder
 		sbdr.WriteString(a.Key)
-		sbdr.WriteString("=\\")
+		sbdr.WriteString("=\\'")
 		sbdr.WriteString(a.Val)
-		sbdr.WriteString("\\ ")
+		sbdr.WriteString("\\' ")
 		//s := a.Key + "=\"" + a.Val + "\" "
 		strbuilder.WriteString(sbdr.String())
 		//str += s
@@ -237,12 +258,12 @@ func NodeText(n *html.Node) string {
 	return res
 }
 
-// isTextNode will validate if node is TextNode
+// IsTextNode will validate if node is TextNode
 func IsTextNode(n *html.Node) bool {
 	return n.Type == html.TextNode
 }
 
-// text will get the text value of the node
+// Text will get the text value of the node
 func Text(n *html.Node) string {
 	if IsTextNode(n) {
 		return n.Data

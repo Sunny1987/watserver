@@ -11,6 +11,7 @@ import (
 )
 
 var wg sync.WaitGroup
+var MU sync.Mutex
 
 // AnalyzeBundle is the object for Analyser
 type AnalyzeBundle struct {
@@ -22,7 +23,7 @@ type AnalyzeBundle struct {
 	CollectedTags resultsapp.TagsFamily
 	MyTags        resultsapp.Tags
 	Response      resultsapp.Response
-	rules         rule.RuleResults
+	rules         *rule.RuleResults
 }
 
 // NewAnalyzeBundle is the constructor for AnalyzeBundle
@@ -76,8 +77,10 @@ func (aBundle *AnalyzeBundle) divAnalysis() {
 		//build the node
 		tag.Div = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -86,7 +89,9 @@ func (aBundle *AnalyzeBundle) divAnalysis() {
 
 		}
 	}
+	MU.Lock()
 	aBundle.Response.DivResults = &list
+	MU.Unlock()
 }
 
 // buttonAnalysis function initiates all the button rule based analysis
@@ -102,8 +107,10 @@ func (aBundle *AnalyzeBundle) buttonAnalysis() {
 		//build the node
 		tag.Button = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -111,7 +118,9 @@ func (aBundle *AnalyzeBundle) buttonAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.ButtonResults = &list
+	MU.Unlock()
 }
 
 // inputAnalysis function initiates all the input rule based analysis
@@ -127,8 +136,10 @@ func (aBundle *AnalyzeBundle) inputAnalysis() {
 		//build the node
 		tag.Input = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -136,7 +147,9 @@ func (aBundle *AnalyzeBundle) inputAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.InputResults = &list
+	MU.Unlock()
 }
 
 // imagesAnalysis function initiates all the images rule based analysisx`
@@ -152,8 +165,10 @@ func (aBundle *AnalyzeBundle) imagesAnalysis() {
 		//build the node
 		tag.Img = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -161,7 +176,9 @@ func (aBundle *AnalyzeBundle) imagesAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.ImageResults = &list
+	MU.Unlock()
 }
 
 // videoAnalysis function initiates all the videos rule based analysis
@@ -177,8 +194,10 @@ func (aBundle *AnalyzeBundle) videoAnalysis() {
 		//build the node
 		tag.Video = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -186,7 +205,9 @@ func (aBundle *AnalyzeBundle) videoAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.VideoResults = &list
+	MU.Unlock()
 }
 
 // audioAnalysis function initiates all the audios rule based analysis
@@ -202,8 +223,10 @@ func (aBundle *AnalyzeBundle) audioAnalysis() {
 		//build the node
 		tag.Audio = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -211,7 +234,9 @@ func (aBundle *AnalyzeBundle) audioAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.AudioResults = &list
+	MU.Unlock()
 }
 
 // textareaAnalysis function initiates all the textarea rule based analysis
@@ -227,8 +252,10 @@ func (aBundle *AnalyzeBundle) textareaAnalysis() {
 		//build the node
 		tag.Textarea = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -236,7 +263,9 @@ func (aBundle *AnalyzeBundle) textareaAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.TextareaResults = &list
+	MU.Unlock()
 }
 
 // selectAnalysis function initiates all the select rule based analysis
@@ -252,8 +281,10 @@ func (aBundle *AnalyzeBundle) selectAnalysis() {
 		//build the node
 		tag.Select = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -261,7 +292,9 @@ func (aBundle *AnalyzeBundle) selectAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.SelectResults = &list
+	MU.Unlock()
 }
 
 // iframeAnalysis function initiates all the iframe rule based analysis
@@ -277,8 +310,10 @@ func (aBundle *AnalyzeBundle) iframeAnalysis() {
 		//build the node
 		tag.Iframe = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -286,7 +321,9 @@ func (aBundle *AnalyzeBundle) iframeAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.IframeResults = &list
+	MU.Unlock()
 }
 
 // linkAnalysis function initiates all the link rule based analysis
@@ -302,8 +339,10 @@ func (aBundle *AnalyzeBundle) linkAnalysis() {
 		//build the node
 		tag.Link = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -311,7 +350,9 @@ func (aBundle *AnalyzeBundle) linkAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.LinkResults = &list
+	MU.Unlock()
 }
 
 // anchorAnalysis function initiates all the anchor rule based analysis
@@ -327,8 +368,10 @@ func (aBundle *AnalyzeBundle) anchorAnalysis() {
 		//build the node
 		tag.Anchor = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -336,7 +379,9 @@ func (aBundle *AnalyzeBundle) anchorAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.AnchorResults = &list
+	MU.Unlock()
 }
 
 // areaAnalysis function initiates all the area rule based analysis
@@ -352,8 +397,10 @@ func (aBundle *AnalyzeBundle) areaAnalysis() {
 		//build the node
 		tag.Area = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -361,7 +408,9 @@ func (aBundle *AnalyzeBundle) areaAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.AreaResults = &list
+	MU.Unlock()
 }
 
 // objectAnalysis function initiates all the object rule based analysis
@@ -377,8 +426,10 @@ func (aBundle *AnalyzeBundle) objectAnalysis() {
 		//build the node
 		tag.Object = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -386,7 +437,9 @@ func (aBundle *AnalyzeBundle) objectAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.ObjectResults = &list
+	MU.Unlock()
 }
 
 // embedAnalysis function initiates all the embed rule based analysis
@@ -402,8 +455,10 @@ func (aBundle *AnalyzeBundle) embedAnalysis() {
 		//build the node
 		tag.Embed = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -411,7 +466,9 @@ func (aBundle *AnalyzeBundle) embedAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.EmbedResults = &list
+	MU.Unlock()
 }
 
 // trackAnalysis function initiates all the track rule based analysis
@@ -427,8 +484,10 @@ func (aBundle *AnalyzeBundle) trackAnalysis() {
 		//build the node
 		tag.Track = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -436,7 +495,9 @@ func (aBundle *AnalyzeBundle) trackAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.TrackResults = &list
+	MU.Unlock()
 }
 
 // h1Analysis function initiates all the h1 rule based analysis
@@ -452,8 +513,10 @@ func (aBundle *AnalyzeBundle) h1Analysis() {
 		//build the node
 		tag.H1 = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -461,7 +524,9 @@ func (aBundle *AnalyzeBundle) h1Analysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.H1Results = &list
+	MU.Unlock()
 }
 
 // h2Analysis function initiates all the h2 rule based analysis
@@ -477,8 +542,10 @@ func (aBundle *AnalyzeBundle) h2Analysis() {
 		//build the node
 		tag.H2 = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -486,7 +553,9 @@ func (aBundle *AnalyzeBundle) h2Analysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.H2Results = &list
+	MU.Unlock()
 }
 
 // h3Analysis function initiates all the h3 rule based analysis
@@ -502,8 +571,10 @@ func (aBundle *AnalyzeBundle) h3Analysis() {
 		//build the node
 		tag.H3 = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -511,7 +582,9 @@ func (aBundle *AnalyzeBundle) h3Analysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.H3Results = &list
+	MU.Unlock()
 }
 
 // h4Analysis function initiates all the h4 rule based analysis
@@ -527,8 +600,10 @@ func (aBundle *AnalyzeBundle) h4Analysis() {
 		//build the node
 		tag.H4 = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -536,7 +611,9 @@ func (aBundle *AnalyzeBundle) h4Analysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.H4Results = &list
+	MU.Unlock()
 }
 
 // h5Analysis function initiates all the h5 rule based analysis
@@ -552,8 +629,10 @@ func (aBundle *AnalyzeBundle) h5Analysis() {
 		//build the node
 		tag.H5 = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -561,7 +640,9 @@ func (aBundle *AnalyzeBundle) h5Analysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.H5Results = &list
+	MU.Unlock()
 }
 
 // h6Analysis function initiates all the h6 rule based analysis
@@ -577,8 +658,10 @@ func (aBundle *AnalyzeBundle) h6Analysis() {
 		//build the node
 		tag.H6 = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -586,7 +669,9 @@ func (aBundle *AnalyzeBundle) h6Analysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.H6Results = &list
+	MU.Unlock()
 }
 
 // paraAnalysis function initiates all the para rule based analysis
@@ -602,8 +687,10 @@ func (aBundle *AnalyzeBundle) paraAnalysis() {
 		//build the node
 		tag.Para = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -611,7 +698,9 @@ func (aBundle *AnalyzeBundle) paraAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.ParaResults = &list
+	MU.Unlock()
 }
 
 // preAnalysis function initiates all the pre rule based analysis
@@ -627,8 +716,10 @@ func (aBundle *AnalyzeBundle) preAnalysis() {
 		//build the node
 		tag.Pre = helper.NodeText(node)
 
-		//implement rules
-		aBundle.rules.Logger = aBundle.Logger
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
 		if status := aBundle.rules.Execute(node); status == true {
 			tag.Result = aBundle.rules.Results
 			if len(list) < 50 {
@@ -636,7 +727,9 @@ func (aBundle *AnalyzeBundle) preAnalysis() {
 			}
 		}
 	}
+	MU.Lock()
 	aBundle.Response.PreResults = &list
+	MU.Unlock()
 }
 
 // cssAnalysis function initiates all the CSS rule based analysis
