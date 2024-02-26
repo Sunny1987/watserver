@@ -12,6 +12,7 @@ import (
 type WCAG121 struct {
 	H96  string
 	G166 string
+	G158 string
 }
 
 // ExecuteWCAG121 executes the WCAG121 techniques
@@ -69,6 +70,25 @@ func (rule *RuleResults) G166Technique(node *html.Node) {
 					rule.Rules.WCAG121.G166 = Fail
 				}
 			}
+		}
+	}
+}
+
+// https://act-rules.github.io/rules/2eb176
+// Implementing this example
+//<html lang="en">
+//	<audio src="/test-assets/moon-audio/moon-speech.mp3" controls></audio>
+//	<a href="/test-assets/moon-audio/moon-speech-transcript.txt">Transcript</a>
+//</html>
+
+// G158Technique for audio tags
+func (rule *RuleResults) G158Technique(node *html.Node) {
+	if node.Data == "audio" &&
+		node.NextSibling.Data == "a" &&
+		helper.IsAttributeKeyValueMatching(node.Attr, "controls", "") {
+		if !helper.IsAttributeValueContaining(node.NextSibling.Attr, "href", "transcript") &&
+			!strings.Contains(helper.Text(node.NextSibling), "transcript") {
+			rule.Rules.WCAG121.G158 = Fail
 		}
 	}
 }
