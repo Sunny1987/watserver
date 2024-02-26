@@ -34,6 +34,10 @@ type Response struct {
 	H6Results       *[]H6tag       `json:"h6s"`
 	PreResults      *[]Pretag      `json:"pres"`
 	LinkResults     *[]Linktag     `json:"links"`
+	AbbrResults     *[]Abbrtag     `json:"abbrs"`
+	SvgResults      *[]SVGtag      `json:"svgs"`
+	CanvasResults   *[]Canvastag   `json:"canvases"`
+	SpanResults     *[]Spantag     `json:"spans"`
 	CSSResults      *[]CSS         `json:"CSS"`
 }
 

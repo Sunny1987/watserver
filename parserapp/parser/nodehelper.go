@@ -160,6 +160,21 @@ func isPre(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Data == "pre"
 }
 
+// isSVG will validate pre tag
+func isSVG(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "svg"
+}
+
+// isAbbr will validate pre tag
+func isAbbr(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "abbr"
+}
+
+// isCanvas will validate pre tag
+func isCanvas(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "canvas"
+}
+
 func isCSSLink(n *html.Node) bool {
 	for _, att := range n.Attr {
 		if att.Key == "rel" && att.Val == "stylesheet" {

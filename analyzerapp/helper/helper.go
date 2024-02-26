@@ -79,9 +79,9 @@ func NodeText(n *html.Node) string {
 	for _, a := range n.Attr {
 		var sbdr strings.Builder
 		sbdr.WriteString(a.Key)
-		sbdr.WriteString("=\\'")
+		sbdr.WriteString("='")
 		sbdr.WriteString(a.Val)
-		sbdr.WriteString("\\' ")
+		sbdr.WriteString("' ")
 		//s := a.Key + "=\"" + a.Val + "\" "
 		strbuilder.WriteString(sbdr.String())
 		//str += s

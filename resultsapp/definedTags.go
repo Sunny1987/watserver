@@ -185,7 +185,26 @@ type Linktag struct {
 	Result []Result
 }
 
+// Abbrtag is the abbr based rule results
 type Abbrtag struct {
 	Abbr   string
+	Result []Result
+}
+
+// SVGtag is the svg based rule results
+type SVGtag struct {
+	SVG    string
+	Result []Result
+}
+
+// Canvastag is the canvas based rule results
+type Canvastag struct {
+	Canvas string
+	Result []Result
+}
+
+// Spantag is the span based rule results
+type Spantag struct {
+	Span   string
 	Result []Result
 }
