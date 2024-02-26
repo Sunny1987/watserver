@@ -54,7 +54,7 @@ func (pBundle *ParseBundle) Parse(responseBody io.Reader) resultsapp.Response {
 
 	//Update Tags in ParseBundle
 	pBundle.TagsFamily = resultsapp.NewTagsFamily(nodeMap, cssList)
-	pBundle.Logger.Println("Initiating WCAG 2.1 analysis.....")
+	pBundle.Logger.Println(".....Initiating WCAG 2.1 analysis.....")
 
 	//Call AnalyzeBundle constructor
 	analyzerBundle := analyzerapp.NewAnalyzeBundle(pBundle.Req, pBundle.Logger, pBundle.Base, pBundle.Doc, pBundle.TagsFamily)
@@ -67,7 +67,7 @@ func (pBundle *ParseBundle) collectNode() map[string][]*html.Node {
 	//initialize a map
 	nodeMap := make(map[string][]*html.Node)
 
-	wg.Add(24)
+	wg.Add(27)
 	go pBundle.getNode(FilterAnchorNodes, "Anchors", nodeMap)
 	go pBundle.getNode(filterDivNodes, "Divs", nodeMap)
 	go pBundle.getNode(filterParaNodes, "Paras", nodeMap)
@@ -92,6 +92,9 @@ func (pBundle *ParseBundle) collectNode() map[string][]*html.Node {
 	go pBundle.getNode(filterTrackNodes, "Tracks", nodeMap)
 	go pBundle.getNode(filterAppletNodes, "Applets", nodeMap)
 	go pBundle.getNode(filterPreNodes, "Pres", nodeMap)
+	go pBundle.getNode(filterAbbrNodes, "Abbrs", nodeMap)
+	go pBundle.getNode(filterSvgNodes, "Svgs", nodeMap)
+	go pBundle.getNode(filterCanvasNodes, "Canvases", nodeMap)
 	wg.Add(1)
 	go func(base string) {
 		pBundle.Logger.Println("Collecting all links...")

@@ -28,6 +28,9 @@ type TagsFamily struct {
 	Pres      []*html.Node
 	Links     []*html.Node
 	Inputs    []*html.Node
+	Abbrs     []*html.Node
+	Svgs      []*html.Node
+	Canvases  []*html.Node
 	CssLinks  []string
 }
 
@@ -58,6 +61,9 @@ func NewTagsFamily(nodeMap map[string][]*html.Node, cssList []string) TagsFamily
 		Pres:      nodeMap["Pres"],
 		Links:     nodeMap["Links"],
 		Inputs:    nodeMap["Inputs"],
+		Abbrs:     nodeMap["Abbrs"],
+		Svgs:      nodeMap["Svgs"],
+		Canvases:  nodeMap["Canvases"],
 		CssLinks:  cssList,
 	}
 }

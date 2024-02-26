@@ -34,11 +34,13 @@ func NewAnalyzeBundle(req *resultsapp.MyRequest, logger *log.Logger, base string
 func (aBundle *AnalyzeBundle) Analyze() resultsapp.Response {
 	aBundle.Response.Request = aBundle.Req
 
-	wg.Add(23)
+	wg.Add(27)
 	go aBundle.anchorAnalysis()
 	go aBundle.audioAnalysis()
 	go aBundle.areaAnalysis()
+	go aBundle.AbbrAnalysis()
 	go aBundle.buttonAnalysis()
+	go aBundle.canvasAnalysis()
 	//go aBundle.cssAnalysis()
 	go aBundle.divAnalysis()
 	go aBundle.embedAnalysis()
@@ -56,6 +58,8 @@ func (aBundle *AnalyzeBundle) Analyze() resultsapp.Response {
 	go aBundle.paraAnalysis()
 	go aBundle.preAnalysis()
 	go aBundle.selectAnalysis()
+	go aBundle.SVGAnalysis()
+	go aBundle.spanAnalysis()
 	go aBundle.textareaAnalysis()
 	go aBundle.trackAnalysis()
 	go aBundle.videoAnalysis()
@@ -728,6 +732,122 @@ func (aBundle *AnalyzeBundle) preAnalysis() {
 	}
 	MU.Lock()
 	aBundle.Response.PreResults = &list
+	MU.Unlock()
+}
+
+// AbbrAnalysis function initiates all the abbr rule based analysis
+func (aBundle *AnalyzeBundle) AbbrAnalysis() {
+	aBundle.Logger.Println("Initiating abbr tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Abbrs
+
+	var list []resultsapp.Abbrtag
+	for _, node := range nodes {
+		var tag resultsapp.Abbrtag
+
+		//build the node
+		tag.Abbr = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.AbbrResults = &list
+	MU.Unlock()
+}
+
+// SVGAnalysis function initiates all the svg rule based analysis
+func (aBundle *AnalyzeBundle) SVGAnalysis() {
+	aBundle.Logger.Println("Initiating svg tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Svgs
+
+	var list []resultsapp.SVGtag
+	for _, node := range nodes {
+		var tag resultsapp.SVGtag
+
+		//build the node
+		tag.SVG = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.SvgResults = &list
+	MU.Unlock()
+}
+
+// canvasAnalysis function initiates all the canvas rule based analysis
+func (aBundle *AnalyzeBundle) canvasAnalysis() {
+	aBundle.Logger.Println("Initiating canvas tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Canvases
+
+	var list []resultsapp.Canvastag
+	for _, node := range nodes {
+		var tag resultsapp.Canvastag
+
+		//build the node
+		tag.Canvas = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.CanvasResults = &list
+	MU.Unlock()
+}
+
+// spanAnalysis function initiates all the spans rule based analysis
+func (aBundle *AnalyzeBundle) spanAnalysis() {
+	aBundle.Logger.Println("Initiating span tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Spans
+
+	var list []resultsapp.Spantag
+	for _, node := range nodes {
+		var tag resultsapp.Spantag
+
+		//build the node
+		tag.Span = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.SpanResults = &list
 	MU.Unlock()
 }
 

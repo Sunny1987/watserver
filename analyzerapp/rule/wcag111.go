@@ -8,18 +8,6 @@ import (
 	"golang.org/x/net/html"
 )
 
-//type WCAG111rule interface {
-//	Aria6Technique(node *html.Node) (string, error)
-//	Aria10Technique(node *html.Node) (string, error)
-//	G94Technique(node *html.Node) (string, error)
-//	H2Technique(node *html.Node) (string, error)
-//	H35Technique(node *html.Node) (string, error)
-//	H53Technique(node *html.Node) (string, error)
-//	Aria15Technique(node *html.Node) (string, error)
-//	H86Technique(node *html.Node) (string, error)
-//	H86CSSTechnique(css string, node *html.Node) (string, error)
-//}
-
 // WCAG111 rule object for Analysis
 type WCAG111 struct {
 	Aria6  string
@@ -176,14 +164,26 @@ func (rule *RuleResults) H35Technique(node *html.Node) {
 func (rule *RuleResults) G94Technique(node *html.Node) {
 	rule.Logger.Println(node.Data)
 	if node.Data == "img" && helper.IsAttributeValueEmpty(node.Attr, "alt") ||
-		//helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-labelledby") ||
-		//helper.AttributeCheckVal(node.Attr, "role", "img") && helper.AttributeCheckValEmpty(node.Attr, "aria-label") ||
+		helper.IsAttributeKeyValueMatching(node.Attr, "role", "img") && helper.IsAttributeValueEmpty(node.Attr, "aria-labelledby") ||
+		helper.IsAttributeKeyValueMatching(node.Attr, "role", "img") && helper.IsAttributeValueEmpty(node.Attr, "aria-label") ||
 		node.Data == "img" && helper.IsAttributeValueEmpty(node.Attr, "title") {
 		rule.Rules.WCAG111.G94 = Fail
 	}
 
 	if node.Data == "area" && helper.IsAttributeValueEmpty(node.Attr, "alt") {
 		rule.Rules.WCAG111.G94 = Fail
+	}
+
+	if node.Data == "svg" && helper.IsAttributePresent(node.Attr, "aria-label") && helper.IsAttributeKeyValueMatching(node.Attr, "role", "img") {
+		if helper.IsAttributeValueEmpty(node.Attr, "aria-label") {
+			rule.Rules.WCAG111.G94 = Fail
+		}
+	}
+
+	if node.Data == "canvas" && helper.IsAttributePresent(node.Attr, "aria-label") {
+		if helper.IsAttributeValueEmpty(node.Attr, "aria-label") {
+			rule.Rules.WCAG111.G94 = Fail
+		}
 	}
 
 }
