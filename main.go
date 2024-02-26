@@ -44,8 +44,8 @@ func main() {
 		Addr:         config.Port,
 		Handler:      ch(serverMux),
 		ReadTimeout:  20 * time.Second,
-		WriteTimeout: 7 * time.Minute,
-		IdleTimeout:  120 * time.Second,
+		WriteTimeout: 50 * time.Minute,
+		IdleTimeout:  50 * time.Minute,
 		ErrorLog:     l,
 	}
 

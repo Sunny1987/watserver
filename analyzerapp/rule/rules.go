@@ -16,11 +16,11 @@ const (
 
 // RuleResults is the finalized rules results for tags
 type RuleResults struct {
-	Results []resultsapp.Result
-	Rules   Rules
-	Logger  *log.Logger
-	Css     string
-	status  bool
+	//Results *[]resultsapp.Result
+	Rules  Rules
+	Logger *log.Logger
+	Css    string
+	status bool
 }
 
 func NewRuleResults(logger *log.Logger) *RuleResults {
@@ -35,7 +35,7 @@ type Rules struct {
 }
 
 // Execute method executes all the rules
-func (rule *RuleResults) Execute(node *html.Node) bool {
+func (rule *RuleResults) Execute(node *html.Node) (bool, []resultsapp.Result) {
 
 	var results []resultsapp.Result
 
@@ -51,8 +51,7 @@ func (rule *RuleResults) Execute(node *html.Node) bool {
 	guideline, techniques = rule.ExecuteWCAG122(node)
 	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
-	rule.Results = results
-	return rule.status
+	return rule.status, results
 
 }
 
