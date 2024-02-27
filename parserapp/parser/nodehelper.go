@@ -160,20 +160,179 @@ func isPre(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Data == "pre"
 }
 
-// isSVG will validate pre tag
+// isSVG will validate svg tag
 func isSVG(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Data == "svg"
 }
 
-// isAbbr will validate pre tag
+// isAbbr will validate abbr tag
 func isAbbr(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Data == "abbr"
 }
 
-// isCanvas will validate pre tag
+// isCanvas will validate canvas tag
 func isCanvas(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Data == "canvas"
 }
+
+// isAcronym will validate Acronym tag
+func isAcronym(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "acronym"
+}
+
+// isAddress will validate Address tag
+func isAddress(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "address"
+}
+
+// isArticle will validate Article tag
+func isArticle(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "article"
+}
+
+// isAside will validate Aside tag
+func isAside(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "aside"
+}
+
+// isBase will validate Base tag
+func isBase(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "base"
+}
+
+// isBasefont will validate Basefont tag
+func isBasefont(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "basefont"
+}
+
+// isBdi will validate Bdi tag
+func isBdi(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "bdi"
+}
+
+// isBdo will validate Bdo tag
+func isBdo(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "bdo"
+}
+
+// isBgsound will validate Bgsound tag
+func isBgsound(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "bgsound"
+}
+
+// isBig will validate Big tag
+func isBig(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "big"
+}
+
+// isBlockquote will validate Blockquote tag
+func isBlockquote(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "blockquote"
+}
+
+// isBody will validate Body tag
+func isBody(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "body"
+}
+
+// isCaption will validate Caption tag
+func isCaption(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "caption"
+}
+
+// isCite will validate Cite tag
+func isCite(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "cite"
+}
+
+// isCode will validate Code tag
+func isCode(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "code"
+}
+
+// isColgroup will validate Colgroup tag
+func isColgroup(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "colgroup"
+}
+
+// isColumn will validate Column tag
+func isColumn(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "column"
+}
+
+// isData will validate Data tag
+func isData(n *html.Node) bool {
+	return n.Type == html.ElementNode && n.Data == "data"
+}
+
+// isDatalist will validate Datalist tag
+func isDatalist(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "datalist" }
+
+// isDefine will validate Define tag
+func isDefine(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "define" }
+
+// isDelete will validate Delete tag
+func isDelete(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "delete" }
+
+// isDetails will validate Details tag
+func isDetails(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "details" }
+
+// isDialog will validate Dialog tag
+func isDialog(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "dialog" }
+
+// isDir will validate Dir tag
+func isDir(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "dir" }
+
+// isForm will validate Form tag
+func isForm(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "form" }
+
+// isFrame will validate Frame tag
+func isFrame(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "frame" }
+
+// isFooter will validate Footer tag
+func isFooter(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "footer" }
+
+// isHead will validate Head tag
+func isHead(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "head" }
+
+// isHeader will validate Header tag
+func isHeader(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "header" }
+
+// isIns will validate Ins tag
+func isIns(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "ins" }
+
+// isLabel will validate Label tag
+func isLabel(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "label" }
+
+// isMain will validate Main tag
+func isMain(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "main" }
+
+// isMarquee will validate Marquee tag
+func isMarquee(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "marquee" }
+
+// isMenuitem will validate Menuitem tag
+func isMenuitem(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "menuitem" }
+
+// isNav will validate Nav tag
+func isNav(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "nav" }
+
+// isTable will validate Table tag
+func isTable(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "table" }
+
+// isTbody will validate Tbody tag
+func isTbody(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "tbody" }
+
+// isTemplate will validate Template tag
+func isTemplate(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "template" }
+
+// isTHead will validate THead tag
+func isTHead(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "thead" }
+
+// isTFoot will validate TFoot tag
+func isTFoot(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "tfoot" }
+
+// isTitle will validate Title tag
+func isTitle(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "title" }
 
 func isCSSLink(n *html.Node) bool {
 	for _, att := range n.Attr {

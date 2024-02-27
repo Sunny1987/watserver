@@ -21,9 +21,9 @@ type AnalyzeBundle struct {
 	Base          string
 	Doc           *html.Node
 	CollectedTags resultsapp.TagsFamily
-	MyTags        resultsapp.Tags
-	Response      resultsapp.Response
-	rules         *rule.RuleResults
+	//MyTags        resultsapp.Tags
+	Response resultsapp.Response
+	rules    *rule.RuleResults
 }
 
 // NewAnalyzeBundle is the constructor for AnalyzeBundle

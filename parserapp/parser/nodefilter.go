@@ -137,6 +137,124 @@ func filterCanvasNodes(n *html.Node) []*html.Node {
 	return filterNode(n, isCanvas)
 }
 
+// filterAcronymNodes will give the list of Acronym
+func filterAcronymNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isAcronym)
+}
+
+// filterAddressNodes will give the list of Address
+func filterAddressNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isAddress)
+}
+
+// filterArticleNodes will give the list of Article
+func filterArticleNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isArticle)
+}
+
+// filterAsideNodes will give the list of Aside
+func filterAsideNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isAside)
+}
+
+// filterBaseNodes will give the list of Aside
+func filterBaseNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isBase)
+}
+
+// filterBasefontNodes will give the list of Basefont
+func filterBasefontNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isBasefont)
+}
+
+// filterTitleNodes will give the list of Title
+func filterTitleNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isTitle)
+}
+
+// filterTFootNodes will give the list of TFoot
+func filterTFootNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isTFoot)
+}
+
+// filterTHeadNodes will give the list of THead
+func filterTHeadNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isTHead)
+}
+
+// filterTBodyNodes will give the list of TBody
+func filterTBodyNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isTbody)
+}
+
+// filterTemplateNodes will give the list of Template
+func filterTemplateNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isTemplate)
+}
+
+// filterTableNodes will give the list of Table
+func filterTableNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isTable)
+}
+
+// filterNavNodes will give the list of Nav
+func filterNavNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isNav)
+}
+
+// filterMenuItemNodes will give the list of MenuItem
+func filterMenuItemNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isMenuitem)
+}
+
+// filterMarqueeItemNodes will give the list of Marquee
+func filterMarqueeItemNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isMarquee)
+}
+
+// filterMainItemNodes will give the list of Main
+func filterMainItemNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isMain)
+}
+
+// filterLabelNodes will give the list of Label
+func filterLabelNodes(n *html.Node) []*html.Node {
+	return filterNode(n, isLabel)
+}
+
+// filterHeaderNodes will give the list of Header
+func filterHeaderNodes(n *html.Node) []*html.Node { return filterNode(n, isHeader) }
+
+// filterHeadNodes will give the list of Head
+func filterHeadNodes(n *html.Node) []*html.Node { return filterNode(n, isHead) }
+
+// filterFooterNodes will give the list of Footer
+func filterFooterNodes(n *html.Node) []*html.Node { return filterNode(n, isFooter) }
+
+// filterFrameNodes will give the list of Frame
+func filterFrameNodes(n *html.Node) []*html.Node { return filterNode(n, isFrame) }
+
+// filterFormNodes will give the list of Form
+func filterFormNodes(n *html.Node) []*html.Node { return filterNode(n, isForm) }
+
+// filterDirNodes will give the list of Dir
+func filterDirNodes(n *html.Node) []*html.Node { return filterNode(n, isDir) }
+
+// filterDialogNodes will give the list of Dialog
+func filterDialogNodes(n *html.Node) []*html.Node { return filterNode(n, isDialog) }
+
+// filterDetailsNodes will give the list of Details
+func filterDetailsNodes(n *html.Node) []*html.Node { return filterNode(n, isDetails) }
+
+// filterBodyNodes will give the list of Body
+func filterBodyNodes(n *html.Node) []*html.Node { return filterNode(n, isBody) }
+
+// filterCaptionNodes will give the list of Caption
+func filterCaptionNodes(n *html.Node) []*html.Node { return filterNode(n, isCaption) }
+
+// filterCiteNodes will give the list of Cite
+func filterCiteNodes(n *html.Node) []*html.Node { return filterNode(n, isCite) }
+
 // filterCSSLinks will filter all the CSS based links
 func filterCSSLinks(list []*html.Node) []*html.Node {
 	var retLnk []*html.Node
