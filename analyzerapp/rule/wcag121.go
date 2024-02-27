@@ -26,8 +26,8 @@ func (rule *RuleResults) ExecuteWCAG121(node *html.Node) (string, []string) {
 	//implement the techniques
 	rule.Logger.Println("....Execute H96")
 	rule.H96Technique(node)
-	rule.Logger.Println("....Execute G166")
-	rule.G166Technique(node)
+	rule.Logger.Println("....Execute G158")
+	rule.G158Technique(node)
 
 	return Wcag121, rule.Rules.WCAG121.GetRuleFailures()
 }
@@ -48,28 +48,14 @@ func (rule WCAG121) GetRuleFailures() []string {
 	return techniques
 }
 
+// sample source : https://www.w3.org/TR/2016/NOTE-WCAG20-TECHS-20161007/H96
+
 // H96Technique analysis for video and audio tags
 func (rule *RuleResults) H96Technique(node *html.Node) {
-	if node.Parent.Data == "audio" || node.Parent.Data == "video" {
-		if helper.IsAttributeKeyValueMatching(node.Attr, "kind", "captions") ||
-			helper.IsAttributeKeyValueMatching(node.Attr, "kind", "descriptions") &&
-				helper.IsAttributeValueEmpty(node.Attr, "label") {
+	if node.Parent.Data == "audio" || node.Parent.Data == "video" && node.Data == "track" {
+		if !helper.IsAttributeKeyValueMatching(node.Attr, "kind", "captions") &&
+			!helper.IsAttributeKeyValueMatching(node.Attr, "kind", "descriptions") {
 			rule.Rules.WCAG121.H96 = Fail
-		}
-	}
-}
-
-var listEx = []string{".mpg", ".mpeg", ".avi", ".wmv", ".mov", ".rm", ".ram", ".swf", ".flv", ".ogg", ".mp4"}
-
-// G166Technique analysis for all tags
-func (rule *RuleResults) G166Technique(node *html.Node) {
-	for _, attr := range node.Attr {
-		if attr.Key == "data" {
-			for _, item := range listEx {
-				if strings.Contains(attr.Val, item) {
-					rule.Rules.WCAG121.G166 = Fail
-				}
-			}
 		}
 	}
 }

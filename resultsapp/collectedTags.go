@@ -2,6 +2,40 @@ package resultsapp
 
 import "golang.org/x/net/html"
 
+const (
+	Anchors   = "Anchors"
+	Divs      = "Divs"
+	Paras     = "Paras"
+	Spans     = "Spans"
+	H1s       = "H1s"
+	H2s       = "H2s"
+	H3s       = "H3s"
+	H4s       = "H4s"
+	H5s       = "H5s"
+	H6s       = "H6s"
+	Imgs      = "Imgs"
+	Buttons   = "Buttons"
+	Videos    = "Videos"
+	Audios    = "Audios"
+	Selects   = "Selects"
+	TextAreas = "TextAreas"
+	Iframes   = "Iframes"
+	Areas     = "Areas"
+	Objects   = "Objects"
+	Embeds    = "Embeds"
+	Tracks    = "Tracks"
+	Applets   = "Applets"
+	Pres      = "Pres"
+	Links     = "Links"
+	Inputs    = "Inputs"
+	Abbrs     = "Abbrs"
+	Svgs      = "Svgs"
+	Canvases  = "Canvases"
+	Asides    = "Asides"
+	Mains     = "Mains"
+	Navs      = "Navs"
+)
+
 type TagsFamily struct {
 	Anchors   []*html.Node
 	Divs      []*html.Node
@@ -31,39 +65,46 @@ type TagsFamily struct {
 	Abbrs     []*html.Node
 	Svgs      []*html.Node
 	Canvases  []*html.Node
-	CssLinks  []string
+	Asides    []*html.Node
+	Mains     []*html.Node
+	Navs      []*html.Node
+
+	CssLinks []string
 }
 
 func NewTagsFamily(nodeMap map[string][]*html.Node, cssList []string) TagsFamily {
 	return TagsFamily{
-		Anchors:   nodeMap["Anchors"],
-		Divs:      nodeMap["Divs"],
-		Paras:     nodeMap["Paras"],
-		Spans:     nodeMap["Spans"],
-		H1s:       nodeMap["H1s"],
-		H2s:       nodeMap["H2s"],
-		H3s:       nodeMap["H3s"],
-		H4s:       nodeMap["H4s"],
-		H5s:       nodeMap["H5s"],
-		H6s:       nodeMap["H6s"],
-		Imgs:      nodeMap["Imgs"],
-		Buttons:   nodeMap["Buttons"],
-		Videos:    nodeMap["Videos"],
-		Audios:    nodeMap["Audios"],
-		Selects:   nodeMap["Selects"],
-		TextAreas: nodeMap["TextAreas"],
-		Iframes:   nodeMap["Iframes"],
-		Areas:     nodeMap["Areas"],
-		Objects:   nodeMap["Objects"],
-		Embeds:    nodeMap["Embeds"],
-		Tracks:    nodeMap["Tracks"],
-		Applets:   nodeMap["Applets"],
-		Pres:      nodeMap["Pres"],
-		Links:     nodeMap["Links"],
-		Inputs:    nodeMap["Inputs"],
-		Abbrs:     nodeMap["Abbrs"],
-		Svgs:      nodeMap["Svgs"],
-		Canvases:  nodeMap["Canvases"],
+		Anchors:   nodeMap[Anchors],
+		Divs:      nodeMap[Divs],
+		Paras:     nodeMap[Paras],
+		Spans:     nodeMap[Spans],
+		H1s:       nodeMap[H1s],
+		H2s:       nodeMap[H2s],
+		H3s:       nodeMap[H3s],
+		H4s:       nodeMap[H4s],
+		H5s:       nodeMap[H5s],
+		H6s:       nodeMap[H6s],
+		Imgs:      nodeMap[Imgs],
+		Buttons:   nodeMap[Buttons],
+		Videos:    nodeMap[Videos],
+		Audios:    nodeMap[Audios],
+		Selects:   nodeMap[Selects],
+		TextAreas: nodeMap[TextAreas],
+		Iframes:   nodeMap[Iframes],
+		Areas:     nodeMap[Areas],
+		Objects:   nodeMap[Objects],
+		Embeds:    nodeMap[Embeds],
+		Tracks:    nodeMap[Tracks],
+		Applets:   nodeMap[Applets],
+		Pres:      nodeMap[Pres],
+		Links:     nodeMap[Links],
+		Inputs:    nodeMap[Inputs],
+		Abbrs:     nodeMap[Abbrs],
+		Svgs:      nodeMap[Svgs],
+		Canvases:  nodeMap[Canvases],
+		Navs:      nodeMap[Navs],
+		Asides:    nodeMap[Asides],
+		Mains:     nodeMap[Mains],
 		CssLinks:  cssList,
 	}
 }

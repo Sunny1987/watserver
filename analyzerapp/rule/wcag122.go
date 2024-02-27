@@ -43,28 +43,12 @@ func (rule WCAG122) GetRuleFailures() []string {
 
 // H95Technique analysis for track tags
 func (rule *RuleResults) H95Technique(node *html.Node) {
+
+	//sample source #1 : https://uxplanet.org/deep-dive-into-wcag-2-1-with-html-css-examples-59845b2174c4#:~:text=It's%20important%20to%20note%20that%20sufficient%20contrast%20between%20text%20and,14pt%20bold%20or%2018pt%20regular).
+	//sample source #1 : https://www.w3.org/TR/2016/NOTE-WCAG20-TECHS-20161007/H95
 	if (node.Parent.Data == "video" || node.Parent.Data == "object" || node.Parent.Data == "embed") &&
 		node.Data == "track" &&
-		helper.IsAttributeKeyValueMatching(node.Attr, "kind", "caption") {
+		!helper.IsAttributeKeyValueMatching(node.Attr, "kind", "caption") {
 		rule.Rules.WCAG122.H95 = Fail
-	}
-
-	if (node.Parent.Data == "video" || node.Parent.Data == "object" || node.Parent.Data == "embed") &&
-		helper.HasNoChild(node) &&
-		helper.IsAttributeValueContaining(node.Attr, "src", "caption") {
-		rule.Rules.WCAG122.H95 = Fail
-	}
-
-	if (node.Parent.Data == "video" || node.Parent.Data == "object" || node.Parent.Data == "embed") &&
-		helper.IsAttributePresent(node.Attr, "ariadescribedby") {
-		attval := helper.GetAttribute(node.Attr, "ariadescribedby")
-		for c := node.Parent.FirstChild; c != nil; c = c.NextSibling {
-			if helper.IsAttributePresent(c.Attr, "id") {
-				if helper.IsAttributeValueContaining(c.Attr, "id", attval) {
-					rule.Rules.WCAG122.H95 = Fail
-					break
-				}
-			}
-		}
 	}
 }
