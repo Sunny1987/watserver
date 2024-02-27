@@ -222,13 +222,13 @@ func filterLabelNodes(n *html.Node) []*html.Node {
 	return filterNode(n, isLabel)
 }
 
-// filterHeaderNodes will give the list of Header
+// filterHeaderNodes will give the list of Headers
 func filterHeaderNodes(n *html.Node) []*html.Node { return filterNode(n, isHeader) }
 
 // filterHeadNodes will give the list of Head
 func filterHeadNodes(n *html.Node) []*html.Node { return filterNode(n, isHead) }
 
-// filterFooterNodes will give the list of Footer
+// filterFooterNodes will give the list of Footers
 func filterFooterNodes(n *html.Node) []*html.Node { return filterNode(n, isFooter) }
 
 // filterFrameNodes will give the list of Frame

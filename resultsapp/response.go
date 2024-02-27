@@ -41,6 +41,18 @@ type Response struct {
 	NavResults      *[]Nav      `json:"navs"`
 	MainResults     *[]Main     `json:"mains"`
 	AsideResults    *[]Aside    `json:"asides"`
+	HeaderResults   *[]Header   `json:"headers"`
+	FooterResults   *[]Footer   `json:"footers"`
+	HeadResults     *[]Head     `json:"heads"`
+	LabelResults    *[]Label    `json:"labels"`
+	FormResults     *[]Form     `json:"forms"`
+	DirResults      *[]Dir      `json:"dirs"`
+	BodyResults     *[]Body     `json:"bodys"`
+	TitleResults    *[]Title    `json:"titles"`
+	TableResults    *[]Table    `json:"tables"`
+	THeadResults    *[]Thead    `json:"THeads"`
+	TbodyResults    *[]Tbody    `json:"tbodys"`
+	TfootResults    *[]Tfoot    `json:"tfoots"`
 	CSSResults      *[]CSS      `json:"CSS"`
 }
 

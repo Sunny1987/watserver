@@ -34,26 +34,36 @@ func NewAnalyzeBundle(req *resultsapp.MyRequest, logger *log.Logger, base string
 func (aBundle *AnalyzeBundle) Analyze() resultsapp.Response {
 	aBundle.Response.Request = aBundle.Req
 
-	wg.Add(27)
+	wg.Add(42)
 	go aBundle.anchorAnalysis()
 	go aBundle.audioAnalysis()
 	go aBundle.areaAnalysis()
 	go aBundle.AbbrAnalysis()
+	go aBundle.asideAnalysis()
 	go aBundle.buttonAnalysis()
+	go aBundle.bodyAnalysis()
 	go aBundle.canvasAnalysis()
 	//go aBundle.cssAnalysis()
 	go aBundle.divAnalysis()
+	go aBundle.dirAnalysis()
 	go aBundle.embedAnalysis()
+	go aBundle.footerAnalysis()
+	go aBundle.formAnalysis()
 	go aBundle.h1Analysis()
 	go aBundle.h2Analysis()
 	go aBundle.h3Analysis()
 	go aBundle.h4Analysis()
 	go aBundle.h5Analysis()
 	go aBundle.h6Analysis()
+	go aBundle.headerAnalysis()
+	go aBundle.headAnalysis()
 	go aBundle.inputAnalysis()
 	go aBundle.imagesAnalysis()
 	go aBundle.iframeAnalysis()
 	go aBundle.linkAnalysis()
+	go aBundle.labelAnalysis()
+	go aBundle.mainAnalysis()
+	go aBundle.navAnalysis()
 	go aBundle.objectAnalysis()
 	go aBundle.paraAnalysis()
 	go aBundle.preAnalysis()
@@ -62,6 +72,11 @@ func (aBundle *AnalyzeBundle) Analyze() resultsapp.Response {
 	go aBundle.spanAnalysis()
 	go aBundle.textareaAnalysis()
 	go aBundle.trackAnalysis()
+	go aBundle.titleAnalysis()
+	go aBundle.tableAnalysis()
+	go aBundle.theadAnalysis()
+	go aBundle.tbodyAnalysis()
+	go aBundle.tfootAnalysis()
 	go aBundle.videoAnalysis()
 
 	wg.Wait()
@@ -935,6 +950,354 @@ func (aBundle *AnalyzeBundle) mainAnalysis() {
 	}
 	MU.Lock()
 	aBundle.Response.MainResults = &list
+	MU.Unlock()
+}
+
+// headerAnalysis function initiates all the header rule based analysis
+func (aBundle *AnalyzeBundle) headerAnalysis() {
+	aBundle.Logger.Println("Initiating header tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Headers
+
+	var list []resultsapp.Header
+	for _, node := range nodes {
+		var tag resultsapp.Header
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.HeaderResults = &list
+	MU.Unlock()
+}
+
+// footerAnalysis function initiates all the footer rule based analysis
+func (aBundle *AnalyzeBundle) footerAnalysis() {
+	aBundle.Logger.Println("Initiating footer tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Footers
+
+	var list []resultsapp.Footer
+	for _, node := range nodes {
+		var tag resultsapp.Footer
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.FooterResults = &list
+	MU.Unlock()
+}
+
+// headAnalysis function initiates all the head rule based analysis
+func (aBundle *AnalyzeBundle) headAnalysis() {
+	aBundle.Logger.Println("Initiating head tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Heads
+
+	var list []resultsapp.Head
+	for _, node := range nodes {
+		var tag resultsapp.Head
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.HeadResults = &list
+	MU.Unlock()
+}
+
+// labelAnalysis function initiates all the label rule based analysis
+func (aBundle *AnalyzeBundle) labelAnalysis() {
+	aBundle.Logger.Println("Initiating label tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Labels
+
+	var list []resultsapp.Label
+	for _, node := range nodes {
+		var tag resultsapp.Label
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.LabelResults = &list
+	MU.Unlock()
+}
+
+// formAnalysis function initiates all the form rule based analysis
+func (aBundle *AnalyzeBundle) formAnalysis() {
+	aBundle.Logger.Println("Initiating form tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Forms
+
+	var list []resultsapp.Form
+	for _, node := range nodes {
+		var tag resultsapp.Form
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.FormResults = &list
+	MU.Unlock()
+}
+
+// dirAnalysis function initiates all the dir rule based analysis
+func (aBundle *AnalyzeBundle) dirAnalysis() {
+	aBundle.Logger.Println("Initiating dir tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Dirs
+
+	var list []resultsapp.Dir
+	for _, node := range nodes {
+		var tag resultsapp.Dir
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.DirResults = &list
+	MU.Unlock()
+}
+
+// bodyAnalysis function initiates all the body rule based analysis
+func (aBundle *AnalyzeBundle) bodyAnalysis() {
+	aBundle.Logger.Println("Initiating body tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Bodys
+
+	var list []resultsapp.Body
+	for _, node := range nodes {
+		var tag resultsapp.Body
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.BodyResults = &list
+	MU.Unlock()
+}
+
+// titleAnalysis function initiates all the title rule based analysis
+func (aBundle *AnalyzeBundle) titleAnalysis() {
+	aBundle.Logger.Println("Initiating title tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Titles
+
+	var list []resultsapp.Title
+	for _, node := range nodes {
+		var tag resultsapp.Title
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.TitleResults = &list
+	MU.Unlock()
+}
+
+// tableAnalysis function initiates all the table rule based analysis
+func (aBundle *AnalyzeBundle) tableAnalysis() {
+	aBundle.Logger.Println("Initiating table tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Tables
+
+	var list []resultsapp.Table
+	for _, node := range nodes {
+		var tag resultsapp.Table
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.TableResults = &list
+	MU.Unlock()
+}
+
+// theadAnalysis function initiates all the thead rule based analysis
+func (aBundle *AnalyzeBundle) theadAnalysis() {
+	aBundle.Logger.Println("Initiating thead tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.THeads
+
+	var list []resultsapp.Thead
+	for _, node := range nodes {
+		var tag resultsapp.Thead
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.THeadResults = &list
+	MU.Unlock()
+}
+
+// tbodyAnalysis function initiates all the tbody rule based analysis
+func (aBundle *AnalyzeBundle) tbodyAnalysis() {
+	aBundle.Logger.Println("Initiating tbody tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.TBodys
+
+	var list []resultsapp.Tbody
+	for _, node := range nodes {
+		var tag resultsapp.Tbody
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.TbodyResults = &list
+	MU.Unlock()
+}
+
+// tfootAnalysis function initiates all the tfoot rule based analysis
+func (aBundle *AnalyzeBundle) tfootAnalysis() {
+	aBundle.Logger.Println("Initiating tfoot tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.TFoots
+
+	var list []resultsapp.Tfoot
+	for _, node := range nodes {
+		var tag resultsapp.Tfoot
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.TfootResults = &list
 	MU.Unlock()
 }
 

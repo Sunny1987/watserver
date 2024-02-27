@@ -289,13 +289,13 @@ func isForm(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == 
 // isFrame will validate Frame tag
 func isFrame(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "frame" }
 
-// isFooter will validate Footer tag
+// isFooter will validate Footers tag
 func isFooter(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "footer" }
 
 // isHead will validate Head tag
 func isHead(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "head" }
 
-// isHeader will validate Header tag
+// isHeader will validate Headers tag
 func isHeader(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "header" }
 
 // isIns will validate Ins tag

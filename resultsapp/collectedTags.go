@@ -34,6 +34,18 @@ const (
 	Asides    = "Asides"
 	Mains     = "Mains"
 	Navs      = "Navs"
+	Headers   = "Headers"
+	Footers   = "Footers"
+	Heads     = "Heads"
+	Labels    = "Labels"
+	Forms     = "Forms"
+	Dirs      = "Dirs"
+	Bodys     = "Bodys"
+	Titles    = "Titles"
+	Tables    = "Tables"
+	THeads    = "THeads"
+	TBodys    = "TBodys"
+	TFoots    = "TFoots"
 )
 
 type TagsFamily struct {
@@ -68,6 +80,18 @@ type TagsFamily struct {
 	Asides    []*html.Node
 	Mains     []*html.Node
 	Navs      []*html.Node
+	Headers   []*html.Node
+	Footers   []*html.Node
+	Heads     []*html.Node
+	Labels    []*html.Node
+	Forms     []*html.Node
+	Dirs      []*html.Node
+	Bodys     []*html.Node
+	Titles    []*html.Node
+	Tables    []*html.Node
+	THeads    []*html.Node
+	TBodys    []*html.Node
+	TFoots    []*html.Node
 
 	CssLinks []string
 }
@@ -105,6 +129,18 @@ func NewTagsFamily(nodeMap map[string][]*html.Node, cssList []string) TagsFamily
 		Navs:      nodeMap[Navs],
 		Asides:    nodeMap[Asides],
 		Mains:     nodeMap[Mains],
+		Headers:   nodeMap[Headers],
+		Footers:   nodeMap[Footers],
+		Heads:     nodeMap[Heads],
+		Labels:    nodeMap[Labels],
+		Forms:     nodeMap[Forms],
+		Dirs:      nodeMap[Dirs],
+		Bodys:     nodeMap[Bodys],
+		Titles:    nodeMap[Titles],
+		Tables:    nodeMap[Tables],
+		THeads:    nodeMap[THeads],
+		TBodys:    nodeMap[TBodys],
+		TFoots:    nodeMap[TFoots],
 		CssLinks:  cssList,
 	}
 }

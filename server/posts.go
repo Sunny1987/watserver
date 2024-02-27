@@ -80,7 +80,7 @@ func (l *NewLogger) FileScan(rw http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 	l.myLogger.Printf("Uploaded File: %+v\n", handler.Filename)
 	l.myLogger.Printf("File Size: %+v\n", handler.Size)
-	l.myLogger.Printf("MIME Header: %+v\n", handler.Header)
+	l.myLogger.Printf("MIME Headers: %+v\n", handler.Header)
 
 	//setup req object
 	reqMod := &MyRequest{}
