@@ -67,7 +67,7 @@ func (pBundle *ParseBundle) collectNode() map[string][]*html.Node {
 	//initialize a map
 	nodeMap := make(map[string][]*html.Node)
 
-	wg.Add(30)
+	wg.Add(42)
 	go pBundle.getNode(FilterAnchorNodes, resultsapp.Anchors, nodeMap)
 	go pBundle.getNode(filterDivNodes, resultsapp.Divs, nodeMap)
 	go pBundle.getNode(filterParaNodes, resultsapp.Paras, nodeMap)
@@ -98,6 +98,18 @@ func (pBundle *ParseBundle) collectNode() map[string][]*html.Node {
 	go pBundle.getNode(filterNavNodes, resultsapp.Navs, nodeMap)
 	go pBundle.getNode(filterAsideNodes, resultsapp.Asides, nodeMap)
 	go pBundle.getNode(filterMainNodes, resultsapp.Mains, nodeMap)
+	go pBundle.getNode(filterHeaderNodes, resultsapp.Headers, nodeMap)
+	go pBundle.getNode(filterFooterNodes, resultsapp.Footers, nodeMap)
+	go pBundle.getNode(filterHeadNodes, resultsapp.Heads, nodeMap)
+	go pBundle.getNode(filterLabelNodes, resultsapp.Labels, nodeMap)
+	go pBundle.getNode(filterFormNodes, resultsapp.Forms, nodeMap)
+	go pBundle.getNode(filterDirNodes, resultsapp.Dirs, nodeMap)
+	go pBundle.getNode(filterBodyNodes, resultsapp.Bodys, nodeMap)
+	go pBundle.getNode(filterTitleNodes, resultsapp.Titles, nodeMap)
+	go pBundle.getNode(filterTableNodes, resultsapp.Tables, nodeMap)
+	go pBundle.getNode(filterTHeadNodes, resultsapp.THeads, nodeMap)
+	go pBundle.getNode(filterTBodyNodes, resultsapp.TBodys, nodeMap)
+	go pBundle.getNode(filterTFootNodes, resultsapp.TFoots, nodeMap)
 
 	wg.Add(1)
 	go func(base string) {
