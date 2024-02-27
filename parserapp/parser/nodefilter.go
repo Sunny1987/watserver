@@ -255,6 +255,9 @@ func filterCaptionNodes(n *html.Node) []*html.Node { return filterNode(n, isCapt
 // filterCiteNodes will give the list of Cite
 func filterCiteNodes(n *html.Node) []*html.Node { return filterNode(n, isCite) }
 
+// filterMainNodes will give the list of Main
+func filterMainNodes(n *html.Node) []*html.Node { return filterNode(n, isMain) }
+
 // filterCSSLinks will filter all the CSS based links
 func filterCSSLinks(list []*html.Node) []*html.Node {
 	var retLnk []*html.Node

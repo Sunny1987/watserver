@@ -74,12 +74,12 @@ func (aBundle *AnalyzeBundle) divAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Divs
 
-	var list []resultsapp.Divtag
+	var list []resultsapp.Div
 	for _, node := range nodes {
-		var tag resultsapp.Divtag
+		var tag resultsapp.Div
 
 		//build the node
-		tag.Div = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -103,12 +103,12 @@ func (aBundle *AnalyzeBundle) buttonAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Buttons
 
-	var list []resultsapp.Buttontag
+	var list []resultsapp.Button
 	for _, node := range nodes {
-		var tag resultsapp.Buttontag
+		var tag resultsapp.Button
 
 		//build the node
-		tag.Button = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -132,12 +132,12 @@ func (aBundle *AnalyzeBundle) inputAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Inputs
 
-	var list []resultsapp.Inputtag
+	var list []resultsapp.Input
 	for _, node := range nodes {
-		var tag resultsapp.Inputtag
+		var tag resultsapp.Input
 
 		//build the node
-		tag.Input = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -161,12 +161,12 @@ func (aBundle *AnalyzeBundle) imagesAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Imgs
 
-	var list []resultsapp.Imgtag
+	var list []resultsapp.Img
 	for _, node := range nodes {
-		var tag resultsapp.Imgtag
+		var tag resultsapp.Img
 
 		//build the node
-		tag.Img = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -190,12 +190,12 @@ func (aBundle *AnalyzeBundle) videoAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Videos
 
-	var list []resultsapp.Videotag
+	var list []resultsapp.Video
 	for _, node := range nodes {
-		var tag resultsapp.Videotag
+		var tag resultsapp.Video
 
 		//build the node
-		tag.Video = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -219,12 +219,12 @@ func (aBundle *AnalyzeBundle) audioAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Audios
 
-	var list []resultsapp.Audiotag
+	var list []resultsapp.Audio
 	for _, node := range nodes {
-		var tag resultsapp.Audiotag
+		var tag resultsapp.Audio
 
 		//build the node
-		tag.Audio = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -248,12 +248,12 @@ func (aBundle *AnalyzeBundle) textareaAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.TextAreas
 
-	var list []resultsapp.Textareatag
+	var list []resultsapp.Textarea
 	for _, node := range nodes {
-		var tag resultsapp.Textareatag
+		var tag resultsapp.Textarea
 
 		//build the node
-		tag.Textarea = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -277,12 +277,12 @@ func (aBundle *AnalyzeBundle) selectAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Selects
 
-	var list []resultsapp.Selecttag
+	var list []resultsapp.Select
 	for _, node := range nodes {
-		var tag resultsapp.Selecttag
+		var tag resultsapp.Select
 
 		//build the node
-		tag.Select = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -306,12 +306,12 @@ func (aBundle *AnalyzeBundle) iframeAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Iframes
 
-	var list []resultsapp.Iframetag
+	var list []resultsapp.Iframe
 	for _, node := range nodes {
-		var tag resultsapp.Iframetag
+		var tag resultsapp.Iframe
 
 		//build the node
-		tag.Iframe = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -335,12 +335,12 @@ func (aBundle *AnalyzeBundle) linkAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Links
 
-	var list []resultsapp.Linktag
+	var list []resultsapp.Link
 	for _, node := range nodes {
-		var tag resultsapp.Linktag
+		var tag resultsapp.Link
 
 		//build the node
-		tag.Link = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -364,12 +364,12 @@ func (aBundle *AnalyzeBundle) anchorAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Anchors
 
-	var list []resultsapp.Anchortag
+	var list []resultsapp.Anchor
 	for _, node := range nodes {
-		var tag resultsapp.Anchortag
+		var tag resultsapp.Anchor
 
 		//build the node
-		tag.Anchor = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -393,12 +393,12 @@ func (aBundle *AnalyzeBundle) areaAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Areas
 
-	var list []resultsapp.Areatag
+	var list []resultsapp.Area
 	for _, node := range nodes {
-		var tag resultsapp.Areatag
+		var tag resultsapp.Area
 
 		//build the node
-		tag.Area = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -422,12 +422,12 @@ func (aBundle *AnalyzeBundle) objectAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Objects
 
-	var list []resultsapp.Objecttag
+	var list []resultsapp.Object
 	for _, node := range nodes {
-		var tag resultsapp.Objecttag
+		var tag resultsapp.Object
 
 		//build the node
-		tag.Object = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -451,12 +451,12 @@ func (aBundle *AnalyzeBundle) embedAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Embeds
 
-	var list []resultsapp.Embedtag
+	var list []resultsapp.Embed
 	for _, node := range nodes {
-		var tag resultsapp.Embedtag
+		var tag resultsapp.Embed
 
 		//build the node
-		tag.Embed = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -480,12 +480,12 @@ func (aBundle *AnalyzeBundle) trackAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Tracks
 
-	var list []resultsapp.Tracktag
+	var list []resultsapp.Track
 	for _, node := range nodes {
-		var tag resultsapp.Tracktag
+		var tag resultsapp.Track
 
 		//build the node
-		tag.Track = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -509,12 +509,12 @@ func (aBundle *AnalyzeBundle) h1Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H1s
 
-	var list []resultsapp.H1tag
+	var list []resultsapp.H1
 	for _, node := range nodes {
-		var tag resultsapp.H1tag
+		var tag resultsapp.H1
 
 		//build the node
-		tag.H1 = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -538,12 +538,12 @@ func (aBundle *AnalyzeBundle) h2Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H2s
 
-	var list []resultsapp.H2tag
+	var list []resultsapp.H2
 	for _, node := range nodes {
-		var tag resultsapp.H2tag
+		var tag resultsapp.H2
 
 		//build the node
-		tag.H2 = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -567,12 +567,12 @@ func (aBundle *AnalyzeBundle) h3Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H3s
 
-	var list []resultsapp.H3tag
+	var list []resultsapp.H3
 	for _, node := range nodes {
-		var tag resultsapp.H3tag
+		var tag resultsapp.H3
 
 		//build the node
-		tag.H3 = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -596,12 +596,12 @@ func (aBundle *AnalyzeBundle) h4Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H4s
 
-	var list []resultsapp.H4tag
+	var list []resultsapp.H4
 	for _, node := range nodes {
-		var tag resultsapp.H4tag
+		var tag resultsapp.H4
 
 		//build the node
-		tag.H4 = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -625,12 +625,12 @@ func (aBundle *AnalyzeBundle) h5Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H5s
 
-	var list []resultsapp.H5tag
+	var list []resultsapp.H5
 	for _, node := range nodes {
-		var tag resultsapp.H5tag
+		var tag resultsapp.H5
 
 		//build the node
-		tag.H5 = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -654,12 +654,12 @@ func (aBundle *AnalyzeBundle) h6Analysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.H6s
 
-	var list []resultsapp.H6tag
+	var list []resultsapp.H6
 	for _, node := range nodes {
-		var tag resultsapp.H6tag
+		var tag resultsapp.H6
 
 		//build the node
-		tag.H6 = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -683,12 +683,12 @@ func (aBundle *AnalyzeBundle) paraAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Paras
 
-	var list []resultsapp.Paratag
+	var list []resultsapp.Para
 	for _, node := range nodes {
-		var tag resultsapp.Paratag
+		var tag resultsapp.Para
 
 		//build the node
-		tag.Para = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -712,12 +712,12 @@ func (aBundle *AnalyzeBundle) preAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Pres
 
-	var list []resultsapp.Pretag
+	var list []resultsapp.Pre
 	for _, node := range nodes {
-		var tag resultsapp.Pretag
+		var tag resultsapp.Pre
 
 		//build the node
-		tag.Pre = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -741,12 +741,12 @@ func (aBundle *AnalyzeBundle) AbbrAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Abbrs
 
-	var list []resultsapp.Abbrtag
+	var list []resultsapp.Abbr
 	for _, node := range nodes {
-		var tag resultsapp.Abbrtag
+		var tag resultsapp.Abbr
 
 		//build the node
-		tag.Abbr = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -770,12 +770,12 @@ func (aBundle *AnalyzeBundle) SVGAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Svgs
 
-	var list []resultsapp.SVGtag
+	var list []resultsapp.SVG
 	for _, node := range nodes {
-		var tag resultsapp.SVGtag
+		var tag resultsapp.SVG
 
 		//build the node
-		tag.SVG = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -799,12 +799,12 @@ func (aBundle *AnalyzeBundle) canvasAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Canvases
 
-	var list []resultsapp.Canvastag
+	var list []resultsapp.Canvas
 	for _, node := range nodes {
-		var tag resultsapp.Canvastag
+		var tag resultsapp.Canvas
 
 		//build the node
-		tag.Canvas = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -828,12 +828,12 @@ func (aBundle *AnalyzeBundle) spanAnalysis() {
 	defer wg.Done()
 	nodes := aBundle.CollectedTags.Spans
 
-	var list []resultsapp.Spantag
+	var list []resultsapp.Span
 	for _, node := range nodes {
-		var tag resultsapp.Spantag
+		var tag resultsapp.Span
 
 		//build the node
-		tag.Span = helper.NodeText(node)
+		tag.Tag = helper.NodeText(node)
 
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
@@ -848,6 +848,93 @@ func (aBundle *AnalyzeBundle) spanAnalysis() {
 	}
 	MU.Lock()
 	aBundle.Response.SpanResults = &list
+	MU.Unlock()
+}
+
+// navAnalysis function initiates all the nav rule based analysis
+func (aBundle *AnalyzeBundle) navAnalysis() {
+	aBundle.Logger.Println("Initiating nav tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Navs
+
+	var list []resultsapp.Nav
+	for _, node := range nodes {
+		var tag resultsapp.Nav
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.NavResults = &list
+	MU.Unlock()
+}
+
+// asideAnalysis function initiates all the aside rule based analysis
+func (aBundle *AnalyzeBundle) asideAnalysis() {
+	aBundle.Logger.Println("Initiating aside tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Navs
+
+	var list []resultsapp.Aside
+	for _, node := range nodes {
+		var tag resultsapp.Aside
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.AsideResults = &list
+	MU.Unlock()
+}
+
+// mainAnalysis function initiates all the main rule based analysis
+func (aBundle *AnalyzeBundle) mainAnalysis() {
+	aBundle.Logger.Println("Initiating main tag Analysis......")
+	defer wg.Done()
+	nodes := aBundle.CollectedTags.Mains
+
+	var list []resultsapp.Main
+	for _, node := range nodes {
+		var tag resultsapp.Main
+
+		//build the node
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		if status, results := aBundle.rules.Execute(node); status == true {
+			tag.Result = results
+			if len(list) < 50 {
+				list = append(list, tag)
+			}
+		}
+	}
+	MU.Lock()
+	aBundle.Response.MainResults = &list
 	MU.Unlock()
 }
 

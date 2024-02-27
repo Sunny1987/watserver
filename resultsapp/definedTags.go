@@ -1,29 +1,29 @@
 package resultsapp
 
 type Tags struct {
-	Applettag
-	Areatag
-	Anchortag
-	Audiotag
-	Buttontag
-	Divtag
-	Embedtag
-	H1tag
-	H2tag
-	H3tag
-	H4tag
-	H5tag
-	H6tag
-	Imgtag
-	Linktag
-	Objecttag
-	Pretag
-	Paratag
-	Inputtag
-	Selecttag
-	Textareatag
-	Tracktag
-	Videotag
+	Applet
+	Area
+	Anchor
+	Audio
+	Button
+	Div
+	Embed
+	H1
+	H2
+	H3
+	H4
+	H5
+	H6
+	Img
+	Link
+	Object
+	Pre
+	Para
+	Input
+	Select
+	Textarea
+	Track
+	Video
 }
 
 // Result object will be used to simplify the tags result rules
@@ -37,141 +37,141 @@ func NewResult(guideline string, rules []string) Result {
 	return Result{Guideline: guideline, Rules: rules}
 }
 
-// Divtag is the Div based rule results
-type Divtag struct {
-	Div    string
+// Div is the Div based rule results
+type Div struct {
+	Tag    string
 	Result []Result
 }
 
-// Anchortag is the anchor based rule results
-type Anchortag struct {
-	Anchor string
+// Anchor is the anchor based rule results
+type Anchor struct {
+	Tag    string
 	Result []Result
 }
 
-// Audiotag is the audio based rule results
-type Audiotag struct {
-	Audio  string
+// Audio is the audio based rule results
+type Audio struct {
+	Tag    string
 	Result []Result
 }
 
-// Buttontag is the button based rule results
-type Buttontag struct {
-	Button string
+// Button is the button based rule results
+type Button struct {
+	Tag    string
 	Result []Result
 }
 
-// Imgtag is the img based rule results
-type Imgtag struct {
-	Img    string
+// Img is the img based rule results
+type Img struct {
+	Tag    string
 	Result []Result
 }
 
-// Inputtag is the input based rule results
-type Inputtag struct {
-	Input  string
+// Input is the input based rule results
+type Input struct {
+	Tag    string
 	Result []Result
 }
 
-// Selecttag is the select based rule results
-type Selecttag struct {
-	Select string
+// Select is the select based rule results
+type Select struct {
+	Tag    string
 	Result []Result
 }
 
-// Textareatag is the textarea based rule results
-type Textareatag struct {
-	Textarea string
-	Result   []Result
-}
-
-// Videotag is the video based rule results
-type Videotag struct {
-	Video  string
+// Textarea is the textarea based rule results
+type Textarea struct {
+	Tag    string
 	Result []Result
 }
 
-// Paratag is the para based rule results
-type Paratag struct {
-	Para   string
+// Video is the video based rule results
+type Video struct {
+	Tag    string
 	Result []Result
 }
 
-// Iframetag is the iframe based rule results
-type Iframetag struct {
-	Iframe string
+// Para is the para based rule results
+type Para struct {
+	Tag    string
 	Result []Result
 }
 
-// Areatag is the area based rule results
-type Areatag struct {
-	Area   string
+// Iframe is the iframe based rule results
+type Iframe struct {
+	Tag    string
 	Result []Result
 }
 
-// Objecttag is the object based rule results
-type Objecttag struct {
-	Object string
+// Area is the area based rule results
+type Area struct {
+	Tag    string
 	Result []Result
 }
 
-// Embedtag is the embed based rule results
-type Embedtag struct {
-	Embed  string
+// Object is the object based rule results
+type Object struct {
+	Tag    string
 	Result []Result
 }
 
-// Tracktag is the track based rule results
-type Tracktag struct {
-	Track  string
+// Embed is the embed based rule results
+type Embed struct {
+	Tag    string
 	Result []Result
 }
 
-// Applettag is the applet based rule results
-type Applettag struct {
-	Applet string
+// Track is the track based rule results
+type Track struct {
+	Tag    string
 	Result []Result
 }
 
-// H1tag is the h1 based rule results
-type H1tag struct {
-	H1     string
+// Applet is the applet based rule results
+type Applet struct {
+	Tag    string
 	Result []Result
 }
 
-// H2tag is the h2 based rule results
-type H2tag struct {
-	H2     string
+// H1 is the h1 based rule results
+type H1 struct {
+	Tag    string
 	Result []Result
 }
 
-// H3tag is the h3 based rule results
-type H3tag struct {
-	H3     string
+// H2 is the h2 based rule results
+type H2 struct {
+	Tag    string
 	Result []Result
 }
 
-// H4tag is the h4 based rule results
-type H4tag struct {
-	H4     string
+// H3 is the h3 based rule results
+type H3 struct {
+	Tag    string
 	Result []Result
 }
 
-// H5tag is the h5 based rule results
-type H5tag struct {
-	H5     string
+// H4 is the h4 based rule results
+type H4 struct {
+	Tag    string
 	Result []Result
 }
 
-// H6tag is the h6 based rule results
-type H6tag struct {
-	H6     string
+// H5 is the h5 based rule results
+type H5 struct {
+	Tag    string
 	Result []Result
 }
 
-// Pretag is the Pre based rule results
-type Pretag struct {
-	Pre    string
+// H6 is the h6 based rule results
+type H6 struct {
+	Tag    string
+	Result []Result
+}
+
+// Pre is the Pre based rule results
+type Pre struct {
+	Tag    string
 	Result []Result
 }
 type CSS struct {
@@ -179,386 +179,386 @@ type CSS struct {
 	Result []Result
 }
 
-// Linktag is the Link based rule results
-type Linktag struct {
-	Link   string
+// Link is the Link based rule results
+type Link struct {
+	Tag    string
 	Result []Result
 }
 
-// Abbrtag is the abbr based rule results
-type Abbrtag struct {
-	Abbr   string
+// Abbr is the abbr based rule results
+type Abbr struct {
+	Tag    string
 	Result []Result
 }
 
-// SVGtag is the svg based rule results
-type SVGtag struct {
-	SVG    string
+// SVG is the svg based rule results
+type SVG struct {
+	Tag    string
 	Result []Result
 }
 
-// Canvastag is the canvas based rule results
-type Canvastag struct {
-	Canvas string
+// Canvas is the canvas based rule results
+type Canvas struct {
+	Tag    string
 	Result []Result
 }
 
-// Spantag is the span based rule results
-type Spantag struct {
-	Span   string
+// Span is the span based rule results
+type Span struct {
+	Tag    string
 	Result []Result
 }
 
-// Acronymtag is the acronym based rule results
-type Acronymtag struct {
-	Acronym string
-	Result  []Result
-}
-
-// Addresstag is the address based rule results
-type Addresstag struct {
-	Address string
-	Result  []Result
-}
-
-// Articletag is the article based rule results
-type Articletag struct {
-	Article string
-	Result  []Result
-}
-
-// Asidetag is the aside based rule results
-type Asidetag struct {
-	Aside  string
+// Acronym is the acronym based rule results
+type Acronym struct {
+	Tag    string
 	Result []Result
 }
 
-// Basetag is the base based rule results
-type Basetag struct {
-	Base   string
+// Address is the address based rule results
+type Address struct {
+	Tag    string
 	Result []Result
 }
 
-// Basefonttag is the basefont based rule results
-type Basefonttag struct {
-	Basefont string
-	Result   []Result
-}
-
-// Bditag is the bdi based rule results
-type Bditag struct {
-	Bdi    string
+// Article is the article based rule results
+type Article struct {
+	Tag    string
 	Result []Result
 }
 
-// Bdotag is the bdo based rule results
-type Bdotag struct {
-	Bdo    string
+// Aside is the aside based rule results
+type Aside struct {
+	Tag    string
 	Result []Result
 }
 
-// Bgsoundtag is the Bgsound based rule results
-type Bgsoundtag struct {
-	Bgsound string
-	Result  []Result
-}
-
-// Bigtag is the Big based rule results
-type Bigtag struct {
-	Big    string
+// Base is the base based rule results
+type Base struct {
+	Tag    string
 	Result []Result
 }
 
-// Blockquotetag is the Blockquote based rule results
-type Blockquotetag struct {
-	Blockquote string
-	Result     []Result
-}
-
-// Bodytag is the Body based rule results
-type Bodytag struct {
-	Body   string
+// Basefont is the basefont based rule results
+type Basefont struct {
+	Tag    string
 	Result []Result
 }
 
-// Boldtag is the Bold based rule results
-type Boldtag struct {
-	Bold   string
+// Bdi is the bdi based rule results
+type Bdi struct {
+	Tag    string
 	Result []Result
 }
 
-// Breaktag is the Break based rule results
-type Breaktag struct {
-	Break  string
+// Bdo is the bdo based rule results
+type Bdo struct {
+	Tag    string
 	Result []Result
 }
 
-// Captiontag is the Caption based rule results
-type Captiontag struct {
-	Caption string
-	Result  []Result
-}
-
-// Centertag is the Center based rule results
-type Centertag struct {
-	Center string
+// Bgsound is the Bgsound based rule results
+type Bgsound struct {
+	Tag    string
 	Result []Result
 }
 
-// Citetag is the Cite based rule results
-type Citetag struct {
-	Cite   string
+// Big is the Big based rule results
+type Big struct {
+	Tag    string
 	Result []Result
 }
 
-// Codetag is the Code based rule results
-type Codetag struct {
-	Code   string
+// Blockquote is the Blockquote based rule results
+type Blockquote struct {
+	Tag    string
 	Result []Result
 }
 
-// Colgrouptag is the Colgroup based rule results
-type Colgrouptag struct {
-	Colgroup string
-	Result   []Result
-}
-
-// Columntag is the Column based rule results
-type Columntag struct {
-	Column string
+// Body is the Body based rule results
+type Body struct {
+	Tag    string
 	Result []Result
 }
 
-// Datatag is the Data based rule results
-type Datatag struct {
-	Data   string
+// Bold is the Bold based rule results
+type Bold struct {
+	Tag    string
 	Result []Result
 }
 
-// Datalisttag is the Datalist based rule results
-type Datalisttag struct {
-	Datalist string
-	Result   []Result
-}
-
-// Ddtag is the Dd based rule results
-type Ddtag struct {
-	Dd     string
+// Break is the Break based rule results
+type Break struct {
+	Tag    string
 	Result []Result
 }
 
-// Definetag is the Define based rule results
-type Definetag struct {
-	Define string
+// Caption is the Caption based rule results
+type Caption struct {
+	Tag    string
 	Result []Result
 }
 
-// Deletetag is the Delete based rule results
-type Deletetag struct {
-	Delete string
+// Center is the Center based rule results
+type Center struct {
+	Tag    string
 	Result []Result
 }
 
-// Detailstag is the Detail based rule results
-type Detailstag struct {
-	Details string
-	Result  []Result
-}
-
-// Dialogtag is the Dialog based rule results
-type Dialogtag struct {
-	Dialog string
+// Cite is the Cite based rule results
+type Cite struct {
+	Tag    string
 	Result []Result
 }
 
-// Dirtag is the Dir based rule results
-type Dirtag struct {
-	Dir    string
+// Code is the Code based rule results
+type Code struct {
+	Tag    string
 	Result []Result
 }
 
-// Dltag is the Dl based rule results
-type Dltag struct {
-	Dl     string
+// Colgroup is the Colgroup based rule results
+type Colgroup struct {
+	Tag    string
 	Result []Result
 }
 
-// Dttag is the Dt based rule results
-type Dttag struct {
-	Dt     string
+// Column is the Column based rule results
+type Column struct {
+	Tag    string
 	Result []Result
 }
 
-// Fieldsettag is the Fieldset based rule results
-type Fieldsettag struct {
-	Fieldset string
-	Result   []Result
-}
-
-// Figcaptiontag is the Figcaption based rule results
-type Figcaptiontag struct {
-	Figcaption string
-	Result     []Result
-}
-
-// Figuretag is the Figure based rule results
-type Figuretag struct {
-	Figure string
+// Data is the Data based rule results
+type Data struct {
+	Tag    string
 	Result []Result
 }
 
-// Fonttag is the Font based rule results
-type Fonttag struct {
-	Font   string
+// Datalist is the Datalist based rule results
+type Datalist struct {
+	Tag    string
 	Result []Result
 }
 
-// Footertag is the Footer based rule results
-type Footertag struct {
-	Footer string
+// Dd is the Dd based rule results
+type Dd struct {
+	Tag    string
 	Result []Result
 }
 
-// Formtag is the Form based rule results
-type Formtag struct {
-	Form   string
+// Define is the Define based rule results
+type Define struct {
+	Tag    string
 	Result []Result
 }
 
-// Frametag is the Frame based rule results
-type Frametag struct {
-	Frame  string
+// Delete is the Delete based rule results
+type Delete struct {
+	Tag    string
 	Result []Result
 }
 
-// Framesettag is the Frameset based rule results
-type Framesettag struct {
-	Frameset string
-	Result   []Result
-}
-
-// Headtag is the Head based rule results
-type Headtag struct {
-	Head   string
+// Details is the Detail based rule results
+type Details struct {
+	Tag    string
 	Result []Result
 }
 
-// Headertag is the Header based rule results
-type Headertag struct {
-	Header string
+// Dialog is the Dialog based rule results
+type Dialog struct {
+	Tag    string
 	Result []Result
 }
 
-// Hgrouptag is the Hgroup based rule results
-type Hgrouptag struct {
-	Hgroup string
+// Dir is the Dir based rule results
+type Dir struct {
+	Tag    string
 	Result []Result
 }
 
-// Instag is the Ins based rule results
-type Instag struct {
-	Ins    string
+// Dl is the Dl based rule results
+type Dl struct {
+	Tag    string
 	Result []Result
 }
 
-// Labeltag is the Label based rule results
-type Labeltag struct {
-	Label  string
+// Dt is the Dt based rule results
+type Dt struct {
+	Tag    string
 	Result []Result
 }
 
-// Listtag is the List based rule results
-type Listtag struct {
-	List   string
+// Fieldset is the Fieldset based rule results
+type Fieldset struct {
+	Tag    string
 	Result []Result
 }
 
-// Maintag is the Main based rule results
-type Maintag struct {
-	Main   string
+// Figcaption is the Figcaption based rule results
+type Figcaption struct {
+	Tag    string
 	Result []Result
 }
 
-// Marqueetag is the Marquee based rule results
-type Marqueetag struct {
-	Marquee string
-	Result  []Result
-}
-
-// Menuitemtag is the Menuitem based rule results
-type Menuitemtag struct {
-	Menuitem string
-	Result   []Result
-}
-
-// Navtag is the Nav based rule results
-type Navtag struct {
-	Nav    string
+// Figure is the Figure based rule results
+type Figure struct {
+	Tag    string
 	Result []Result
 }
 
-// Optgrouptag is the Optgroup based rule results
-type Optgrouptag struct {
-	Optgroup string
-	Result   []Result
-}
-
-// Optiontag is the Option based rule results
-type Optiontag struct {
-	Option string
+// Font is the Font based rule results
+type Font struct {
+	Tag    string
 	Result []Result
 }
 
-// Paramtag is the Param based rule results
-type Paramtag struct {
-	Param  string
+// Footer is the Footer based rule results
+type Footer struct {
+	Tag    string
 	Result []Result
 }
 
-// Tabletag is the Table based rule results
-type Tabletag struct {
-	Table  string
+// Form is the Form based rule results
+type Form struct {
+	Tag    string
 	Result []Result
 }
 
-// Tbodytag is the Tbody based rule results
-type Tbodytag struct {
-	Tbody  string
+// Frame is the Frame based rule results
+type Frame struct {
+	Tag    string
 	Result []Result
 }
 
-// Tdtag is the Td based rule results
-type Tdtag struct {
-	Td     string
+// Frameset is the Frameset based rule results
+type Frameset struct {
+	Tag    string
 	Result []Result
 }
 
-// Templatetag is the Template based rule results
-type Templatetag struct {
-	Template string
-	Result   []Result
-}
-
-// Tfoottag is the Tfoot based rule results
-type Tfoottag struct {
-	Tfoot  string
+// Head is the Head based rule results
+type Head struct {
+	Tag    string
 	Result []Result
 }
 
-// Thtag is the Th based rule results
-type Thtag struct {
-	Th     string
+// Header is the Header based rule results
+type Header struct {
+	Tag    string
 	Result []Result
 }
 
-// Theadtag is the Thead based rule results
-type Theadtag struct {
-	Thead  string
+// Hgroup is the Hgroup based rule results
+type Hgroup struct {
+	Tag    string
 	Result []Result
 }
 
-// Titletag is the Title based rule results
-type Titletag struct {
-	Title  string
+// Ins is the Ins based rule results
+type Ins struct {
+	Tag    string
+	Result []Result
+}
+
+// Label is the Label based rule results
+type Label struct {
+	Tag    string
+	Result []Result
+}
+
+// List is the List based rule results
+type List struct {
+	Tag    string
+	Result []Result
+}
+
+// Main is the Main based rule results
+type Main struct {
+	Tag    string
+	Result []Result
+}
+
+// Marquee is the Marquee based rule results
+type Marquee struct {
+	Tag    string
+	Result []Result
+}
+
+// Menuitem is the Menuitem based rule results
+type Menuitem struct {
+	Tag    string
+	Result []Result
+}
+
+// Nav is the Nav based rule results
+type Nav struct {
+	Tag    string
+	Result []Result
+}
+
+// Optgroup is the Optgroup based rule results
+type Optgroup struct {
+	Tag    string
+	Result []Result
+}
+
+// Option is the Option based rule results
+type Option struct {
+	Tag    string
+	Result []Result
+}
+
+// Param is the Param based rule results
+type Param struct {
+	Tag    string
+	Result []Result
+}
+
+// Table is the Table based rule results
+type Table struct {
+	Tag    string
+	Result []Result
+}
+
+// Tbody is the Tbody based rule results
+type Tbody struct {
+	Tag    string
+	Result []Result
+}
+
+// Td is the Td based rule results
+type Td struct {
+	Tag    string
+	Result []Result
+}
+
+// Template is the Template based rule results
+type Template struct {
+	Tag    string
+	Result []Result
+}
+
+// Tfoot is the Tfoot based rule results
+type Tfoot struct {
+	Tag    string
+	Result []Result
+}
+
+// Th is the Th based rule results
+type Th struct {
+	Tag    string
+	Result []Result
+}
+
+// Thead is the Thead based rule results
+type Thead struct {
+	Tag    string
+	Result []Result
+}
+
+// Title is the Title based rule results
+type Title struct {
+	Tag    string
 	Result []Result
 }
