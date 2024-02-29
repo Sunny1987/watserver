@@ -21,7 +21,7 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	//get the list of links from sitemap
 	links, base := sitemapbuilder.SiteMap(req.URL, req.Depth, l.myLogger)
 	l.myLogger.Println("***** site map completed*****")
-	var finalResult []resultsapp.Response
+	var finalResult []resultsapp.FinalResponse
 
 	//scan based on depth
 	wg.Add(len(links))
@@ -50,20 +50,20 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 
 	//print the response
 	resultsapp.PrintResponse(rw, l.myLogger, finalResult)
-	//PrintResponse(finalResult, rw, l.myLogger)
 
 	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))
 }
 
 // FileScan will scan the uploaded File and provide the accessibility results
-func (l *NewLogger) FileScan(rw http.ResponseWriter, r *http.Request) {
+func (l *NewLogger) FileScan(rw http.ResponseWriter,
+	r *http.Request) {
 	//track execution time for scan
 	timeStart := time.Now()
 
 	//get the request from middleware
 	//req := r.Context().Value(KeyUser{}).(*MyRequest)
 
-	var finalResult []resultsapp.Response
+	var finalResult []resultsapp.FinalResponse
 
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {

@@ -3,74 +3,79 @@ package resultsapp
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/jung-kurt/gofpdf"
 	"log"
 	"net/http"
+	"reflect"
 )
 
-// Response is the response object for json
-type Response struct {
-	Request         interface{} `json:"request"`
-	Person          *string     `json:"person"`
-	DivResults      *[]Div      `json:"divs"`
-	ButtonResults   *[]Button   `json:"buttons"`
-	InputResults    *[]Input    `json:"inputs"`
-	ImageResults    *[]Img      `json:"images"`
-	VideoResults    *[]Video    `json:"videos"`
-	AudioResults    *[]Audio    `json:"audios"`
-	TextareaResults *[]Textarea `json:"textAreas"`
-	SelectResults   *[]Select   `json:"selects"`
-	ParaResults     *[]Para     `json:"paras"`
-	IframeResults   *[]Iframe   `json:"iframes"`
-	AnchorResults   *[]Anchor   `json:"anchors"`
-	AreaResults     *[]Area     `json:"areas"`
-	ObjectResults   *[]Object   `json:"objects"`
-	EmbedResults    *[]Embed    `json:"embeds"`
-	TrackResults    *[]Track    `json:"tracks"`
-	H1Results       *[]H1       `json:"h1s"`
-	H2Results       *[]H2       `json:"h2s"`
-	H3Results       *[]H3       `json:"h3s"`
-	H4Results       *[]H4       `json:"h4s"`
-	H5Results       *[]H5       `json:"h5s"`
-	H6Results       *[]H6       `json:"h6s"`
-	PreResults      *[]Pre      `json:"pres"`
-	LinkResults     *[]Link     `json:"links"`
-	AbbrResults     *[]Abbr     `json:"abbrs"`
-	SvgResults      *[]SVG      `json:"svgs"`
-	CanvasResults   *[]Canvas   `json:"canvases"`
-	SpanResults     *[]Span     `json:"spans"`
-	NavResults      *[]Nav      `json:"navs"`
-	MainResults     *[]Main     `json:"mains"`
-	AsideResults    *[]Aside    `json:"asides"`
-	HeaderResults   *[]Header   `json:"headers"`
-	FooterResults   *[]Footer   `json:"footers"`
-	HeadResults     *[]Head     `json:"heads"`
-	LabelResults    *[]Label    `json:"labels"`
-	FormResults     *[]Form     `json:"forms"`
-	DirResults      *[]Dir      `json:"dirs"`
-	BodyResults     *[]Body     `json:"bodys"`
-	TitleResults    *[]Title    `json:"titles"`
-	TableResults    *[]Table    `json:"tables"`
-	THeadResults    *[]Thead    `json:"THeads"`
-	TbodyResults    *[]Tbody    `json:"tbodys"`
-	TfootResults    *[]Tfoot    `json:"tfoots"`
-	CSSResults      *[]CSS      `json:"CSS"`
+type FinalResponse struct {
+	Request interface{}
+	Person  *string
+	Results []TagResult
 }
 
-func PrintResponse(rw http.ResponseWriter, l *log.Logger, results []Response) {
+func PrintResponse(rw http.ResponseWriter, l *log.Logger, results []FinalResponse) {
 	l.Println("Initiating the response....")
-	var filteredRes []Response
-	if len(results) > 100 {
-		filteredRes = results[:99]
-	} else {
-		filteredRes = results
+	var finalResponse string
+	if len(results) == 0 {
+		_, err := fmt.Fprintln(rw, "no bytes to unmarshal")
+		if err != nil {
+			l.Printf("Error : %v", err)
+		}
 	}
-	rep, err := json.MarshalIndent(filteredRes, "", " ")
+
+	rep, err := json.MarshalIndent(results, "", " ")
+	//rep, err := json.MarshalIndent(resp, "", " ")
 	if err != nil {
 		l.Println(err)
 	}
-	fresp := string(rep)
-	_, err = fmt.Fprintln(rw, fresp)
+
+	finalResponse = string(rep)
+	_, err = fmt.Fprintln(rw, finalResponse)
 	if err != nil {
 		l.Printf("Error : %v", err)
 	}
+}
+
+//func ParseResultsAndCreatePDF(l *log.Logger, results []Response) string {
+//	l.Println(".... Processing Results for PDF... ")
+//	var finalResponse string
+//	if len(results) == 0 {
+//		_, err := fmt.Fprintln(rw, "no bytes to unmarshal")
+//		if err != nil {
+//			l.Printf("Error : %v", err)
+//		}
+//	}
+//	return finalResponse
+//}
+
+func CreatePDF(l *log.Logger, resp string) {
+	l.Println("...Generating PDF...")
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "B", 16)
+	pdf.Cell(40, 10, resp)
+	err := pdf.OutputFileAndClose("hello.pdf")
+	if err != nil {
+		l.Println(err)
+	}
+}
+
+func (resp FinalResponse) GetFilteredResponse() ([]string, map[string]interface{}) {
+	tags := make(map[string]interface{})
+	var tagNames []string
+
+	structVal := reflect.ValueOf(resp)
+	for i := 0; i < structVal.NumField(); i++ {
+		field := structVal.Field(i)
+		name := structVal.Type().Field(i).Name
+		value := field.Interface()
+
+		if !reflect.ValueOf(value).IsNil() {
+			tags[name] = value
+			tagNames = append(tagNames, name)
+		}
+	}
+	return tagNames, tags
 }

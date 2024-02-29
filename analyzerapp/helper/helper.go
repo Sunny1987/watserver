@@ -73,6 +73,7 @@ func HasOneChild(n *html.Node) bool {
 
 // NodeText will retrieve node text
 func NodeText(n *html.Node) string {
+
 	//html.Render()
 	var strbuilder strings.Builder
 	//var str *string
