@@ -28,7 +28,7 @@ func (req *MyRequest) Validate() error {
 }
 
 // startScan will initiate the scan/parse process
-func (req *MyRequest) startScan(l *log.Logger, base string) resultsapp.Response {
+func (req *MyRequest) startScan(l *log.Logger, base string) resultsapp.FinalResponse {
 
 	//create requestBundle
 	requestBundle := resultsapp.NewMyRequest(req.URL, req.Depth, req.File, req.FileName)

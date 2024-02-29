@@ -26,7 +26,7 @@ type ParseBundle struct {
 }
 
 // NewParseBundle is the constructor for ParseBundle
-func NewParseBundle(Req *resultsapp.MyRequest, log *log.Logger, Base string) DataBundle {
+func NewParseBundle(Req *resultsapp.MyRequest, log *log.Logger, Base string) *ParseBundle {
 	return &ParseBundle{
 		Req:    Req,
 		Logger: log,
@@ -40,7 +40,7 @@ func (pBundle *ParseBundle) SetDocValue(doc *html.Node) {
 }
 
 // Parse method will parse the incoming http response body/ html file body
-func (pBundle *ParseBundle) Parse(responseBody io.Reader) resultsapp.Response {
+func (pBundle *ParseBundle) Parse(responseBody io.Reader) resultsapp.FinalResponse {
 	doc, err := html.Parse(responseBody)
 	if err != nil {
 		pBundle.Logger.Printf("Error parsing the html : %v", err)
@@ -113,8 +113,8 @@ func (pBundle *ParseBundle) collectNode() map[string][]*html.Node {
 
 	wg.Add(1)
 	go func(base string) {
-		pBundle.Logger.Println("Collecting all links...")
 		defer wg.Done()
+		pBundle.Logger.Println("Collecting all links...")
 		if base != "" {
 			linkNodes := FilterLinkNodes(pBundle.Doc)
 			pBundle.Logger.Printf("base link: %v", base)
