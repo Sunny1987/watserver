@@ -6,49 +6,62 @@ import (
 	"github.com/jung-kurt/gofpdf"
 	"log"
 	"net/http"
-	"reflect"
 )
 
+// ResponseBundle object for Response data management
+type ResponseBundle struct {
+	rw       http.ResponseWriter
+	logger   *log.Logger
+	response []FinalResponse
+}
+
+// NewResponseBundle constructor for ResponseBundle object
+func NewResponseBundle(rw http.ResponseWriter, logger *log.Logger, response []FinalResponse) *ResponseBundle {
+	return &ResponseBundle{rw: rw, logger: logger, response: response}
+}
+
+// FinalResponse object for response creation
 type FinalResponse struct {
-	Request interface{}
-	Person  *string
-	Results []TagResult
+	Request interface{} `json:"request"`
+	Person  *string     `json:"person"`
+	Results []TagResult `json:"results"`
 }
 
-func PrintResponse(rw http.ResponseWriter, l *log.Logger, results []FinalResponse) {
-	l.Println("Initiating the response....")
-	var finalResponse string
-	if len(results) == 0 {
-		_, err := fmt.Fprintln(rw, "no bytes to unmarshal")
+// PrintResponse will generate the response of the query
+func (rBundle ResponseBundle) PrintResponse() {
+	rBundle.logger.Println("Initiating the response....")
+
+	if len(rBundle.response) == 0 {
+		_, err := fmt.Fprintln(rBundle.rw, "no bytes to unmarshal")
 		if err != nil {
-			l.Printf("Error : %v", err)
+			rBundle.logger.Printf("Error : %v", err)
+
 		}
+		return
 	}
 
-	rep, err := json.MarshalIndent(results, "", " ")
-	//rep, err := json.MarshalIndent(resp, "", " ")
-	if err != nil {
-		l.Println(err)
+	if len(rBundle.response) == 1 {
+		var resp FinalResponse
+		resp = rBundle.response[0]
+		rBundle.CreateJSONandPrintResponse(resp)
+		return
 	}
 
-	finalResponse = string(rep)
-	_, err = fmt.Fprintln(rw, finalResponse)
-	if err != nil {
-		l.Printf("Error : %v", err)
-	}
+	rBundle.CreateJSONandPrintResponse(rBundle.response)
 }
 
-//func ParseResultsAndCreatePDF(l *log.Logger, results []Response) string {
-//	l.Println(".... Processing Results for PDF... ")
-//	var finalResponse string
-//	if len(results) == 0 {
-//		_, err := fmt.Fprintln(rw, "no bytes to unmarshal")
-//		if err != nil {
-//			l.Printf("Error : %v", err)
-//		}
-//	}
-//	return finalResponse
-//}
+func (rBundle ResponseBundle) CreateJSONandPrintResponse(results interface{}) {
+	rep, err := json.MarshalIndent(results, "", " ")
+	if err != nil {
+		rBundle.logger.Println(err)
+	}
+
+	finalResponse := string(rep)
+	_, err = fmt.Fprintln(rBundle.rw, finalResponse)
+	if err != nil {
+		rBundle.logger.Printf("Error : %v", err)
+	}
+}
 
 func CreatePDF(l *log.Logger, resp string) {
 	l.Println("...Generating PDF...")
@@ -56,26 +69,8 @@ func CreatePDF(l *log.Logger, resp string) {
 	pdf.AddPage()
 	pdf.SetFont("Arial", "B", 16)
 	pdf.Cell(40, 10, resp)
-	err := pdf.OutputFileAndClose("hello.pdf")
+	err := pdf.OutputFileAndClose("Report.pdf")
 	if err != nil {
 		l.Println(err)
 	}
-}
-
-func (resp FinalResponse) GetFilteredResponse() ([]string, map[string]interface{}) {
-	tags := make(map[string]interface{})
-	var tagNames []string
-
-	structVal := reflect.ValueOf(resp)
-	for i := 0; i < structVal.NumField(); i++ {
-		field := structVal.Field(i)
-		name := structVal.Type().Field(i).Name
-		value := field.Interface()
-
-		if !reflect.ValueOf(value).IsNil() {
-			tags[name] = value
-			tagNames = append(tagNames, name)
-		}
-	}
-	return tagNames, tags
 }
