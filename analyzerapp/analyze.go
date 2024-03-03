@@ -88,8 +88,7 @@ func (aBundle *AnalyzeBundle) tagAnalysis(nodes []*html.Node) {
 		aBundle.Logger.Println("no tags collected")
 		return
 	}
-	t := nodes[0].Data
-	aBundle.Logger.Printf("Initiating %v Analysis......", t)
+	aBundle.Logger.Printf("Initiating %v Analysis......", nodes[0].Data)
 
 	var list []resultsapp.TagResult
 	for _, node := range nodes {

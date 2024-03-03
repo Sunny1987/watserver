@@ -49,7 +49,8 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 
 	//print the response
-	resultsapp.PrintResponse(rw, l.myLogger, finalResult)
+	rBubdle := resultsapp.NewResponseBundle(rw, l.myLogger, finalResult)
+	rBubdle.PrintResponse()
 
 	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))
 }
@@ -96,7 +97,8 @@ func (l *NewLogger) FileScan(rw http.ResponseWriter,
 	finalResult = append(finalResult, results)
 
 	//print the response
-	resultsapp.PrintResponse(rw, l.myLogger, finalResult)
+	rBubdle := resultsapp.NewResponseBundle(rw, l.myLogger, finalResult)
+	rBubdle.PrintResponse()
 
 	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))
 }
