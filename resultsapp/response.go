@@ -37,36 +37,65 @@ type FinalResponse struct {
 // PrintResponse will generate the response of the query
 func (rBundle ResponseBundle) PrintResponse() {
 	rBundle.logger.Println("Initiating the response....")
-	var err error
-	if len(rBundle.response[0].Results) == 0 {
-		if rBundle.response[0].Request.URL != "" {
-			_, err = fmt.Fprintf(rBundle.rw, "\n No WCAG compliance error observed for URL= %s", rBundle.response[0].Request.URL)
 
+	//Delete pre-existing text files
+	DeleteTextFiles()
+
+	var err error
+	if len(rBundle.response) == 1 {
+		if status, _ := rBundle.NoResultsGenerated(rBundle.response[0], err); status {
+			return
+		}
+		if rBundle.ResultGenerated(rBundle.response[0]) {
+			return
+		}
+
+	} else {
+		var results []FinalResponse
+		for i := 0; i < len(rBundle.response); i++ {
+			respI := rBundle.response[i]
+			if len(respI.Results) > 0 {
+				results = append(results, respI)
+				CreateHTMLPage(rBundle.logger, respI)
+			}
+		}
+		if len(results) > 0 {
+			rBundle.CreateJSONAndPrintResponse(results)
+		} else {
+
+		}
+
+	}
+}
+
+func (rBundle ResponseBundle) ResultGenerated(resp FinalResponse) bool {
+	if len(resp.Results) == 1 {
+		rBundle.CreateJSONAndPrintResponse(resp)
+		CreateHTMLPage(rBundle.logger, resp)
+		return true
+	}
+	return false
+}
+
+func (rBundle ResponseBundle) NoResultsGenerated(resp FinalResponse, err error) (bool, string) {
+	resp = rBundle.response[0]
+	var entity string
+	if len(resp.Results) == 0 {
+		if resp.Request.URL != "" {
+			_, err = fmt.Fprintf(rBundle.rw, "\n No WCAG compliance error observed for URL= %s", rBundle.response[0].Request.URL)
+			entity = resp.Request.URL
 		} else {
 			_, err = fmt.Fprintf(rBundle.rw, "\n No WCAG compliance error observed for File= %s\n", rBundle.response[0].Request.FileName)
+			entity = resp.Request.FileName
 		}
+
 		if err != nil {
 			rBundle.logger.Printf("Error : %v", err)
 
 		}
-		return
+		return true, entity
 	}
-
-	if len(rBundle.response[0].Results) == 1 {
-		var resp FinalResponse
-		resp = rBundle.response[0]
-		rBundle.CreateJSONAndPrintResponse(resp)
-		CreateHTMLPage(rBundle.logger, resp)
-		return
-	}
-
-	for i := 0; i < len(rBundle.response); i++ {
-		respI := rBundle.response[i]
-		if len(respI.Results) > 0 {
-			rBundle.CreateJSONAndPrintResponse(respI)
-			CreateHTMLPage(rBundle.logger, respI)
-		}
-	}
+	return false, entity
 }
 
 // CreateJSONAndPrintResponse is responsible to convert the FinalResponse to JSON and print final response
@@ -115,9 +144,6 @@ func CreateHTMLPage(l *log.Logger, resp FinalResponse) {
 	}
 
 	fileN = fileN + "_analyzed.txt"
-
-	//Delete pre-existing text files
-	DeleteTextFiles()
 
 	// Print the reconstructed HTML body
 	file, err := os.Create(fileN)
