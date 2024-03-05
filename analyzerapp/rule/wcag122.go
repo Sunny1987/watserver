@@ -50,5 +50,6 @@ func (rule *RuleResults) H95Technique(node *html.Node) {
 		node.Data == "track" &&
 		!helper.IsAttributeKeyValueMatching(node.Attr, "kind", "caption") {
 		rule.Rules.WCAG122.H95 = Fail
+		AddErrorAttribute(node, Wcag122, "H95")
 	}
 }
