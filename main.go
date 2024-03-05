@@ -17,8 +17,15 @@ func main() {
 
 	//log section
 	l := log.New(os.Stdout, "WAT:", log.LstdFlags)
+
+	//SetHandler
 	routerHandler := server.GetNewLogger(l)
+
+	//set mux
 	serverMux := mux.NewRouter()
+
+	//set env
+	SetEnvVar()
 
 	//Register the handlers to the server mux
 	postRouter := serverMux.Methods("POST").Subrouter()
@@ -34,14 +41,18 @@ func main() {
 	)
 
 	//Load the config.json properties
-	config, err := server.LoadConfiguration("config.json")
-	if err != nil {
-
+	//config, err := server.LoadConfiguration("config.json")
+	//if err != nil {
+	//
+	//}
+	port := os.Getenv("PORT")
+	if port == "" {
+		l.Fatal("Port must be set")
 	}
 
 	//Define server
 	prodServer := &http.Server{
-		Addr:         config.Port,
+		Addr:         port,
 		Handler:      ch(serverMux),
 		ReadTimeout:  20 * time.Second,
 		WriteTimeout: 50 * time.Minute,
@@ -68,7 +79,7 @@ func main() {
 	l.Println("Stopping server as per user interrupt", sig)
 
 	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
-	err = prodServer.Shutdown(tc)
+	err := prodServer.Shutdown(tc)
 	if err != nil {
 		return
 	}

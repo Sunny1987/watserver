@@ -73,9 +73,4 @@ func AddErrorAttribute(node *html.Node, key, value string) {
 		Key: key,
 		Val: value,
 	})
-
-	node.Attr = append(node.Attr, html.Attribute{
-		Key: "style",
-		Val: "background-color: yellow",
-	})
 }
