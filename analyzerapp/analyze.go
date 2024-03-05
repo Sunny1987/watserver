@@ -78,6 +78,7 @@ func (aBundle *AnalyzeBundle) Analyze() resultsapp.FinalResponse {
 	go aBundle.tagAnalysis(aBundle.CollectedTags.Videos)
 
 	wg.Wait()
+	aBundle.FinalResponse.Doc = aBundle.Doc
 	return aBundle.FinalResponse
 }
 

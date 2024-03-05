@@ -43,9 +43,7 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 			//mu.Unlock()
 
 		}(link)
-
 	}
-
 	wg.Wait()
 
 	//print the response

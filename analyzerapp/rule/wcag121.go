@@ -56,6 +56,7 @@ func (rule *RuleResults) H96Technique(node *html.Node) {
 		if !helper.IsAttributeKeyValueMatching(node.Attr, "kind", "captions") &&
 			!helper.IsAttributeKeyValueMatching(node.Attr, "kind", "descriptions") {
 			rule.Rules.WCAG121.H96 = Fail
+			AddErrorAttribute(node, Wcag121, "H96")
 		}
 	}
 }
@@ -75,6 +76,7 @@ func (rule *RuleResults) G158Technique(node *html.Node) {
 		if !helper.IsAttributeValueContaining(node.NextSibling.Attr, "href", "transcript") &&
 			!strings.Contains(helper.Text(node.NextSibling), "transcript") {
 			rule.Rules.WCAG121.G158 = Fail
+			AddErrorAttribute(node, Wcag121, "G158")
 		}
 	}
 }

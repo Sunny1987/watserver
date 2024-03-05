@@ -67,3 +67,15 @@ func (rule *RuleResults) UpdateRuleList(guideline string, techniques []string) [
 	}
 	return results
 }
+
+func AddErrorAttribute(node *html.Node, key, value string) {
+	node.Attr = append(node.Attr, html.Attribute{
+		Key: key,
+		Val: value,
+	})
+
+	node.Attr = append(node.Attr, html.Attribute{
+		Key: "style",
+		Val: "background-color: yellow",
+	})
+}

@@ -74,6 +74,7 @@ func (rule *RuleResults) Aria6Technique(node *html.Node) {
 	//logic implementation
 	if helper.IsAttributePresent(node.Attr, "role") && helper.IsAttributeValueEmpty(node.Attr, "aria-label") {
 		rule.Rules.WCAG111.Aria6 = Fail
+		AddErrorAttribute(node, Wcag111, "Aria6")
 	}
 }
 
@@ -100,6 +101,7 @@ func (rule *RuleResults) Aria10Technique(node *html.Node) {
 				if helper.IsAttributePresent(c.Attr, "src") {
 					if helper.IsAttributeValueEmpty(node.Attr, "alt") {
 						rule.Rules.WCAG111.Aria10 = Fail
+						AddErrorAttribute(node, Wcag111, "Aria10")
 					}
 				}
 			}
@@ -115,6 +117,7 @@ func (rule *RuleResults) H86Technique(node *html.Node) {
 		if helper.IsAttributeKeyValueMatching(node.Attr, "class", className) {
 			if helper.IsAttributePresent(node.Attr, "alt") {
 				rule.Rules.WCAG111.H86CSS = Fail
+				AddErrorAttribute(node, Wcag111, "H86CSS")
 			}
 		}
 
@@ -126,6 +129,7 @@ func (rule *RuleResults) H45Technique(node *html.Node) {
 	if helper.IsAttributePresent(node.Attr, "longdesc") {
 		if helper.IsAttributeValueEmpty(node.Attr, "longdesc") {
 			rule.Rules.WCAG111.H45 = Fail
+			AddErrorAttribute(node, Wcag111, "H45")
 		}
 	}
 }
@@ -135,6 +139,7 @@ func (rule *RuleResults) ARIA15Technique(node *html.Node) {
 	if helper.IsAttributePresent(node.Attr, "aria-describedby") {
 		if helper.IsAttributeValueEmpty(node.Attr, "aria-describedby") {
 			rule.Rules.WCAG111.Aria15 = Fail
+			AddErrorAttribute(node, Wcag111, "Aria15")
 		}
 	}
 }
@@ -144,6 +149,7 @@ func (rule *RuleResults) H2Technique(node *html.Node) {
 	if node.Parent.Data == "a" {
 		if helper.IsAttributeValueEmpty(node.Attr, "alt") {
 			rule.Rules.WCAG111.H2 = Fail
+			AddErrorAttribute(node, Wcag111, "H2")
 		}
 	}
 }
@@ -154,6 +160,7 @@ func (rule *RuleResults) H35Technique(node *html.Node) {
 		if helper.IsTextNode(node.FirstChild) {
 			if helper.IsAttributeValueEmpty(node.Attr, "alt") {
 				rule.Rules.WCAG111.H35 = Fail
+				AddErrorAttribute(node, Wcag111, "H35")
 			}
 
 		}
@@ -168,21 +175,26 @@ func (rule *RuleResults) G94Technique(node *html.Node) {
 		helper.IsAttributeKeyValueMatching(node.Attr, "role", "img") && helper.IsAttributeValueEmpty(node.Attr, "aria-label") ||
 		node.Data == "img" && helper.IsAttributeValueEmpty(node.Attr, "title") {
 		rule.Rules.WCAG111.G94 = Fail
+		AddErrorAttribute(node, Wcag111, "G94")
 	}
 
 	if node.Data == "area" && helper.IsAttributeValueEmpty(node.Attr, "alt") {
 		rule.Rules.WCAG111.G94 = Fail
+		AddErrorAttribute(node, Wcag111, "G94")
 	}
 
 	if node.Data == "svg" && helper.IsAttributePresent(node.Attr, "aria-label") && helper.IsAttributeKeyValueMatching(node.Attr, "role", "img") {
 		if helper.IsAttributeValueEmpty(node.Attr, "aria-label") {
 			rule.Rules.WCAG111.G94 = Fail
+			AddErrorAttribute(node, Wcag111, "G94")
 		}
 	}
 
 	if node.Data == "canvas" && helper.IsAttributePresent(node.Attr, "aria-label") {
 		if helper.IsAttributeValueEmpty(node.Attr, "aria-label") {
 			rule.Rules.WCAG111.G94 = Fail
+			AddErrorAttribute(node, Wcag111, "G94")
+
 		}
 	}
 
