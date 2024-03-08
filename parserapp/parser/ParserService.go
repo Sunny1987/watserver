@@ -28,14 +28,16 @@ type ParseBundle struct {
 	base       string
 	doc        *html.Node
 	tagsFamily resultsapp.TagsFamily
+	analyzer   analyzerapp.AnalyzerService
 }
 
 // NewParseBundle is the constructor for ParseBundle
-func NewParseBundle(Req *resultsapp.MyRequest, log *log.Logger, Base string) ParserService {
+func NewParseBundle(Req *resultsapp.MyRequest, log *log.Logger, Base string, analyzer analyzerapp.AnalyzerService) ParserService {
 	return &ParseBundle{
-		req:    Req,
-		logger: log,
-		base:   Base,
+		req:      Req,
+		logger:   log,
+		base:     Base,
+		analyzer: analyzer,
 	}
 }
 
@@ -59,11 +61,13 @@ func (pBundle *ParseBundle) Parse(responseBody io.Reader) resultsapp.FinalRespon
 
 	//Update Tags in ParseBundle
 	pBundle.tagsFamily = resultsapp.NewTagsFamily(nodeMap, cssList)
+
 	pBundle.logger.Println(".....Initiating WCAG 2.1 analysis.....")
 
 	//Call AnalyzeBundle constructor
-	analyzerBundle := analyzerapp.NewAnalyzeBundle(pBundle.req, pBundle.logger, pBundle.base, pBundle.doc, pBundle.tagsFamily)
-	return analyzerBundle.Analyze()
+	//analyzer := analyzerapp.NewAnalyzeBundle(pBundle.req, pBundle.logger, pBundle.base, pBundle.doc, pBundle.tagsFamily)
+	pBundle.analyzer.AddProperties(pBundle.base, pBundle.doc, pBundle.tagsFamily)
+	return pBundle.analyzer.Analyze()
 }
 
 // collectNode will extract the html nodes

@@ -13,6 +13,11 @@ import (
 var wg sync.WaitGroup
 var MU sync.Mutex
 
+type AnalyzerService interface {
+	Analyze() resultsapp.FinalResponse
+	AddProperties(base string, doc *html.Node, collectedTags resultsapp.TagsFamily)
+}
+
 // AnalyzeBundle is the object for Analyser
 type AnalyzeBundle struct {
 	Req           *resultsapp.MyRequest
@@ -26,9 +31,15 @@ type AnalyzeBundle struct {
 	input         rule.Inputs
 }
 
-// NewAnalyzeBundle is the constructor for AnalyzeBundle
-func NewAnalyzeBundle(req *resultsapp.MyRequest, logger *log.Logger, base string, doc *html.Node, collectedTags resultsapp.TagsFamily) *AnalyzeBundle {
-	return &AnalyzeBundle{Req: req, Logger: logger, Base: base, Doc: doc, CollectedTags: collectedTags}
+func NewAnalyzeBundleNoCollectedTags(req *resultsapp.MyRequest, logger *log.Logger) *AnalyzeBundle {
+	return &AnalyzeBundle{Req: req, Logger: logger}
+}
+
+// AddProperties will update the analyzer bundle with doc, base and collectedTags
+func (aBundle *AnalyzeBundle) AddProperties(base string, doc *html.Node, collectedTags resultsapp.TagsFamily) {
+	aBundle.Doc = doc
+	aBundle.Base = base
+	aBundle.CollectedTags = collectedTags
 }
 
 func (aBundle *AnalyzeBundle) Analyze() resultsapp.FinalResponse {
