@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sync"
 	"time"
+	"webserver/parserapp/parser"
 	"webserver/parserapp/sitemapbuilder"
 	"webserver/resultsapp"
 )
@@ -30,10 +31,14 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 		go func(link string) {
 			defer wg.Done()
 
-			//setup req object
-			reqMod := &MyRequest{}
-			reqMod.URL = link
-			reqMod.Depth = req.Depth
+			//create requestBundle
+			requestBundle := resultsapp.NewMyRequest(req.URL, req.Depth, req.File, req.FileName)
+
+			//Create new ParserService
+			parseEngine := parser.NewParseBundle(requestBundle, l.myLogger, base)
+
+			//Request object created with constructor
+			reqMod := NewMyRequestURL(link, req.Depth, parseEngine)
 
 			l.myLogger.Printf("Link# %v : %v ", i, reqMod.URL)
 			//start scan for url
@@ -47,7 +52,8 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 
 	//print the response
-	rBubdle := resultsapp.NewResponseBundle(rw, l.myLogger, finalResult)
+	printer := resultsapp.NewPrinter(rw, l.myLogger)
+	rBubdle := resultsapp.NewResponseBundle(rw, l.myLogger, finalResult, printer)
 	rBubdle.PrintResponse()
 
 	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))
@@ -81,12 +87,14 @@ func (l *NewLogger) FileScan(rw http.ResponseWriter,
 	l.myLogger.Printf("File Size: %+v\n", handler.Size)
 	l.myLogger.Printf("MIME Headers: %+v\n", handler.Header)
 
-	//setup req object
-	reqMod := &MyRequest{}
-	reqMod.URL = ""
-	reqMod.Depth = 0
-	reqMod.File = file
-	reqMod.FileName = handler.Filename
+	//create requestBundle
+	requestBundle := resultsapp.NewMyRequest("", 0, file, handler.Filename)
+
+	//Create new ParserService
+	parseEngine := parser.NewParseBundle(requestBundle, l.myLogger, "")
+
+	//Request object created with constructor
+	reqMod := NewMyRequestFile(file, handler.Filename, parseEngine)
 
 	//start scan for File
 	results := reqMod.startScan(l.myLogger, "")
@@ -95,7 +103,8 @@ func (l *NewLogger) FileScan(rw http.ResponseWriter,
 	finalResult = append(finalResult, results)
 
 	//print the response
-	rBubdle := resultsapp.NewResponseBundle(rw, l.myLogger, finalResult)
+	printer := resultsapp.NewPrinter(rw, l.myLogger)
+	rBubdle := resultsapp.NewResponseBundle(rw, l.myLogger, finalResult, printer)
 	rBubdle.PrintResponse()
 
 	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))

@@ -23,7 +23,8 @@ type WCAG111 struct {
 }
 
 // ExecuteWCAG111 executes the WCAG111 techniques
-func (rule *RuleResults) ExecuteWCAG111(node *html.Node) (string, []string) {
+func (rule *RuleResults) ExecuteWCAG111(input Inputs) (string, []string) {
+	node := input.node
 	rule.Logger.Printf("...intiating WCAG111 for %v ", node.Data)
 
 	//Refresh struct
