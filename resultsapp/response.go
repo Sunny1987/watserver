@@ -62,7 +62,7 @@ func (rBundle ResponseBundle) PrintResponse() {
 		if len(results) > 0 {
 			rBundle.CreateJSONAndPrintResponse(results)
 		} else {
-
+			rBundle.CreateJSONAndPrintResponse("No WCAG errors observed for " + rBundle.response[0].Request.URL)
 		}
 
 	}

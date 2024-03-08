@@ -23,6 +23,19 @@ type RuleResults struct {
 	status bool
 }
 
+type Inputs struct {
+	node *html.Node
+	css  string
+}
+
+func NewInputs(node *html.Node) *Inputs {
+	return &Inputs{node: node}
+}
+
+func NewInputsWithCSS(node *html.Node, css string) *Inputs {
+	return &Inputs{node: node, css: css}
+}
+
 func NewRuleResults(logger *log.Logger) *RuleResults {
 	return &RuleResults{Logger: logger}
 }
@@ -35,20 +48,20 @@ type Rules struct {
 }
 
 // Execute method executes all the rules
-func (rule *RuleResults) Execute(node *html.Node) (bool, []resultsapp.Result) {
+func (rule *RuleResults) Execute(input Inputs) (bool, []resultsapp.Result) {
 
 	var results []resultsapp.Result
 
 	//Execute WCAG111 guideline
-	guideline, techniques := rule.ExecuteWCAG111(node)
+	guideline, techniques := rule.ExecuteWCAG111(input.node)
 	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
 	//Execute WCAG121 guideline
-	guideline, techniques = rule.ExecuteWCAG121(node)
+	guideline, techniques = rule.ExecuteWCAG121(input.node)
 	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
 	//Execute WCAG122 guideline
-	guideline, techniques = rule.ExecuteWCAG122(node)
+	guideline, techniques = rule.ExecuteWCAG122(input.node)
 	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
 	return rule.status, results

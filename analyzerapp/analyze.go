@@ -23,6 +23,7 @@ type AnalyzeBundle struct {
 	CollectedTags resultsapp.TagsFamily
 	rules         *rule.RuleResults
 	FinalResponse resultsapp.FinalResponse
+	input         rule.Inputs
 }
 
 // NewAnalyzeBundle is the constructor for AnalyzeBundle
@@ -33,7 +34,7 @@ func NewAnalyzeBundle(req *resultsapp.MyRequest, logger *log.Logger, base string
 func (aBundle *AnalyzeBundle) Analyze() resultsapp.FinalResponse {
 	aBundle.FinalResponse.Request = aBundle.Req
 
-	wg.Add(42)
+	wg.Add(45)
 	go aBundle.tagAnalysis(aBundle.CollectedTags.Anchors)
 	go aBundle.tagAnalysis(aBundle.CollectedTags.Audios)
 	go aBundle.tagAnalysis(aBundle.CollectedTags.Areas)
@@ -77,6 +78,11 @@ func (aBundle *AnalyzeBundle) Analyze() resultsapp.FinalResponse {
 	go aBundle.tagAnalysis(aBundle.CollectedTags.TFoots)
 	go aBundle.tagAnalysis(aBundle.CollectedTags.Videos)
 
+	//css analysis for tags registered below
+	go aBundle.cssAnalysis(aBundle.CollectedTags.Divs)
+	go aBundle.cssAnalysis(aBundle.CollectedTags.Inputs)
+	go aBundle.cssAnalysis(aBundle.CollectedTags.Buttons)
+
 	wg.Wait()
 	aBundle.FinalResponse.Doc = aBundle.Doc
 	return aBundle.FinalResponse
@@ -101,8 +107,8 @@ func (aBundle *AnalyzeBundle) tagAnalysis(nodes []*html.Node) {
 		//refresh ruleResult
 		ruleResult := rule.NewRuleResults(aBundle.Logger)
 		aBundle.rules = ruleResult
-
-		if status, results := aBundle.rules.Execute(node); status == true {
+		inputs := rule.NewInputs(node)
+		if status, results := aBundle.rules.Execute(*inputs); status == true {
 			tag.Result = results
 			if len(list) < 50 {
 				list = append(list, tag)
@@ -114,32 +120,41 @@ func (aBundle *AnalyzeBundle) tagAnalysis(nodes []*html.Node) {
 	MU.Unlock()
 }
 
-//// cssAnalysis function initiates all the CSS rule based analysis
-//func (aBundle *AnalyzeBundle) cssAnalysis() {
-//	aBundle.Logger.Println("Initiating CSS Analysis......")
-//	defer wg.Done()
-//	var list []resultsapp.CSS
-//	nodes := aBundle.CollectedTags.Divs
-//	cssLinks := aBundle.CollectedTags.CssLinks
-//	for _, css := range cssLinks {
-//		aBundle.Logger.Printf("CSS : %v ", css)
-//		var tag resultsapp.CSS
-//
-//		//add css data
-//		tag.CSS = css
-//
-//		//implement rule
-//		aBundle.rules.Css = css
-//		for _, node := range nodes {
-//			aBundle.rules.Logger = aBundle.Logger
-//			if status, results := aBundle.rules.Execute(node); status == true {
-//				tag.Result = results
-//				if len(list) < 50 {
-//					list = append(list, tag)
-//				}
-//			}
-//		}
-//
-//	}
-//	aBundle.Response.CSSResults = list
-//}
+// cssAnalysis function initiates all the CSS rule based analysis
+func (aBundle *AnalyzeBundle) cssAnalysis(nodes []*html.Node) {
+	defer wg.Done()
+	if len(nodes) == 0 {
+		aBundle.Logger.Println("no tags collected")
+		return
+	}
+	aBundle.Logger.Printf("Initiating CSS Analysis for %v......", nodes[0].Data)
+
+	var list []resultsapp.TagResult
+	cssLinks := aBundle.CollectedTags.CssLinks
+	for _, node := range nodes {
+		aBundle.Logger.Printf("node : %v ", node.Data)
+		var tag resultsapp.TagResult
+
+		//add css data
+		tag.Tag = helper.NodeText(node)
+
+		//refresh ruleResult
+		ruleResult := rule.NewRuleResults(aBundle.Logger)
+		aBundle.rules = ruleResult
+
+		//implement rule
+		for _, css := range cssLinks {
+			input := rule.NewInputsWithCSS(node, css)
+			if status, results := aBundle.rules.Execute(*input); status == true {
+				tag.Result = results
+				if len(list) < 50 {
+					list = append(list, tag)
+				}
+			}
+		}
+
+	}
+	MU.Lock()
+	aBundle.FinalResponse.Results = append(aBundle.FinalResponse.Results, list...)
+	MU.Unlock()
+}
