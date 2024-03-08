@@ -15,49 +15,54 @@ var (
 	cssList []string
 )
 
+// ParserService has parser contracts
+type ParserService interface {
+	Parse(responseBody io.Reader) resultsapp.FinalResponse
+}
+
 // ParseBundle object is the DataBundle for future parsing
 type ParseBundle struct {
-	Req        *resultsapp.MyRequest
-	Logger     *log.Logger
-	Person     *string //the property is currently optional
-	Base       string
-	Doc        *html.Node
-	TagsFamily resultsapp.TagsFamily
+	req        *resultsapp.MyRequest
+	logger     *log.Logger
+	person     *string //the property is currently optional
+	base       string
+	doc        *html.Node
+	tagsFamily resultsapp.TagsFamily
 }
 
 // NewParseBundle is the constructor for ParseBundle
-func NewParseBundle(Req *resultsapp.MyRequest, log *log.Logger, Base string) *ParseBundle {
+func NewParseBundle(Req *resultsapp.MyRequest, log *log.Logger, Base string) ParserService {
 	return &ParseBundle{
-		Req:    Req,
-		Logger: log,
-		Base:   Base,
+		req:    Req,
+		logger: log,
+		base:   Base,
 	}
 }
 
-// SetDocValue is the Setter for Doc property
-func (pBundle *ParseBundle) SetDocValue(doc *html.Node) {
-	pBundle.Doc = doc
+// SetDocValue is the Setter for doc property
+func (pBundle *ParseBundle) setDocValue(doc *html.Node) {
+	pBundle.doc = doc
 }
 
 // Parse method will parse the incoming http response body/ html file body
 func (pBundle *ParseBundle) Parse(responseBody io.Reader) resultsapp.FinalResponse {
 	doc, err := html.Parse(responseBody)
 	if err != nil {
-		pBundle.Logger.Printf("Error parsing the html : %v", err)
+		pBundle.logger.Printf("Error parsing the html : %v", err)
 	}
 
-	//Set Doc value for ParseBundle
-	pBundle.SetDocValue(doc)
+	//Set doc value for ParseBundle
+	pBundle.setDocValue(doc)
 
 	//Collect all nodes from html doc
 	nodeMap := pBundle.collectNode()
 
 	//Update Tags in ParseBundle
-	pBundle.TagsFamily = resultsapp.NewTagsFamily(nodeMap, cssList)
-	pBundle.Logger.Println(".....Initiating WCAG 2.1 analysis.....")
+	pBundle.tagsFamily = resultsapp.NewTagsFamily(nodeMap, cssList)
+	pBundle.logger.Println(".....Initiating WCAG 2.1 analysis.....")
 
 	//Call AnalyzeBundle constructor
-	analyzerBundle := analyzerapp.NewAnalyzeBundle(pBundle.Req, pBundle.Logger, pBundle.Base, pBundle.Doc, pBundle.TagsFamily)
+	analyzerBundle := analyzerapp.NewAnalyzeBundle(pBundle.req, pBundle.logger, pBundle.base, pBundle.doc, pBundle.tagsFamily)
 	return analyzerBundle.Analyze()
 }
 
@@ -114,16 +119,16 @@ func (pBundle *ParseBundle) collectNode() map[string][]*html.Node {
 	wg.Add(1)
 	go func(base string) {
 		defer wg.Done()
-		pBundle.Logger.Println("Collecting all links...")
+		pBundle.logger.Println("Collecting all links...")
 		if base != "" {
-			linkNodes := FilterLinkNodes(pBundle.Doc)
-			pBundle.Logger.Printf("base link: %v", base)
+			linkNodes := FilterLinkNodes(pBundle.doc)
+			pBundle.logger.Printf("base link: %v", base)
 
 			//collect CSS links
-			cssLinks := HrefLinks(filterCSSLinks(linkNodes), base, pBundle.Logger)
+			cssLinks := HrefLinks(filterCSSLinks(linkNodes), base, pBundle.logger)
 			for _, link := range cssLinks {
-				pBundle.Logger.Println(link)
-				readCSSLinks(link, pBundle.Logger)
+				pBundle.logger.Println(link)
+				readCSSLinks(link, pBundle.logger)
 			}
 			if len(linkNodes) > 0 {
 				mu.Lock()
@@ -132,7 +137,7 @@ func (pBundle *ParseBundle) collectNode() map[string][]*html.Node {
 			}
 
 		}
-	}(pBundle.Base)
+	}(pBundle.base)
 	wg.Wait()
 	return nodeMap
 }
@@ -140,8 +145,8 @@ func (pBundle *ParseBundle) collectNode() map[string][]*html.Node {
 // getNode function is a common function to retrieve the node
 func (pBundle *ParseBundle) getNode(fn func(node *html.Node) []*html.Node, nodeName string, nodeMap map[string][]*html.Node) {
 	defer wg.Done()
-	pBundle.Logger.Printf("Collecting all %v...", nodeName)
-	nodes := fn(pBundle.Doc)
+	pBundle.logger.Printf("Collecting all %v...", nodeName)
+	nodes := fn(pBundle.doc)
 	if len(nodes) > 0 {
 		mu.Lock()
 		nodeMap[nodeName] = nodes

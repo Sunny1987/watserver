@@ -11,7 +11,8 @@ type WCAG122 struct {
 }
 
 // ExecuteWCAG122 executes the WCAG122 techniques
-func (rule *RuleResults) ExecuteWCAG122(node *html.Node) (string, []string) {
+func (rule *RuleResults) ExecuteWCAG122(input Inputs) (string, []string) {
+	node := input.node
 	rule.Logger.Printf("...intiating WCAG122 for %v ", node.Data)
 
 	//Refresh struct

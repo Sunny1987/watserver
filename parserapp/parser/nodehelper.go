@@ -195,7 +195,7 @@ func isAside(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Data == "aside"
 }
 
-// isBase will validate Base tag
+// isBase will validate base tag
 func isBase(n *html.Node) bool {
 	return n.Type == html.ElementNode && n.Data == "base"
 }

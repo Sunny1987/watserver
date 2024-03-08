@@ -11,10 +11,19 @@ import (
 
 // MyRequest object for input
 type MyRequest struct {
-	URL      string    `json:"url" validate:"required,url"`
-	Depth    int       `json:"depth" validate:"gt=-1,lte=2"`
-	File     io.Reader `json:"file"`
-	FileName string    `json:"fileName"`
+	URL          string               `json:"url" validate:"required,url"`
+	Depth        int                  `json:"depth" validate:"gt=-1,lte=2"`
+	File         io.Reader            `json:"file"`
+	FileName     string               `json:"fileName"`
+	parserEngine parser.ParserService `json:"-"`
+}
+
+func NewMyRequestFile(file io.Reader, fileName string, parserEngine parser.ParserService) *MyRequest {
+	return &MyRequest{File: file, FileName: fileName, parserEngine: parserEngine}
+}
+
+func NewMyRequestURL(URL string, depth int, parserEngine parser.ParserService) *MyRequest {
+	return &MyRequest{URL: URL, Depth: depth, parserEngine: parserEngine}
 }
 
 // Validate will perform field level validation
@@ -30,12 +39,6 @@ func (req *MyRequest) Validate() error {
 // startScan will initiate the scan/parse process
 func (req *MyRequest) startScan(l *log.Logger, base string) resultsapp.FinalResponse {
 
-	//create requestBundle
-	requestBundle := resultsapp.NewMyRequest(req.URL, req.Depth, req.File, req.FileName)
-
-	//Create new ParseBundle/DataBundle
-	DataBundle := parser.NewParseBundle(requestBundle, l, base)
-
 	if req.File == nil {
 		resp, err := http.Get(req.URL)
 		if err != nil {
@@ -43,12 +46,12 @@ func (req *MyRequest) startScan(l *log.Logger, base string) resultsapp.FinalResp
 		}
 		defer resp.Body.Close()
 
-		//Call Parse Method to read http response body
-		return DataBundle.Parse(resp.Body)
+		//Call Parse Service to read http response body
+		return req.parserEngine.Parse(resp.Body)
 
 	} else {
 
-		//Call Parse Method to read html file body
-		return DataBundle.Parse(req.File)
+		//Call Parse Service to read html file body
+		return req.parserEngine.Parse(req.File)
 	}
 }

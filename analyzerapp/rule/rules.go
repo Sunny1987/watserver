@@ -23,15 +23,18 @@ type RuleResults struct {
 	status bool
 }
 
+// Inputs struct will handle parameters for execute for optional css scenario
 type Inputs struct {
 	node *html.Node
 	css  string
 }
 
+// NewInputs is the constructor for Inputs
 func NewInputs(node *html.Node) *Inputs {
 	return &Inputs{node: node}
 }
 
+// NewInputsWithCSS is the constructor for Inputs
 func NewInputsWithCSS(node *html.Node, css string) *Inputs {
 	return &Inputs{node: node, css: css}
 }
@@ -53,15 +56,15 @@ func (rule *RuleResults) Execute(input Inputs) (bool, []resultsapp.Result) {
 	var results []resultsapp.Result
 
 	//Execute WCAG111 guideline
-	guideline, techniques := rule.ExecuteWCAG111(input.node)
+	guideline, techniques := rule.ExecuteWCAG111(input)
 	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
 	//Execute WCAG121 guideline
-	guideline, techniques = rule.ExecuteWCAG121(input.node)
+	guideline, techniques = rule.ExecuteWCAG121(input)
 	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
 	//Execute WCAG122 guideline
-	guideline, techniques = rule.ExecuteWCAG122(input.node)
+	guideline, techniques = rule.ExecuteWCAG122(input)
 	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
 	return rule.status, results
