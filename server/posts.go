@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sync"
 	"time"
+	"webserver/analyzerapp"
 	"webserver/parserapp/parser"
 	"webserver/parserapp/sitemapbuilder"
 	"webserver/resultsapp"
@@ -34,8 +35,11 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 			//create requestBundle
 			requestBundle := resultsapp.NewMyRequest(req.URL, req.Depth, req.File, req.FileName)
 
+			//Create AnalyzerService
+			analyzerEngine := analyzerapp.NewAnalyzeBundleNoCollectedTags(requestBundle, l.myLogger)
+
 			//Create new ParserService
-			parseEngine := parser.NewParseBundle(requestBundle, l.myLogger, base)
+			parseEngine := parser.NewParseBundle(requestBundle, l.myLogger, base, analyzerEngine)
 
 			//Request object created with constructor
 			reqMod := NewMyRequestURL(link, req.Depth, parseEngine)
@@ -90,8 +94,11 @@ func (l *NewLogger) FileScan(rw http.ResponseWriter,
 	//create requestBundle
 	requestBundle := resultsapp.NewMyRequest("", 0, file, handler.Filename)
 
+	//Create AnalyzerService
+	analyzerEngine := analyzerapp.NewAnalyzeBundleNoCollectedTags(requestBundle, l.myLogger)
+
 	//Create new ParserService
-	parseEngine := parser.NewParseBundle(requestBundle, l.myLogger, "")
+	parseEngine := parser.NewParseBundle(requestBundle, l.myLogger, "", analyzerEngine)
 
 	//Request object created with constructor
 	reqMod := NewMyRequestFile(file, handler.Filename, parseEngine)

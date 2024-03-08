@@ -144,3 +144,12 @@ func NewTagsFamily(nodeMap map[string][]*html.Node, cssList []string) TagsFamily
 		CssLinks:  cssList,
 	}
 }
+
+var tags []TagsFamily
+
+func AddTags(tag TagsFamily) {
+	tags = append(tags, tag)
+}
+func GetAllTags() []TagsFamily {
+	return tags
+}
