@@ -15,6 +15,7 @@ var wg sync.WaitGroup
 
 // GetURLResp will scan the URL with desired depth and provide the accessibility results
 func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
+	l.myLogger.Println("GetURLResp called...")
 	//track execution time for scan
 	timeStart := time.Now()
 
@@ -69,8 +70,8 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 }
 
 // FileScan will scan the uploaded File and provide the accessibility results
-func (l *NewLogger) FileScan(rw http.ResponseWriter,
-	r *http.Request) {
+func (l *NewLogger) FileScan(rw http.ResponseWriter, r *http.Request) {
+	l.myLogger.Println("FileScan called...")
 	//track execution time for scan
 	timeStart := time.Now()
 

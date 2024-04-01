@@ -11,4 +11,5 @@ type RouterHandler interface {
 	MiddlewareValidationForURL(next http.Handler) http.HandlerFunc
 	MiddlewareValidationForFile(next http.Handler) http.HandlerFunc
 	MiddlewareForCorsUpdate(next http.Handler) http.HandlerFunc
+	PingServer(writer http.ResponseWriter, request *http.Request)
 }

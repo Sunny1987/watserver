@@ -29,6 +29,7 @@ func (api *APIServer) Run() error {
 	serverMux := http.NewServeMux()
 	serverMux.HandleFunc("POST /scan", routerHandler.GetURLResp)
 	serverMux.HandleFunc("POST /uploadhtml", routerHandler.FileScan)
+	serverMux.HandleFunc("GET /ping", routerHandler.PingServer)
 
 	v1 := http.NewServeMux()
 	v1.Handle("/api/v1/", http.StripPrefix("/api/v1", serverMux))

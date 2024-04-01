@@ -25,9 +25,10 @@ func (l *NewLogger) MiddlewareValidationForURL(next http.Handler) http.HandlerFu
 				if strings.Contains(err.Error(), "gt") {
 					http.Error(writer, "Depth is less than 0", http.StatusBadRequest)
 				}
-				l.myLogger.Println("*****Exiting MiddlewareForURL******")
+
 			}
 		}
+		l.myLogger.Println("*****Exiting MiddlewareForURL******")
 		next.ServeHTTP(writer, request)
 	}
 }
