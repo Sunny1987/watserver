@@ -8,5 +8,7 @@ import (
 type RouterHandler interface {
 	GetURLResp(rw http.ResponseWriter, r *http.Request)
 	FileScan(rw http.ResponseWriter, r *http.Request)
-	MiddlewareValidation(next http.Handler) http.Handler
+	MiddlewareValidationForURL(next http.Handler) http.HandlerFunc
+	MiddlewareValidationForFile(next http.Handler) http.HandlerFunc
+	MiddlewareForCorsUpdate(next http.Handler) http.HandlerFunc
 }

@@ -62,7 +62,7 @@ func (rBundle ResponseBundle) PrintResponse() {
 func (rBundle ResponseBundle) ResultGenerated(resp FinalResponse) bool {
 	if len(resp.Results) == 1 {
 		rBundle.printer.CreateJSONAndPrintResponse(resp)
-		rBundle.printer.CreateHTMLPage(resp)
+		//rBundle.printer.CreateHTMLPage(resp)
 		return true
 	}
 	return false

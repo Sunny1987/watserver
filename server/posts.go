@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"net/http"
 	"sync"
 	"time"
@@ -17,8 +18,12 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	//track execution time for scan
 	timeStart := time.Now()
 
-	//get the request from middleware
-	req := r.Context().Value(KeyUser{}).(*MyRequest)
+	req := &MyRequest{}
+	err := json.NewDecoder(r.Body).Decode(req)
+
+	if err != nil {
+		l.myLogger.Println("Middleware: %v", err)
+	}
 
 	//get the list of links from sitemap
 	links, base := sitemapbuilder.SiteMap(req.URL, req.Depth, l.myLogger)
@@ -69,17 +74,9 @@ func (l *NewLogger) FileScan(rw http.ResponseWriter,
 	//track execution time for scan
 	timeStart := time.Now()
 
-	//get the request from middleware
-	//req := r.Context().Value(KeyUser{}).(*MyRequest)
-
 	var finalResult []resultsapp.FinalResponse
 
-	err := r.ParseMultipartForm(10 << 20)
-	if err != nil {
-		http.Error(rw, "Error max file size exceeded", http.StatusBadRequest)
-		return
-	}
-	file, handler, err := r.FormFile("myfile")
+	file, handler, err := r.FormFile("file")
 
 	if err != nil {
 		l.myLogger.Println("Error Retrieving the File")

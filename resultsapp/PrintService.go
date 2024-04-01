@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/jung-kurt/gofpdf"
 	"golang.org/x/net/html"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -67,28 +66,37 @@ func (printer Printer) CreateHTMLPage(resp FinalResponse) {
 
 	fileN = fileN + "_analyzed.txt"
 
+	// Set headers for file download
+	printer.rw.Header().Set("Content-Disposition", "attachment; filename=html_to_txt.txt")
+	printer.rw.Header().Set("Content-Type", "text/plain")
+
+	// Write the HTML content to response
+	if _, err := printer.rw.Write(buf.Bytes()); err != nil {
+		log.Println("Failed to write response:", err)
+	}
+
 	// Print the reconstructed HTML body
 
-	//created directory
-	dirPath := createDirectory(printer.logger)
-
-	//Delete old files
-	deleteTextFiles(dirPath)
+	////created directory
+	//dirPath := createDirectory(printer.logger)
+	//
+	////Delete old files
+	//deleteTextFiles(dirPath)
 
 	//define filepath+
 
-	filePath := dirPath + "/" + fileN
-	file, err := os.Create(filePath)
-	defer file.Close()
-	if err != nil {
-		printer.logger.Fatalf("Failed to create file: %v", err)
-	}
+	//filePath := dirPath + "/" + fileN
+	//file, err := os.Create(filePath)
+	//defer file.Close()
+	//if err != nil {
+	//	printer.logger.Fatalf("Failed to create file: %v", err)
+	//}
 
-	_, err = io.WriteString(file, buf.String())
-	if err != nil {
-		printer.logger.Fatal(err)
-	}
-	printer.logger.Printf("Created file: %s", filePath)
+	//_, err = io.WriteString(file, buf.String())
+	//if err != nil {
+	//	printer.logger.Fatal(err)
+	//}
+	//printer.logger.Printf("Created file: %s", filePath)
 }
 
 func createDirectory(l *log.Logger) string {
