@@ -1,30 +1,22 @@
 package server
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/go-playground/validator"
 	"net/http"
 	"strings"
 )
 
-type KeyUser struct{}
-
-var ctx context.Context
-
-// MiddlewareValidation will validate incoming request and authentication before scan
-func (l *NewLogger) MiddlewareValidation(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		l.myLogger.Println("***Starting Middleware***")
-
-		switch request.URL.Path {
-		case "/scan":
+// MiddlewareValidationForURL will perform validations for GetURLResp
+func (l *NewLogger) MiddlewareValidationForURL(next http.Handler) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		l.myLogger.Println("***Starting MiddlewareForURL***")
+		if request.URL.Path == "scan" {
 			req := &MyRequest{}
 			err := json.NewDecoder(request.Body).Decode(req)
 			if err != nil {
 				l.myLogger.Println("Middleware: %v", err)
 			}
-			l.myLogger.Printf("req: %v", req)
 			err = req.Validate()
 			if err != nil {
 				if strings.Contains(err.Error(), "lte") {
@@ -33,18 +25,41 @@ func (l *NewLogger) MiddlewareValidation(next http.Handler) http.Handler {
 				if strings.Contains(err.Error(), "gt") {
 					http.Error(writer, "Depth is less than 0", http.StatusBadRequest)
 				}
-				l.myLogger.Println("*****Exiting middleware******")
+				l.myLogger.Println("*****Exiting MiddlewareForURL******")
 			}
-			ctx = context.WithValue(request.Context(), KeyUser{}, req)
-			request = request.WithContext(ctx)
-			next.ServeHTTP(writer, request)
-
-		case "/uploadhtml":
-			ctx = context.TODO()
-			request = request.WithContext(ctx)
-			next.ServeHTTP(writer, request)
 		}
-	})
+		next.ServeHTTP(writer, request)
+	}
+}
+
+// MiddlewareValidationForFile will perform validations for FileScan
+func (l *NewLogger) MiddlewareValidationForFile(next http.Handler) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		l.myLogger.Println("***Starting MiddlewareValidationForFile***")
+		if request.URL.Path == "/uploadhtml" {
+			err := request.ParseMultipartForm(10 << 20)
+			if err != nil {
+				http.Error(writer, "Error max file size exceeded", http.StatusBadRequest)
+				return
+			}
+
+		}
+		l.myLogger.Println("***Exiting MiddlewareValidationForFile***")
+		next.ServeHTTP(writer, request)
+	}
+}
+
+// MiddlewareForCorsUpdate will provide CORS access
+func (l *NewLogger) MiddlewareForCorsUpdate(next http.Handler) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		l.myLogger.Println("***Starting MiddlewareForCorsUpdate***")
+		writer.Header().Set("Access-Control-Allow-Origin", "*")
+		writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		writer.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+
+		l.myLogger.Println("***Exiting MiddlewareForCorsUpdate***")
+		next.ServeHTTP(writer, request)
+	}
 }
 
 // ValidateRequestURL will validate url object empty and http/https protocols
