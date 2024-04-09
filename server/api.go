@@ -8,6 +8,8 @@ import (
 	"os"
 	"os/signal"
 	"time"
+	"webserver/Database"
+	"webserver/resultsapp"
 )
 
 type APIServer struct {
@@ -20,16 +22,27 @@ func NewAPIServer(addr string) *APIServer {
 
 func (api *APIServer) Run() error {
 	var err error
+
 	//log section
 	l := log.New(os.Stdout, "WAT:", log.LstdFlags)
 
-	//SetHandler
-	routerHandler := GetNewLogger(l)
+	//initiate database
+	var routerHandler RouterHandler
+	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == "true" {
+		dBundle := Database.NewDBBundle(l)
+		dBundle.InitDB()
+
+		routerHandler = GetNewLoggerWithDB(l, dBundle)
+	} else {
+		routerHandler = GetNewLogger(l)
+	}
 
 	serverMux := http.NewServeMux()
 	serverMux.HandleFunc("POST /scan", routerHandler.GetURLResp)
 	serverMux.HandleFunc("POST /uploadhtml", routerHandler.FileScan)
+	serverMux.HandleFunc("POST /scanregister", routerHandler.ScanRegister)
 	serverMux.HandleFunc("GET /ping", routerHandler.PingServer)
+	serverMux.HandleFunc("GET /results/{uuid}", routerHandler.GetLatestResults)
 
 	v1 := http.NewServeMux()
 	v1.Handle("/api/v1/", http.StripPrefix("/api/v1", serverMux))

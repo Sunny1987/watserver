@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"github.com/go-resty/resty/v2"
 	"net/http"
 	"sync"
 	"time"
@@ -11,7 +12,15 @@ import (
 	"webserver/resultsapp"
 )
 
-var wg sync.WaitGroup
+var (
+	wg     sync.WaitGroup
+	Client = resty.New()
+)
+
+const (
+	DBTRUE  = "true"
+	DBFALSE = "false"
+)
 
 // GetURLResp will scan the URL with desired depth and provide the accessibility results
 func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
@@ -60,6 +69,11 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 		}(link)
 	}
 	wg.Wait()
+
+	//update the db if dbflag is set to true
+	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBTRUE {
+		l.db.UpdateResults(req.Id, finalResult)
+	}
 
 	//print the response
 	printer := resultsapp.NewPrinter(rw, l.myLogger)
@@ -113,4 +127,49 @@ func (l *NewLogger) FileScan(rw http.ResponseWriter, r *http.Request) {
 	rBubdle.PrintResponse()
 
 	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))
+}
+
+// ScanRegister will initiate scan and return an uuid to the user, this uuid will be used to fetch the scan results later
+func (l *NewLogger) ScanRegister(writer http.ResponseWriter, request *http.Request) {
+	l.myLogger.Println("ScanRegister called...")
+	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBFALSE {
+		writer.WriteHeader(http.StatusForbidden)
+		writer.Write([]byte("Database is disabled"))
+		return
+	}
+	env := resultsapp.GetEnvValueFor("ENV")
+	url := GetUrl(env)
+
+	myreq := &MyRequest{}
+	err := json.NewDecoder(request.Body).Decode(myreq)
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
+		writer.Write([]byte(err.Error()))
+		l.myLogger.Println("Error in retriving request body")
+		return
+	}
+
+	recId := l.db.CreateResult(myreq.URL)
+	myreq.Id = recId
+
+	go func() {
+		_, err = Client.R().SetHeader("Accept", "application/json").SetBody(myreq).Post(url)
+		if err != nil {
+			http.Error(writer, "Error creating POST request", http.StatusInternalServerError)
+			return
+		}
+	}()
+
+	resp := "Scan initiated with UUID=" + recId.String()
+	writer.Write([]byte(resp))
+}
+
+func GetUrl(env string) string {
+	var url string
+	if env == "dev" {
+		url = "http://localhost:8080/api/v1/scan"
+	} else {
+		url = resultsapp.GetEnvValueFor("PROD_URL") + "scan"
+	}
+	return url
 }

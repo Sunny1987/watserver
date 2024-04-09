@@ -31,7 +31,7 @@ type AnalyzeBundle struct {
 	input         rule.Inputs
 }
 
-func NewAnalyzeBundleNoCollectedTags(req *resultsapp.MyRequest, logger *log.Logger) *AnalyzeBundle {
+func NewAnalyzeBundleNoCollectedTags(req *resultsapp.MyRequest, logger *log.Logger) AnalyzerService {
 	return &AnalyzeBundle{Req: req, Logger: logger}
 }
 

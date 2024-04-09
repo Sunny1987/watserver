@@ -11,7 +11,7 @@ import (
 func (l *NewLogger) MiddlewareValidationForURL(next http.Handler) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 		l.myLogger.Println("***Starting MiddlewareForURL***")
-		if request.URL.Path == "scan" {
+		if request.URL.Path == "/api/v1/scan" || request.URL.Path == "/api/v1/scanregister" {
 			req := &MyRequest{}
 			err := json.NewDecoder(request.Body).Decode(req)
 			if err != nil {

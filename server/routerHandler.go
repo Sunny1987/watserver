@@ -12,4 +12,6 @@ type RouterHandler interface {
 	MiddlewareValidationForFile(next http.Handler) http.HandlerFunc
 	MiddlewareForCorsUpdate(next http.Handler) http.HandlerFunc
 	PingServer(writer http.ResponseWriter, request *http.Request)
+	ScanRegister(writer http.ResponseWriter, request *http.Request)
+	GetLatestResults(writer http.ResponseWriter, request *http.Request)
 }

@@ -1,12 +1,15 @@
 package main
 
-import "webserver/server"
+import (
+	"webserver/resultsapp"
+	"webserver/server"
+)
 
 var port string
 
 func init() {
 	//get env
-	port = ":" + GetEnvValueFor("PORT")
+	port = ":" + resultsapp.GetEnvValueFor("PORT")
 }
 
 func main() {
