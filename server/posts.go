@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/go-resty/resty/v2"
+	"github.com/google/uuid"
 	"net/http"
 	"sync"
 	"time"
@@ -62,8 +63,11 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	}
 	wg.Wait()
 
+	//for checking if a standalone scan is initiated
+	nullUUID := uuid.UUID{}
+
 	//update the db if dbflag is set to true
-	if USEDB == DBTRUE {
+	if USEDB == DBTRUE && req.Id != nullUUID {
 		if err := l.db.UpdateResultsForScan(req.Id, finalResult); err != nil {
 			rw.WriteHeader(http.StatusInternalServerError)
 			resp := "Failed to update results in DB. \n Error = " + err.Error()
