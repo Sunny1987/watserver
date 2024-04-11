@@ -63,8 +63,8 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 
 	//update the db if dbflag is set to true
-	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBTRUE {
-		if err := l.db.UpdateResults(req.Id, finalResult); err != nil {
+	if USEDB == DBTRUE {
+		if err := l.db.UpdateResultsForScan(req.Id, finalResult); err != nil {
 			rw.WriteHeader(http.StatusInternalServerError)
 			resp := "Failed to update results in DB. \n Error = " + err.Error()
 			rw.Write([]byte(resp))
@@ -129,20 +129,19 @@ func (l *NewLogger) FileScan(rw http.ResponseWriter, r *http.Request) {
 // ScanRegister will initiate scan and return an uuid to the user, this uuid will be used to fetch the scan results later
 func (l *NewLogger) ScanRegister(writer http.ResponseWriter, request *http.Request) {
 	l.myLogger.Println("ScanRegister called...")
-	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBFALSE {
+	if USEDB == DBFALSE {
 		writer.WriteHeader(http.StatusForbidden)
 		writer.Write([]byte("Database is disabled"))
 		return
 	}
-	env := resultsapp.GetEnvValueFor("ENV")
-	url := GetUrl(env)
+	url := GetUrl(ENV)
 
 	myreq := &MyRequest{}
 	ctx := request.Context()
 
 	myreq = ctx.Value("req").(*MyRequest)
 
-	recId, err := l.db.CreateResult(myreq.URL)
+	recId, err := l.db.CreateResultForScan(myreq.URL)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 		resp := "Scan aborted due to record creation failure. Error=" + err.Error()
@@ -168,9 +167,9 @@ func (l *NewLogger) ScanRegister(writer http.ResponseWriter, request *http.Reque
 func GetUrl(env string) string {
 	var url string
 	if env == "dev" {
-		url = "http://localhost:8080/api/v1/scan"
+		url = DEV_URL + "scan"
 	} else {
-		url = resultsapp.GetEnvValueFor("PROD_URL") + "scan"
+		url = PROD_URL + "scan"
 	}
 	return url
 }
