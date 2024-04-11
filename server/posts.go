@@ -1,7 +1,6 @@
 package server
 
 import (
-	"encoding/json"
 	"github.com/go-resty/resty/v2"
 	"net/http"
 	"sync"
@@ -17,11 +16,6 @@ var (
 	Client = resty.New()
 )
 
-const (
-	DBTRUE  = "true"
-	DBFALSE = "false"
-)
-
 // GetURLResp will scan the URL with desired depth and provide the accessibility results
 func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	l.myLogger.Println("GetURLResp called...")
@@ -29,11 +23,9 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	timeStart := time.Now()
 
 	req := &MyRequest{}
-	err := json.NewDecoder(r.Body).Decode(req)
+	ctx := r.Context()
 
-	if err != nil {
-		l.myLogger.Println("Middleware: %v", err)
-	}
+	req = ctx.Value("fReq").(*MyRequest)
 
 	//get the list of links from sitemap
 	links, base := sitemapbuilder.SiteMap(req.URL, req.Depth, l.myLogger)
@@ -72,7 +64,12 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 
 	//update the db if dbflag is set to true
 	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBTRUE {
-		l.db.UpdateResults(req.Id, finalResult)
+		if err := l.db.UpdateResults(req.Id, finalResult); err != nil {
+			rw.WriteHeader(http.StatusInternalServerError)
+			resp := "Failed to update results in DB. \n Error = " + err.Error()
+			rw.Write([]byte(resp))
+			return
+		}
 	}
 
 	//print the response
@@ -141,21 +138,25 @@ func (l *NewLogger) ScanRegister(writer http.ResponseWriter, request *http.Reque
 	url := GetUrl(env)
 
 	myreq := &MyRequest{}
-	err := json.NewDecoder(request.Body).Decode(myreq)
+	ctx := request.Context()
+
+	myreq = ctx.Value("req").(*MyRequest)
+
+	recId, err := l.db.CreateResult(myreq.URL)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
-		writer.Write([]byte(err.Error()))
-		l.myLogger.Println("Error in retriving request body")
+		resp := "Scan aborted due to record creation failure. Error=" + err.Error()
+		writer.Write([]byte(resp))
 		return
 	}
 
-	recId := l.db.CreateResult(myreq.URL)
 	myreq.Id = recId
 
 	go func() {
-		_, err = Client.R().SetHeader("Accept", "application/json").SetBody(myreq).Post(url)
+		_, err := Client.R().SetHeader("Accept", "application/json").SetBody(myreq).Post(url)
 		if err != nil {
-			http.Error(writer, "Error creating POST request", http.StatusInternalServerError)
+			l.myLogger.Printf("Error to call a scan call %v\n", err)
+			//http.Error(writer, "Error creating POST request", http.StatusInternalServerError)
 			return
 		}
 	}()

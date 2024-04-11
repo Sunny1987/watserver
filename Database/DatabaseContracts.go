@@ -6,7 +6,7 @@ import (
 )
 
 type DBService interface {
-	InitDB()
-	CreateResult(url string) uuid.UUID
-	UpdateResults(id uuid.UUID, result []resultsapp.FinalResponse)
+	InitDB(dns string) error
+	CreateResult(url string) (uuid.UUID, error)
+	UpdateResults(id uuid.UUID, result []resultsapp.FinalResponse) error
 }

@@ -14,10 +14,11 @@ import (
 
 type APIServer struct {
 	addr string
+	dns  string
 }
 
-func NewAPIServer(addr string) *APIServer {
-	return &APIServer{addr: addr}
+func NewAPIServer(addr string, dns string) *APIServer {
+	return &APIServer{addr: addr, dns: dns}
 }
 
 func (api *APIServer) Run() error {
@@ -28,12 +29,18 @@ func (api *APIServer) Run() error {
 
 	//initiate database
 	var routerHandler RouterHandler
-	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == "true" {
+	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBTRUE {
+		l.Printf("DB Option=%v", DBTRUE)
 		dBundle := Database.NewDBBundle(l)
-		dBundle.InitDB()
+
+		if err := dBundle.InitDB(api.dns); err != nil {
+			return err
+		}
+		l.Println("DB connected successfully")
 
 		routerHandler = GetNewLoggerWithDB(l, dBundle)
 	} else {
+		l.Printf("DB Option=%v", DBFALSE)
 		routerHandler = GetNewLogger(l)
 	}
 
@@ -49,7 +56,8 @@ func (api *APIServer) Run() error {
 
 	//middleware connect
 	middlewareChain := MiddlewareChain(
-		routerHandler.MiddlewareValidationForURL,
+		routerHandler.MiddlewareValidationForScanRegister,
+		routerHandler.MiddlewareValidationForScan,
 		routerHandler.MiddlewareValidationForFile,
 		routerHandler.MiddlewareForCorsUpdate,
 	)
