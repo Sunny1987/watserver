@@ -1,15 +1,22 @@
 package main
 
-import "webserver/server"
+import (
+	"webserver/resultsapp"
+	"webserver/server"
+)
 
 var port string
+var dns string
 
 func init() {
 	//get env
-	port = ":" + GetEnvValueFor("PORT")
+	port = ":" + resultsapp.GetEnvValueFor("PORT")
+	dns = resultsapp.GetEnvValueFor("DNS_PGEDGE")
 }
 
 func main() {
-	server := server.NewAPIServer(port)
-	server.Run()
+	server := server.NewAPIServer(port, dns)
+	if err := server.Run(); err != nil {
+		panic(err)
+	}
 }

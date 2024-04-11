@@ -1,17 +1,19 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/go-playground/validator"
 	"net/http"
 	"strings"
+	"time"
 )
 
-// MiddlewareValidationForURL will perform validations for GetURLResp
-func (l *NewLogger) MiddlewareValidationForURL(next http.Handler) http.HandlerFunc {
+// MiddlewareValidationForScanRegister will perform validations for ScanRegister
+func (l *NewLogger) MiddlewareValidationForScanRegister(next http.Handler) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		l.myLogger.Println("***Starting MiddlewareForURL***")
-		if request.URL.Path == "scan" {
+		l.myLogger.Println("***Starting MiddlewareValidationForScanRegister***")
+		if request.URL.Path == "/api/v1/scanregister" {
 			req := &MyRequest{}
 			err := json.NewDecoder(request.Body).Decode(req)
 			if err != nil {
@@ -27,8 +29,46 @@ func (l *NewLogger) MiddlewareValidationForURL(next http.Handler) http.HandlerFu
 				}
 
 			}
+			ctx, cancel := context.WithTimeout(request.Context(), 5*time.Second)
+			defer cancel()
+			request = request.WithContext(ctx)
+
+			request = request.WithContext(context.WithValue(request.Context(), "req", req))
+
 		}
-		l.myLogger.Println("*****Exiting MiddlewareForURL******")
+		l.myLogger.Println("*****Exiting MiddlewareValidationForScanRegister******")
+		next.ServeHTTP(writer, request)
+	}
+}
+
+// MiddlewareValidationForScan will perform validations for GetURLResp
+func (l *NewLogger) MiddlewareValidationForScan(next http.Handler) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		l.myLogger.Println("***Starting MiddlewareValidationForScan***")
+		if request.URL.Path == "/api/v1/scan" {
+			req := &MyRequest{}
+			err := json.NewDecoder(request.Body).Decode(req)
+			if err != nil {
+				l.myLogger.Println("Middleware: %v", err)
+			}
+			err = req.Validate()
+			if err != nil {
+				if strings.Contains(err.Error(), "lte") {
+					http.Error(writer, "Depth is greater than 3", http.StatusBadRequest)
+				}
+				if strings.Contains(err.Error(), "gt") {
+					http.Error(writer, "Depth is less than 0", http.StatusBadRequest)
+				}
+
+			}
+			ctx, cancel := context.WithTimeout(request.Context(), 5*time.Second)
+			defer cancel()
+			request = request.WithContext(ctx)
+
+			request = request.WithContext(context.WithValue(request.Context(), "fReq", req))
+
+		}
+		l.myLogger.Println("*****Exiting MiddlewareValidationForScan******")
 		next.ServeHTTP(writer, request)
 	}
 }

@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/go-playground/validator"
+	"github.com/google/uuid"
 	"io"
 	"log"
 	"net/http"
@@ -16,6 +17,7 @@ type MyRequest struct {
 	File         io.Reader            `json:"file"`
 	FileName     string               `json:"fileName"`
 	parserEngine parser.ParserService `json:"-"`
+	Id           uuid.UUID            `json:"id"`
 }
 
 func NewMyRequestFile(file io.Reader, fileName string, parserEngine parser.ParserService) *MyRequest {

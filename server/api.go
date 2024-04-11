@@ -8,35 +8,56 @@ import (
 	"os"
 	"os/signal"
 	"time"
+	"webserver/Database"
+	"webserver/resultsapp"
 )
 
 type APIServer struct {
 	addr string
+	dns  string
 }
 
-func NewAPIServer(addr string) *APIServer {
-	return &APIServer{addr: addr}
+func NewAPIServer(addr string, dns string) *APIServer {
+	return &APIServer{addr: addr, dns: dns}
 }
 
 func (api *APIServer) Run() error {
 	var err error
+
 	//log section
 	l := log.New(os.Stdout, "WAT:", log.LstdFlags)
 
-	//SetHandler
-	routerHandler := GetNewLogger(l)
+	//initiate database
+	var routerHandler RouterHandler
+	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBTRUE {
+		l.Printf("DB Option=%v", DBTRUE)
+		dBundle := Database.NewDBBundle(l)
+
+		if err := dBundle.InitDB(api.dns); err != nil {
+			return err
+		}
+		l.Println("DB connected successfully")
+
+		routerHandler = GetNewLoggerWithDB(l, dBundle)
+	} else {
+		l.Printf("DB Option=%v", DBFALSE)
+		routerHandler = GetNewLogger(l)
+	}
 
 	serverMux := http.NewServeMux()
 	serverMux.HandleFunc("POST /scan", routerHandler.GetURLResp)
 	serverMux.HandleFunc("POST /uploadhtml", routerHandler.FileScan)
+	serverMux.HandleFunc("POST /scanregister", routerHandler.ScanRegister)
 	serverMux.HandleFunc("GET /ping", routerHandler.PingServer)
+	serverMux.HandleFunc("GET /results/{uuid}", routerHandler.GetLatestResults)
 
 	v1 := http.NewServeMux()
 	v1.Handle("/api/v1/", http.StripPrefix("/api/v1", serverMux))
 
 	//middleware connect
 	middlewareChain := MiddlewareChain(
-		routerHandler.MiddlewareValidationForURL,
+		routerHandler.MiddlewareValidationForScanRegister,
+		routerHandler.MiddlewareValidationForScan,
 		routerHandler.MiddlewareValidationForFile,
 		routerHandler.MiddlewareForCorsUpdate,
 	)

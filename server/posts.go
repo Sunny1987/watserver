@@ -1,7 +1,7 @@
 package server
 
 import (
-	"encoding/json"
+	"github.com/go-resty/resty/v2"
 	"net/http"
 	"sync"
 	"time"
@@ -11,7 +11,10 @@ import (
 	"webserver/resultsapp"
 )
 
-var wg sync.WaitGroup
+var (
+	wg     sync.WaitGroup
+	Client = resty.New()
+)
 
 // GetURLResp will scan the URL with desired depth and provide the accessibility results
 func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
@@ -20,11 +23,9 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 	timeStart := time.Now()
 
 	req := &MyRequest{}
-	err := json.NewDecoder(r.Body).Decode(req)
+	ctx := r.Context()
 
-	if err != nil {
-		l.myLogger.Println("Middleware: %v", err)
-	}
+	req = ctx.Value("fReq").(*MyRequest)
 
 	//get the list of links from sitemap
 	links, base := sitemapbuilder.SiteMap(req.URL, req.Depth, l.myLogger)
@@ -60,6 +61,16 @@ func (l *NewLogger) GetURLResp(rw http.ResponseWriter, r *http.Request) {
 		}(link)
 	}
 	wg.Wait()
+
+	//update the db if dbflag is set to true
+	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBTRUE {
+		if err := l.db.UpdateResults(req.Id, finalResult); err != nil {
+			rw.WriteHeader(http.StatusInternalServerError)
+			resp := "Failed to update results in DB. \n Error = " + err.Error()
+			rw.Write([]byte(resp))
+			return
+		}
+	}
 
 	//print the response
 	printer := resultsapp.NewPrinter(rw, l.myLogger)
@@ -113,4 +124,53 @@ func (l *NewLogger) FileScan(rw http.ResponseWriter, r *http.Request) {
 	rBubdle.PrintResponse()
 
 	l.myLogger.Printf("Query completed in %v\n", time.Since(timeStart))
+}
+
+// ScanRegister will initiate scan and return an uuid to the user, this uuid will be used to fetch the scan results later
+func (l *NewLogger) ScanRegister(writer http.ResponseWriter, request *http.Request) {
+	l.myLogger.Println("ScanRegister called...")
+	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBFALSE {
+		writer.WriteHeader(http.StatusForbidden)
+		writer.Write([]byte("Database is disabled"))
+		return
+	}
+	env := resultsapp.GetEnvValueFor("ENV")
+	url := GetUrl(env)
+
+	myreq := &MyRequest{}
+	ctx := request.Context()
+
+	myreq = ctx.Value("req").(*MyRequest)
+
+	recId, err := l.db.CreateResult(myreq.URL)
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
+		resp := "Scan aborted due to record creation failure. Error=" + err.Error()
+		writer.Write([]byte(resp))
+		return
+	}
+
+	myreq.Id = recId
+
+	go func() {
+		_, err := Client.R().SetHeader("Accept", "application/json").SetBody(myreq).Post(url)
+		if err != nil {
+			l.myLogger.Printf("Error to call a scan call %v\n", err)
+			//http.Error(writer, "Error creating POST request", http.StatusInternalServerError)
+			return
+		}
+	}()
+
+	resp := "Scan initiated with UUID=" + recId.String()
+	writer.Write([]byte(resp))
+}
+
+func GetUrl(env string) string {
+	var url string
+	if env == "dev" {
+		url = "http://localhost:8080/api/v1/scan"
+	} else {
+		url = resultsapp.GetEnvValueFor("PROD_URL") + "scan"
+	}
+	return url
 }
