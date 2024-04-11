@@ -15,4 +15,5 @@ type RouterHandler interface {
 	PingServer(writer http.ResponseWriter, request *http.Request)
 	ScanRegister(writer http.ResponseWriter, request *http.Request)
 	GetLatestResults(writer http.ResponseWriter, request *http.Request)
+	GetResult(writer http.ResponseWriter, request *http.Request)
 }

@@ -9,18 +9,20 @@ import (
 	"os/signal"
 	"time"
 	"webserver/Database"
-	"webserver/resultsapp"
 )
 
+// APIServer is the wrapper over server functions
 type APIServer struct {
 	addr string
 	dns  string
 }
 
+// NewAPIServer is the constructor for APIServer
 func NewAPIServer(addr string, dns string) *APIServer {
 	return &APIServer{addr: addr, dns: dns}
 }
 
+// Run initiates server execution
 func (api *APIServer) Run() error {
 	var err error
 
@@ -29,7 +31,7 @@ func (api *APIServer) Run() error {
 
 	//initiate database
 	var routerHandler RouterHandler
-	if useDB := resultsapp.GetEnvValueFor("DBFLAG"); useDB == DBTRUE {
+	if USEDB == DBTRUE {
 		l.Printf("DB Option=%v", DBTRUE)
 		dBundle := Database.NewDBBundle(l)
 
@@ -44,13 +46,20 @@ func (api *APIServer) Run() error {
 		routerHandler = GetNewLogger(l)
 	}
 
+	//mux declaration and handler registrations
 	serverMux := http.NewServeMux()
+
+	//Post handler registrations
 	serverMux.HandleFunc("POST /scan", routerHandler.GetURLResp)
 	serverMux.HandleFunc("POST /uploadhtml", routerHandler.FileScan)
 	serverMux.HandleFunc("POST /scanregister", routerHandler.ScanRegister)
-	serverMux.HandleFunc("GET /ping", routerHandler.PingServer)
-	serverMux.HandleFunc("GET /results/{uuid}", routerHandler.GetLatestResults)
 
+	//Get handler registrations
+	serverMux.HandleFunc("GET /ping", routerHandler.PingServer)
+	serverMux.HandleFunc("GET /results", routerHandler.GetLatestResults)
+	serverMux.HandleFunc("GET /results/{id}", routerHandler.GetResult)
+
+	//API version handling
 	v1 := http.NewServeMux()
 	v1.Handle("/api/v1/", http.StripPrefix("/api/v1", serverMux))
 
