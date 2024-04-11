@@ -68,6 +68,8 @@ func (api *APIServer) Run() error {
 		routerHandler.MiddlewareValidationForScanRegister,
 		routerHandler.MiddlewareValidationForScan,
 		routerHandler.MiddlewareValidationForFile,
+		routerHandler.MiddlewareForResults,
+		routerHandler.MiddlewareForResult,
 		routerHandler.MiddlewareForCorsUpdate,
 	)
 

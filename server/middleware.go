@@ -96,9 +96,38 @@ func (l *NewLogger) MiddlewareForCorsUpdate(next http.Handler) http.HandlerFunc 
 		l.myLogger.Println("***Starting MiddlewareForCorsUpdate***")
 		writer.Header().Set("Access-Control-Allow-Origin", "*")
 		writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		writer.Header().Set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+		writer.Header().Set("Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin")
+		writer.WriteHeader(http.StatusOK)
 
 		l.myLogger.Println("***Exiting MiddlewareForCorsUpdate***")
+		next.ServeHTTP(writer, request)
+	}
+}
+
+func (l *NewLogger) MiddlewareForResults(next http.Handler) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		l.myLogger.Println("***Starting MiddlewareForResults***")
+		if request.URL.Path == "/api/v1/results" {
+			if request.Method != http.MethodGet {
+				http.Error(writer, "Method not allowed", http.StatusMethodNotAllowed)
+				return
+			}
+		}
+
+		next.ServeHTTP(writer, request)
+	}
+}
+
+func (l *NewLogger) MiddlewareForResult(next http.Handler) http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		l.myLogger.Println("***Starting MiddlewareForResult***")
+
+		if strings.Contains(request.URL.Path, "/api/v1/result") {
+			if id := strings.Split(request.URL.Path, "/")[2]; id == "" {
+				http.Error(writer, "Path does not contain id", http.StatusBadRequest)
+				return
+			}
+		}
 		next.ServeHTTP(writer, request)
 	}
 }
