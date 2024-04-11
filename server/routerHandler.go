@@ -16,4 +16,6 @@ type RouterHandler interface {
 	ScanRegister(writer http.ResponseWriter, request *http.Request)
 	GetLatestResults(writer http.ResponseWriter, request *http.Request)
 	GetResult(writer http.ResponseWriter, request *http.Request)
+	MiddlewareForResults(next http.Handler) http.HandlerFunc
+	MiddlewareForResult(next http.Handler) http.HandlerFunc
 }
