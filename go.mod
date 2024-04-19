@@ -15,6 +15,7 @@ require (
 )
 
 require (
+	github.com/Sunny1987/ServerBase v0.0.0-20240419165654-ec30f8939900 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

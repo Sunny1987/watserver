@@ -236,9 +236,7 @@ func isBody(n *html.Node) bool {
 }
 
 // isCaption will validate Caption tag
-func isCaption(n *html.Node) bool {
-	return n.Type == html.ElementNode && n.Data == "caption"
-}
+func isCaption(n *html.Node) bool { return n.Type == html.ElementNode && n.Data == "caption" }
 
 // isCite will validate Cite tag
 func isCite(n *html.Node) bool {

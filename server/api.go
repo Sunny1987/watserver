@@ -1,13 +1,9 @@
 package server
 
 import (
-	"context"
-	"github.com/common-nighthawk/go-figure"
+	"github.com/Sunny1987/ServerBase/server"
 	"log"
-	"net/http"
 	"os"
-	"os/signal"
-	"time"
 	"webserver/Database"
 )
 
@@ -25,99 +21,60 @@ func NewAPIServer(addr string, dns string) *APIServer {
 // Run initiates server execution
 func (api *APIServer) Run() error {
 	var err error
-
 	//log section
 	l := log.New(os.Stdout, "WAT:", log.LstdFlags)
 
 	//initiate database
 	var routerHandler RouterHandler
+
 	if USEDB == DBTRUE {
 		l.Printf("DB Option=%v", DBTRUE)
 		dBundle := Database.NewDBBundle(l)
 
-		if err := dBundle.InitDB(api.dns); err != nil {
+		if err = dBundle.InitDB(api.dns); err != nil {
 			return err
 		}
 		l.Println("DB connected successfully")
 
 		routerHandler = GetNewLoggerWithDB(l, dBundle)
+
 	} else {
 		l.Printf("DB Option=%v", DBFALSE)
 		routerHandler = GetNewLogger(l)
 	}
 
-	//mux declaration and handler registrations
-	serverMux := http.NewServeMux()
+	// Create the app configuration
+	app := server.NewMyAPIServer(&server.OptionalParams{
+		Addr:      api.addr,
+		AppName:   "WAT",
+		AppAuthor: "Sabyasachi Roy",
+		AppVer:    "1.0.0",
+	})
 
-	//Post handler registrations
-	serverMux.HandleFunc("POST /scan", routerHandler.GetURLResp)
-	serverMux.HandleFunc("POST /uploadhtml", routerHandler.FileScan)
-	serverMux.HandleFunc("POST /scanregister", routerHandler.ScanRegister)
+	//Register Post calls
+	app.Post("/scan", routerHandler.GetURLResp)
+	app.Post("/uploadhtml", routerHandler.FileScan)
+	app.Post("/scanregister", routerHandler.ScanRegister)
 
-	//Get handler registrations
-	serverMux.HandleFunc("GET /ping", routerHandler.PingServer)
-	serverMux.HandleFunc("GET /results", routerHandler.GetLatestResults)
-	serverMux.HandleFunc("GET /results/{id}", routerHandler.GetResult)
+	//Register Get Calls
+	app.Get("/ping", routerHandler.PingServer)
+	app.Get("/results", routerHandler.GetLatestResults)
+	app.Get("/results/{id}", routerHandler.GetResult)
 
-	//API version handling
-	v1 := http.NewServeMux()
-	v1.Handle("/api/v1/", http.StripPrefix("/api/v1", serverMux))
+	//SetUp Prefix
+	app.AddPrefix("/api/v1/")
 
-	//middleware connect
-	middlewareChain := MiddlewareChain(
-		routerHandler.MiddlewareValidationForScanRegister,
-		routerHandler.MiddlewareValidationForScan,
-		routerHandler.MiddlewareValidationForFile,
-		routerHandler.MiddlewareForResults,
-		routerHandler.MiddlewareForResult,
-		routerHandler.MiddlewareForCorsUpdate,
-	)
+	//Add Middleware
+	app.AddMiddleware(routerHandler.MiddlewareValidationForScanRegister)
+	app.AddMiddleware(routerHandler.MiddlewareValidationForScan)
+	app.AddMiddleware(routerHandler.MiddlewareValidationForFile)
+	app.AddMiddleware(routerHandler.MiddlewareForResults)
+	app.AddMiddleware(routerHandler.MiddlewareForResult)
+	app.AddMiddleware(routerHandler.MiddlewareForCorsUpdate)
 
-	//Define server
-	prodServer := &http.Server{
-		Addr:         api.addr,
-		Handler:      middlewareChain(v1),
-		ReadTimeout:  20 * time.Second,
-		WriteTimeout: 50 * time.Minute,
-		IdleTimeout:  50 * time.Minute,
-		ErrorLog:     l,
-	}
-
-	go func() {
-		myFigure := figure.NewFigure("WAT", "", true)
-		myFigure.Print()
-		l.Println("version: 1.0.0")
-		l.Println("Author: Sabyasachi Roy")
-		l.Printf("Starting server at port %v", api.addr)
-		if err = prodServer.ListenAndServe(); err != nil {
-			l.Printf("Error starting server %v", err)
-			os.Exit(1)
-		}
-	}()
-
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, os.Interrupt)
-	sig := <-sigChan
-
-	l.Println("Stopping server as per user interrupt", sig)
-
-	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
-	err = prodServer.Shutdown(tc)
-	if err != nil {
-		l.Println(err)
+	//Run server
+	if err = app.Run(); err != nil {
 		return err
 	}
 	return err
-}
-
-type Middleware func(http.Handler) http.HandlerFunc
-
-func MiddlewareChain(middlewares ...Middleware) Middleware {
-	return func(next http.Handler) http.HandlerFunc {
-		for i := len(middlewares) - 1; i >= 0; i-- {
-			next = middlewares[i](next)
-		}
-		return next.ServeHTTP
-	}
-
 }
