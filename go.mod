@@ -3,7 +3,7 @@ module webserver
 go 1.22.0
 
 require (
-	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be
+	github.com/Sunny1987/ServerBase v0.0.0-20240420141404-726d7afd6473
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/go-resty/resty/v2 v2.12.0
 	github.com/google/uuid v1.6.0
@@ -15,7 +15,7 @@ require (
 )
 
 require (
-	github.com/Sunny1987/ServerBase v0.0.0-20240419165654-ec30f8939900 // indirect
+	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

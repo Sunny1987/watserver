@@ -12,6 +12,7 @@ const (
 	Wcag111 = "WCAG111"
 	Wcag121 = "WCAG121"
 	Wcag122 = "WCAG122"
+	Wcag131 = "WCAG131"
 )
 
 // RuleResults is the finalized rules results for tags
@@ -48,6 +49,7 @@ type Rules struct {
 	WCAG111 WCAG111
 	WCAG121 WCAG121
 	WCAG122 WCAG122
+	WCAG131 WCAG131
 }
 
 // Execute method executes all the rules
@@ -65,6 +67,10 @@ func (rule *RuleResults) Execute(input Inputs) (bool, []resultsapp.Result) {
 
 	//Execute WCAG122 guideline
 	guideline, techniques = rule.ExecuteWCAG122(input)
+	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
+
+	//Execute WCAG131 guideline
+	guideline, techniques = rule.ExecuteWCAG131(input)
 	results = append(results, rule.UpdateRuleList(guideline, techniques)...)
 
 	return rule.status, results
